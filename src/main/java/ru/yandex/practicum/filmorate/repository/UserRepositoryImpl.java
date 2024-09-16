@@ -38,4 +38,8 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> getUsers() {
         return new ArrayList<>(users);
     }
+
+    public void clear(){
+        users.clear();
+    }
 }

@@ -36,6 +36,10 @@ public class UserServiceImpl implements UserService{
         return userRepository.getUsers();
     }
 
+    public void clear(){
+        userRepository.clear();
+    }
+
     private void validateUser(User user) {
         log.info("UserService: выполнение вальдации");
         String email = user.getEmail();
