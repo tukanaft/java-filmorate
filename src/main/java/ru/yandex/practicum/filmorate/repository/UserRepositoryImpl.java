@@ -31,7 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
                 foundUser = user;
             }
         }
-        if (foundUser == null){
+        if (foundUser == null) {
             throw new IllegalArgumentException("пользователь не найден");
         }
         foundUser.setEmail(newUser.getEmail());
