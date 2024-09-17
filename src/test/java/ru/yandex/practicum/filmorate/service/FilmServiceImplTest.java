@@ -100,13 +100,18 @@ class FilmServiceImplTest {
                 .build();
         filmService.addFilm(film);
         Film filmUpd = Film.builder()
-                .id(1)
+                .id(2)
                 .name("nameUpd")
                 .description("Description of filmUpd")
                 .duration(Duration.ofHours(2))
                 .releaseDate(LocalDate.now())
                 .build();
-
+        filmService.updateFilm(filmUpd);
+        Film actual = filmService.getFilms().get(0);
+        Assertions.assertThat(actual.getName()).isEqualTo(film.getName());
+        Assertions.assertThat(actual.getDescription()).isEqualTo(film.getDescription());
+        Assertions.assertThat(actual.getDuration()).isEqualTo(film.getDuration());
+        Assertions.assertThat(actual.getReleaseDate()).isEqualTo(film.getReleaseDate());
     }
 
     @Test
