@@ -26,7 +26,7 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     public Film updateFilm(Film newFilm) {
-        Integer foundFilm = 0;
+        int foundFilm = 0;
         for (Film film : films) {
             if (Objects.equals(film.getId(), newFilm.getId())) {
                 newFilm.setName(newFilm.getName());
