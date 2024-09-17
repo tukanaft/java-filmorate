@@ -25,10 +25,11 @@ class FilmServiceImplTest {
     @Test
     void whenAddFilmIsSuccess() {
         Film film = Film.builder()
-                .name("name")
-                .description("Description of film")
-                .duration(Duration.ofHours(1))
-                .releaseDate(LocalDate.now())
+                .name("bjB4aIilbD419ye")
+                .description("ZjjWhnWFXYvnI\n" +
+                        "  │ RPxaxyJX9EJJlwEuQ5ettTbhSxwd7L26gF0SQ")
+                .duration(Duration.ofMinutes(104))
+                .releaseDate(LocalDate.of(1968,07,31))
                 .build();
         filmService.addFilm(film);
         Film actual = filmService.getFilms().get(0);
