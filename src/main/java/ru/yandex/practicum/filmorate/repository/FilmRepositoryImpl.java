@@ -32,7 +32,7 @@ public class FilmRepositoryImpl implements FilmRepository {
 
             }
         }
-        if (foundFilm == null){
+        if (foundFilm == null) {
             throw new IllegalArgumentException("пользователь не найден");
         }
         foundFilm.setName(newFilm.getName());
