@@ -25,19 +25,19 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public User updateUser(User newUser) {
-        User foundUser = null;
+        Integer foundUser = 0;
         for (User user : users) {
             if (Objects.equals(user.getId(), newUser.getId())) {
-                foundUser = user;
+                newUser.setEmail(newUser.getEmail());
+                newUser.setLogin(newUser.getLogin());
+                newUser.setBirthday(newUser.getBirthday());
+                foundUser = 1;
             }
         }
-        if (foundUser == null) {
+        if (foundUser == 0) {
             throw new IllegalArgumentException("пользователь не найден");
         }
-        foundUser.setEmail(newUser.getEmail());
-        foundUser.setLogin(newUser.getLogin());
-        foundUser.setBirthday(newUser.getBirthday());
-        return foundUser;
+        return newUser;
     }
 
     public List<User> getUsers() {

@@ -19,27 +19,27 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     public Film addFilm(Film newFilm) {
-        newFilm.setId(filmId++);
+        newFilm.setId(filmId);
+        filmId++;
         films.add(newFilm);
         return newFilm;
     }
 
     public Film updateFilm(Film newFilm) {
-        Film foundFilm = null;
+        Integer foundFilm = 0;
         for (Film film : films) {
             if (Objects.equals(film.getId(), newFilm.getId())) {
-                foundFilm = film;
-
+                newFilm.setName(newFilm.getName());
+                newFilm.setDescription(newFilm.getDescription());
+                newFilm.setReleaseDate(newFilm.getReleaseDate());
+                newFilm.setDuration(newFilm.getDuration());
+                foundFilm = 1;
             }
         }
-        if (foundFilm == null) {
+        if (foundFilm == 0) {
             throw new IllegalArgumentException("пользователь не найден");
         }
-        foundFilm.setName(newFilm.getName());
-        foundFilm.setDescription(newFilm.getDescription());
-        foundFilm.setReleaseDate(newFilm.getReleaseDate());
-        foundFilm.setDuration(newFilm.getDuration());
-        return foundFilm;
+        return newFilm;
     }
 
     public List<Film> getFilms() {

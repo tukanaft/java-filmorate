@@ -100,6 +100,7 @@ class FilmServiceImplTest {
                 .build();
         filmService.addFilm(film);
         Film filmUpd = Film.builder()
+                .id(1)
                 .name("nameUpd")
                 .description("Description of filmUpd")
                 .duration(Duration.ofHours(2))
