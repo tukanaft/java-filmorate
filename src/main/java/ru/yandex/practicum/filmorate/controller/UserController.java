@@ -23,10 +23,10 @@ public class UserController {
         return userService.addUser(newUser);
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@RequestBody User newUser, @PathVariable("id") Integer id) {
+    @PutMapping
+    public User updateUser(@RequestBody User newUser) {
         log.info("UserController: выполнение запроса на обновление пользователя: {}", newUser);
-        return userService.updateUser(newUser, id);
+        return userService.updateUser(newUser);
     }
 
     @GetMapping

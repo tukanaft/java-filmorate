@@ -86,12 +86,13 @@ class UserServiceImplTest {
                 .build();
         userService.addUser(user);
         User userUpd = User.builder()
+                .id(1)
                 .name("nameUpd")
                 .email("email2@yandex.ru")
                 .login("loginUpd")
                 .birthday(LocalDate.ofYearDay(2020, 20))
                 .build();
-        userService.updateUser(userUpd, 1);
+        userService.updateUser(userUpd);
         User actual = userService.getUsers().get(0);
         Assertions.assertThat(actual.getName()).isEqualTo(user.getName());
         Assertions.assertThat(actual.getEmail()).isEqualTo(user.getEmail());
@@ -109,12 +110,13 @@ class UserServiceImplTest {
                 .build();
         userService.addUser(user);
         User userUpd = User.builder()
+                .id(1)
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
                 .birthday(LocalDate.ofYearDay(2040, 20))
                 .build();
-        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd, 1))
+        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректная дата рождения");
     }
@@ -129,12 +131,13 @@ class UserServiceImplTest {
                 .build();
         userService.addUser(user);
         User userUpd = User.builder()
+                .id(1)
                 .name("name")
                 .email("email2yandex.ru")
                 .login("login")
                 .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
-        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd, 1))
+        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректный email");
     }
@@ -149,12 +152,13 @@ class UserServiceImplTest {
                 .build();
         userService.addUser(user);
         User userUpd = User.builder()
+                .id(1)
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login login")
                 .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
-        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd, 1))
+        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректный логин");
     }

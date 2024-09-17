@@ -24,10 +24,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User newUser, Integer id) {
+    public User updateUser(User newUser) {
         log.info("UserService: выполнение запроса на обновление пользователя: {}", newUser);
         validateUser(newUser);
-        return userRepository.updateUser(newUser, id);
+        return userRepository.updateUser(newUser);
     }
 
     @Override

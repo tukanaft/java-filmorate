@@ -23,10 +23,10 @@ public class FilmController {
         return filmService.addFilm(newFilm);
     }
 
-    @PutMapping("/{id}")
-    public Film updateFilm(@RequestBody Film newFilm, @PathVariable("id") Integer id) {
+    @PutMapping
+    public Film updateFilm(@RequestBody Film newFilm) {
         log.info("FilmController: выполнение запроса на обновление фильма: {}", newFilm);
-        return filmService.updateFilm(newFilm, id);
+        return filmService.updateFilm(newFilm);
     }
 
     @GetMapping

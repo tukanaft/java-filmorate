@@ -24,9 +24,9 @@ public class UserRepositoryImpl implements UserRepository {
         return newUser;
     }
 
-    public User updateUser(User newUser, Integer id) {
+    public User updateUser(User newUser) {
         for (User user : users) {
-            if (Objects.equals(user.getId(), id)) {
+            if (Objects.equals(user.getId(), newUser.getId())) {
                 user.setEmail(newUser.getEmail());
                 user.setLogin(newUser.getLogin());
                 user.setBirthday(newUser.getBirthday());

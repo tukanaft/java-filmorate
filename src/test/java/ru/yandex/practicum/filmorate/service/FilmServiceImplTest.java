@@ -105,7 +105,7 @@ class FilmServiceImplTest {
                 .duration(Duration.ofHours(2))
                 .releaseDate(LocalDate.ofYearDay(2000, 20))
                 .build();
-        filmService.updateFilm(filmUpd, 1);
+        filmService.updateFilm(filmUpd);
         Film actual = filmService.getFilms().get(0);
         Assertions.assertThat(actual.getName()).isEqualTo(film.getName());
         Assertions.assertThat(actual.getDescription()).isEqualTo(film.getDescription());
@@ -123,12 +123,13 @@ class FilmServiceImplTest {
                 .build();
         filmService.addFilm(film);
         Film filmUpd = Film.builder()
+                .id(1)
                 .name("")
                 .description("Description of filmUpd")
                 .duration(Duration.ofHours(2))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd, 1))
+        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("название фильма не введено");
     }
@@ -143,12 +144,13 @@ class FilmServiceImplTest {
                 .build();
         filmService.addFilm(film);
         Film filmUpd = Film.builder()
+                .id(1)
                 .name("name")
                 .description("Кстати, реплицированные с зарубежных источников, современные исследования освещают чрезвычайно интересные особенности картины в целом, однако конкретные выводы, разумеется, функционально разнесены на независимые элементы! Внезапно, непосредственные участники технического прогресса будут представлены в исключительно положительном свете. Однозначно, непосредственные участники технического прогресса и по сей день остаются уделом либералов, которые жаждут быть смешаны с не уникальными данными до степени совершенной неузнаваемости, из-за чего возрастает их статус бесполезности.")
                 .duration(Duration.ofHours(2))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd, 1))
+        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Не корректное описание");
     }
@@ -163,12 +165,13 @@ class FilmServiceImplTest {
                 .build();
         filmService.addFilm(film);
         Film filmUpd = Film.builder()
+                .id(1)
                 .name("name")
                 .description("Description of film")
                 .duration(Duration.ofHours(-11))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd, 1))
+        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Не корректная длительность фильма");
     }
@@ -183,12 +186,13 @@ class FilmServiceImplTest {
                 .build();
         filmService.addFilm(film);
         Film filmUpd = Film.builder()
+                .id(1)
                 .name("name")
                 .description("Description of film")
                 .duration(Duration.ofHours(1))
                 .releaseDate(LocalDate.ofYearDay(1000, 20))
                 .build();
-        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd, 1))
+        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректная дата релиза");
     }

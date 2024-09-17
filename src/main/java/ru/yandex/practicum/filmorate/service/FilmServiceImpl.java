@@ -25,10 +25,10 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public Film updateFilm(Film newFilm, Integer id) {
+    public Film updateFilm(Film newFilm) {
         log.info("FilmService: выполнение запроса на обновление фильма: {}", newFilm);
         validateFilm(newFilm);
-        return filmRepository.updateFilm(newFilm, id);
+        return filmRepository.updateFilm(newFilm);
     }
 
     @Override
