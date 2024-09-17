@@ -18,19 +18,19 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film addFilm(@RequestBody Film newFilm){
+    public Film addFilm(@RequestBody Film newFilm) {
         log.info("FilmController: выполнение запроса на добавление фильма: {}", newFilm);
         return filmService.addFilm(newFilm);
     }
 
     @PutMapping("/{id}")
-    public Film updateFilm(@RequestBody Film newFilm,@PathVariable("id") Integer id){
+    public Film updateFilm(@RequestBody Film newFilm, @PathVariable("id") Integer id) {
         log.info("FilmController: выполнение запроса на обновление фильма: {}", newFilm);
-        return filmService.updateFilm(newFilm,id);
+        return filmService.updateFilm(newFilm, id);
     }
 
     @GetMapping
-    public List<Film> getFilms(){
+    public List<Film> getFilms() {
         log.info("FilmController: выполнение запроса на получение фильма");
         return filmService.getFilms();
     }
