@@ -9,22 +9,22 @@ import java.util.Objects;
 
 @Component
 
-public class FilmRepositoryImpl implements FilmRepository{
+public class FilmRepositoryImpl implements FilmRepository {
     private List<Film> films;
     private Integer filmId;
 
-    public FilmRepositoryImpl(){
+    public FilmRepositoryImpl() {
         films = new ArrayList<>();
         filmId = 1;
     }
 
-    public Film addFilm(Film newFilm){
+    public Film addFilm(Film newFilm) {
         newFilm.setId(filmId++);
         films.add(newFilm);
         return newFilm;
     }
 
-    public Film updateFilm(Film newFilm, Integer id){
+    public Film updateFilm(Film newFilm, Integer id) {
         for (Film film : films) {
             if (Objects.equals(film.getId(), id)) {
                 film.setName(newFilm.getName());
@@ -36,11 +36,11 @@ public class FilmRepositoryImpl implements FilmRepository{
         return newFilm;
     }
 
-    public List<Film> getFilms(){
+    public List<Film> getFilms() {
         return new ArrayList<>(films);
     }
 
-    public void clear(){
+    public void clear() {
         films.clear();
     }
 

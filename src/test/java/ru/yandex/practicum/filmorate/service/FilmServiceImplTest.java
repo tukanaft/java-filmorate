@@ -12,15 +12,13 @@ import java.time.Duration;
 import java.time.LocalDate;
 
 
-
-
 @SpringBootTest
 class FilmServiceImplTest {
     @Autowired
     private FilmService filmService;
 
     @AfterEach
-    void clear(){
+    void clear() {
         filmService.clear();
     }
 
@@ -48,7 +46,7 @@ class FilmServiceImplTest {
                 .duration(Duration.ofHours(1))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(()->filmService.addFilm(film))
+        Assertions.assertThatThrownBy(() -> filmService.addFilm(film))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("название фильма не введено");
     }
@@ -61,7 +59,7 @@ class FilmServiceImplTest {
                 .duration(Duration.ofHours(1))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(()->filmService.addFilm(film))
+        Assertions.assertThatThrownBy(() -> filmService.addFilm(film))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Не корректное описание");
     }
@@ -74,7 +72,7 @@ class FilmServiceImplTest {
                 .duration(Duration.ofHours(-11))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(()->filmService.addFilm(film))
+        Assertions.assertThatThrownBy(() -> filmService.addFilm(film))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Не корректная длительность фильма");
     }
@@ -85,9 +83,9 @@ class FilmServiceImplTest {
                 .name("name")
                 .description("Description of film")
                 .duration(Duration.ofHours(1))
-                .releaseDate(LocalDate.ofYearDay(1000,20))
+                .releaseDate(LocalDate.ofYearDay(1000, 20))
                 .build();
-        Assertions.assertThatThrownBy(()->filmService.addFilm(film))
+        Assertions.assertThatThrownBy(() -> filmService.addFilm(film))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректная дата релиза");
     }
@@ -105,7 +103,7 @@ class FilmServiceImplTest {
                 .name("nameUpd")
                 .description("Description of filmUpd")
                 .duration(Duration.ofHours(2))
-                .releaseDate(LocalDate.ofYearDay(2000,20))
+                .releaseDate(LocalDate.ofYearDay(2000, 20))
                 .build();
         filmService.updateFilm(filmUpd, 1);
         Film actual = filmService.getFilms().get(0);
@@ -130,7 +128,7 @@ class FilmServiceImplTest {
                 .duration(Duration.ofHours(2))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(()->filmService.updateFilm(filmUpd,1))
+        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd, 1))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("название фильма не введено");
     }
@@ -150,7 +148,7 @@ class FilmServiceImplTest {
                 .duration(Duration.ofHours(2))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(()->filmService.updateFilm(filmUpd,1))
+        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd, 1))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Не корректное описание");
     }
@@ -170,7 +168,7 @@ class FilmServiceImplTest {
                 .duration(Duration.ofHours(-11))
                 .releaseDate(LocalDate.now())
                 .build();
-        Assertions.assertThatThrownBy(()->filmService.updateFilm(filmUpd,1))
+        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd, 1))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Не корректная длительность фильма");
     }
@@ -188,9 +186,9 @@ class FilmServiceImplTest {
                 .name("name")
                 .description("Description of film")
                 .duration(Duration.ofHours(1))
-                .releaseDate(LocalDate.ofYearDay(1000,20))
+                .releaseDate(LocalDate.ofYearDay(1000, 20))
                 .build();
-        Assertions.assertThatThrownBy(()->filmService.updateFilm(filmUpd,1))
+        Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd, 1))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректная дата релиза");
     }

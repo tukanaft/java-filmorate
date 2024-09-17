@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface FilmRepository {
     Film addFilm(Film newFilm);
+
     Film updateFilm(Film newFilm, Integer id);
+
     List<Film> getFilms();
+
     void clear();
 }

@@ -6,20 +6,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
     @AfterEach
-    void clear(){
+    void clear() {
         userService.clear();
     }
 
@@ -29,7 +27,7 @@ class UserServiceImplTest {
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(user);
         User actual = userService.getUsers().get(0);
@@ -45,9 +43,9 @@ class UserServiceImplTest {
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2040,20))
+                .birthday(LocalDate.ofYearDay(2040, 20))
                 .build();
-        Assertions.assertThatThrownBy(()->userService.addUser(user))
+        Assertions.assertThatThrownBy(() -> userService.addUser(user))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректная дата рождения");
     }
@@ -58,9 +56,9 @@ class UserServiceImplTest {
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
-        Assertions.assertThatThrownBy(()->userService.addUser(user))
+        Assertions.assertThatThrownBy(() -> userService.addUser(user))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректный логин");
     }
@@ -71,9 +69,9 @@ class UserServiceImplTest {
                 .name("name")
                 .email("emailyandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
-        Assertions.assertThatThrownBy(()->userService.addUser(user))
+        Assertions.assertThatThrownBy(() -> userService.addUser(user))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректный email");
     }
@@ -84,14 +82,14 @@ class UserServiceImplTest {
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(user);
         User userUpd = User.builder()
                 .name("nameUpd")
                 .email("email2@yandex.ru")
                 .login("loginUpd")
-                .birthday(LocalDate.ofYearDay(2020,20))
+                .birthday(LocalDate.ofYearDay(2020, 20))
                 .build();
         userService.updateUser(userUpd, 1);
         User actual = userService.getUsers().get(0);
@@ -107,16 +105,16 @@ class UserServiceImplTest {
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(user);
         User userUpd = User.builder()
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2040,20))
+                .birthday(LocalDate.ofYearDay(2040, 20))
                 .build();
-        Assertions.assertThatThrownBy(()->userService.updateUser(userUpd,1))
+        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd, 1))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректная дата рождения");
     }
@@ -127,16 +125,16 @@ class UserServiceImplTest {
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(user);
         User userUpd = User.builder()
                 .name("name")
                 .email("email2yandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
-        Assertions.assertThatThrownBy(()->userService.updateUser(userUpd,1))
+        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd, 1))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректный email");
     }
@@ -147,16 +145,16 @@ class UserServiceImplTest {
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(user);
         User userUpd = User.builder()
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login login")
-                .birthday(LocalDate.ofYearDay(2000,20))
+                .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
-        Assertions.assertThatThrownBy(()->userService.updateUser(userUpd,1))
+        Assertions.assertThatThrownBy(() -> userService.updateUser(userUpd, 1))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректный логин");
     }

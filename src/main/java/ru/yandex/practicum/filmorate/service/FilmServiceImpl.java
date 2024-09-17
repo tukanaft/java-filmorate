@@ -38,32 +38,32 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public void clear(){
+    public void clear() {
         filmRepository.clear();
     }
 
-    private void validateFilm(Film film){
-        log.info("FilmService: начало выполнение валидации фильма: {}",film);
+    private void validateFilm(Film film) {
+        log.info("FilmService: начало выполнение валидации фильма: {}", film);
         String filmName = film.getName();
         String filmDescription = film.getDescription();
         LocalDate filmDate = film.getReleaseDate();
         Duration filmduration = film.getDuration();
 
 
-        if (filmName == null || filmName.isEmpty()){
-            log.info("FilmService: валидация названия фильма не пройдена: {}",filmName);
+        if (filmName == null || filmName.isEmpty()) {
+            log.info("FilmService: валидация названия фильма не пройдена: {}", filmName);
             throw new ValidationException("название фильма не введено");
         }
-        if (filmDescription == null || filmDescription.length()>200 || filmDescription.length()<5){
-            log.info("FilmService: валидации описания фильма не пройдена: {}",filmDescription);
+        if (filmDescription == null || filmDescription.length() > 200 || filmDescription.length() < 5) {
+            log.info("FilmService: валидации описания фильма не пройдена: {}", filmDescription);
             throw new ValidationException("Не корректное описание");
         }
-        if (filmDate == null || filmDate.isBefore(LocalDate.of(1985,12,28))){
-            log.info("FilmService: валидации даты создания фильма не пройдена: {}",filmDate);
+        if (filmDate == null || filmDate.isBefore(LocalDate.of(1985, 12, 28))) {
+            log.info("FilmService: валидации даты создания фильма не пройдена: {}", filmDate);
             throw new ValidationException("не корректная дата релиза");
         }
-        if (filmduration == null || filmduration.isNegative()){
-            log.info("FilmService: валидации продолжительности фильма не пройдена: {}",filmduration);
+        if (filmduration == null || filmduration.isNegative()) {
+            log.info("FilmService: валидации продолжительности фильма не пройдена: {}", filmduration);
             throw new ValidationException("Не корректная длительность фильма");
         }
     }

@@ -13,18 +13,18 @@ public class UserRepositoryImpl implements UserRepository {
     private List<User> users;
     private Integer userId;
 
-    public UserRepositoryImpl(){
+    public UserRepositoryImpl() {
         users = new ArrayList<>();
         userId = 1;
     }
 
-    public User addUser(User newUser){
+    public User addUser(User newUser) {
         newUser.setId(userId++);
         users.add(newUser);
         return newUser;
     }
 
-    public User updateUser(User newUser, Integer id){
+    public User updateUser(User newUser, Integer id) {
         for (User user : users) {
             if (Objects.equals(user.getId(), id)) {
                 user.setEmail(newUser.getEmail());
@@ -39,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository {
         return new ArrayList<>(users);
     }
 
-    public void clear(){
+    public void clear() {
         users.clear();
     }
 }

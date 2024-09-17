@@ -18,19 +18,19 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User addUser(@RequestBody User newUser){
+    public User addUser(@RequestBody User newUser) {
         log.info("UserController: выполнение запроса на добавление пользователя: {}", newUser);
         return userService.addUser(newUser);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@RequestBody User newUser,@PathVariable("id") Integer id){
+    public User updateUser(@RequestBody User newUser, @PathVariable("id") Integer id) {
         log.info("UserController: выполнение запроса на обновление пользователя: {}", newUser);
-        return userService.updateUser(newUser,id);
+        return userService.updateUser(newUser, id);
     }
 
     @GetMapping
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         log.info("UserController: выполнение запроса на получение пользователей");
         return userService.getUsers();
     }
