@@ -58,7 +58,7 @@ public class FilmServiceImpl implements FilmService {
             log.info("FilmService: валидации описания фильма не пройдена: {}", filmDescription);
             throw new ValidationException("Не корректное описание");
         }
-        if (filmDate == null || filmDate.isBefore(LocalDate.of(1885, 12, 28))) {
+        if (filmDate == null || filmDate.isBefore(LocalDate.of(1895, 12, 28))) {
             log.info("FilmService: валидации даты создания фильма не пройдена: {}", filmDate);
             throw new ValidationException("не корректная дата релиза");
         }
