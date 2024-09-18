@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmRepositoryImpl;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class FilmServiceImpl implements FilmService {
         String filmName = film.getName();
         String filmDescription = film.getDescription();
         LocalDate filmDate = film.getReleaseDate();
-        Duration filmduration = film.getDuration();
+        Integer filmduration = film.getDuration();
 
 
         if (filmName == null || filmName.isEmpty()) {
@@ -62,7 +61,7 @@ public class FilmServiceImpl implements FilmService {
             log.info("FilmService: валидации даты создания фильма не пройдена: {}", filmDate);
             throw new ValidationException("не корректная дата релиза");
         }
-        if (filmduration == null || filmduration.isNegative()) {
+        if (filmduration == null || filmduration < 0) {
             log.info("FilmService: валидации продолжительности фильма не пройдена: {}", filmduration);
             throw new ValidationException("Не корректная длительность фильма");
         }

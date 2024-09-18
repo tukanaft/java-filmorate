@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.time.Duration;
+
 import java.time.LocalDate;
 
 
@@ -28,7 +28,7 @@ class FilmServiceImplTest {
                 .name("bjB4aIilbD419ye")
                 .description("ZjjWhnWFXYvnI\n" +
                         "  │ RPxaxyJX9EJJlwEuQ5ettTbhSxwd7L26gF0SQ")
-                .duration(Duration.ofMinutes(104))
+                .duration(104)
                 .releaseDate(LocalDate.of(1968,07,31))
                 .build();
         filmService.addFilm(film);
@@ -44,7 +44,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("")
                 .description("Description of film")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.now())
                 .build();
         Assertions.assertThatThrownBy(() -> filmService.addFilm(film))
@@ -57,7 +57,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("name")
                 .description("Кстати, реплицированные с зарубежных источников, современные исследования освещают чрезвычайно интересные особенности картины в целом, однако конкретные выводы, разумеется, функционально разнесены на независимые элементы! Внезапно, непосредственные участники технического прогресса будут представлены в исключительно положительном свете. Однозначно, непосредственные участники технического прогресса и по сей день остаются уделом либералов, которые жаждут быть смешаны с не уникальными данными до степени совершенной неузнаваемости, из-за чего возрастает их статус бесполезности.")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.now())
                 .build();
         Assertions.assertThatThrownBy(() -> filmService.addFilm(film))
@@ -70,7 +70,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(-11))
+                .duration(-11)
                 .releaseDate(LocalDate.now())
                 .build();
         Assertions.assertThatThrownBy(() -> filmService.addFilm(film))
@@ -83,7 +83,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.ofYearDay(1000, 20))
                 .build();
         Assertions.assertThatThrownBy(() -> filmService.addFilm(film))
@@ -96,7 +96,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.now())
                 .build();
         filmService.addFilm(film);
@@ -104,7 +104,7 @@ class FilmServiceImplTest {
                 .id(2)
                 .name("nameUpd")
                 .description("Description of filmUpd")
-                .duration(Duration.ofHours(2))
+                .duration(2)
                 .releaseDate(LocalDate.now())
                 .build();
         filmService.updateFilm(filmUpd);
@@ -120,7 +120,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.now())
                 .build();
         filmService.addFilm(film);
@@ -128,7 +128,7 @@ class FilmServiceImplTest {
                 .id(1)
                 .name("")
                 .description("Description of filmUpd")
-                .duration(Duration.ofHours(2))
+                .duration(2)
                 .releaseDate(LocalDate.now())
                 .build();
         Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd))
@@ -141,7 +141,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.now())
                 .build();
         filmService.addFilm(film);
@@ -149,7 +149,7 @@ class FilmServiceImplTest {
                 .id(1)
                 .name("name")
                 .description("Кстати, реплицированные с зарубежных источников, современные исследования освещают чрезвычайно интересные особенности картины в целом, однако конкретные выводы, разумеется, функционально разнесены на независимые элементы! Внезапно, непосредственные участники технического прогресса будут представлены в исключительно положительном свете. Однозначно, непосредственные участники технического прогресса и по сей день остаются уделом либералов, которые жаждут быть смешаны с не уникальными данными до степени совершенной неузнаваемости, из-за чего возрастает их статус бесполезности.")
-                .duration(Duration.ofHours(2))
+                .duration(2)
                 .releaseDate(LocalDate.now())
                 .build();
         Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd))
@@ -162,7 +162,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.now())
                 .build();
         filmService.addFilm(film);
@@ -170,7 +170,7 @@ class FilmServiceImplTest {
                 .id(1)
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(-11))
+                .duration(-11)
                 .releaseDate(LocalDate.now())
                 .build();
         Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd))
@@ -183,7 +183,7 @@ class FilmServiceImplTest {
         Film film = Film.builder()
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.now())
                 .build();
         filmService.addFilm(film);
@@ -191,7 +191,7 @@ class FilmServiceImplTest {
                 .id(1)
                 .name("name")
                 .description("Description of film")
-                .duration(Duration.ofHours(1))
+                .duration(1)
                 .releaseDate(LocalDate.ofYearDay(1000, 20))
                 .build();
         Assertions.assertThatThrownBy(() -> filmService.updateFilm(filmUpd))

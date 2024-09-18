@@ -32,7 +32,7 @@ public class FilmRepositoryImpl implements FilmRepository {
                 newFilm.setName(newFilm.getName());
                 newFilm.setDescription(newFilm.getDescription());
                 newFilm.setReleaseDate(newFilm.getReleaseDate());
-                newFilm.setDuration(newFilm.getDuration());
+                newFilm.setDuration((newFilm.getDuration()));
                 foundFilm = 1;
             }
         }
