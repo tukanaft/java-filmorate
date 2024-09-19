@@ -3,45 +3,41 @@ package ru.yandex.practicum.filmorate.repository;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 
 public class UserRepositoryImpl implements UserRepository {
-    private List<User> users;
+    private HashMap<Integer,User> users;
     private Integer userId;
 
     public UserRepositoryImpl() {
-        users = new ArrayList<>();
+        users = new HashMap<>();
         userId = 1;
     }
 
     public User addUser(User newUser) {
         newUser.setId(userId++);
-        users.add(newUser);
+        users.put(newUser.getId(), newUser);
         return newUser;
     }
 
     public User updateUser(User newUser) {
         Integer foundUser = 0;
-        for (User user : users) {
-            if (Objects.equals(user.getId(), newUser.getId())) {
-                newUser.setEmail(newUser.getEmail());
-                newUser.setLogin(newUser.getLogin());
-                newUser.setBirthday(newUser.getBirthday());
+            if (users.containsKey(newUser.getId())) {
+                users.get(newUser.getId()).setEmail(newUser.getEmail());
+                users.get(newUser.getId()).setLogin(newUser.getLogin());
+                users.get(newUser.getId()).setBirthday(newUser.getBirthday());
                 foundUser = 1;
             }
-        }
         if (foundUser == 0) {
             throw new IllegalArgumentException("пользователь не найден");
         }
         return newUser;
     }
 
-    public List<User> getUsers() {
-        return new ArrayList<>(users);
+    public Map<Integer, User> getUsers() {
+        return users;
     }
 
     public void clear() {

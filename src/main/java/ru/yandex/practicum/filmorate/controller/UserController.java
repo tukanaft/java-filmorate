@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public Map<Integer, User> getUsers() {
         log.info("UserController: выполнение запроса на получение пользователей");
         return userService.getUsers();
     }

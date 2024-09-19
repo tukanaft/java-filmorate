@@ -3,47 +3,44 @@ package ru.yandex.practicum.filmorate.repository;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 
 public class FilmRepositoryImpl implements FilmRepository {
-    private List<Film> films;
+    private HashMap<Integer, Film> films;
     private Integer filmId;
 
     public FilmRepositoryImpl() {
-        films = new ArrayList<>();
+        films = new HashMap<>();
         filmId = 1;
     }
 
     public Film addFilm(Film newFilm) {
         newFilm.setId(filmId);
         filmId++;
-        films.add(newFilm);
+        films.put(newFilm.getId(), newFilm);
         return newFilm;
     }
 
     public Film updateFilm(Film newFilm) {
         int foundFilm = 0;
-        for (Film film : films) {
-            if (Objects.equals(film.getId(), newFilm.getId())) {
-                newFilm.setName(newFilm.getName());
-                newFilm.setDescription(newFilm.getDescription());
-                newFilm.setReleaseDate(newFilm.getReleaseDate());
-                newFilm.setDuration((newFilm.getDuration()));
-                foundFilm = 1;
-            }
+        if (films.containsKey(newFilm.getId())) {
+            films.get(newFilm.getId()).setName(newFilm.getName());
+            films.get(newFilm.getId()).setDescription(newFilm.getDescription());
+            films.get(newFilm.getId()).setReleaseDate(newFilm.getReleaseDate());
+            films.get(newFilm.getId()).setDuration((newFilm.getDuration()));
+            foundFilm = 1;
         }
+
         if (foundFilm == 0) {
             throw new IllegalArgumentException("пользователь не найден");
         }
         return newFilm;
     }
 
-    public List<Film> getFilms() {
-        return new ArrayList<>(films);
+    public Map<Integer, Film> getFilms() {
+        return films;
     }
 
     public void clear() {

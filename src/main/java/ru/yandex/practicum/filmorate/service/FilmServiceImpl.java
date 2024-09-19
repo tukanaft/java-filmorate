@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmRepositoryImpl;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -31,7 +31,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> getFilms() {
+    public Map<Integer, Film> getFilms() {
         log.info("FilmService: выполнение запроса на получение фильма");
         return filmRepository.getFilms();
     }
@@ -53,7 +53,7 @@ public class FilmServiceImpl implements FilmService {
             log.info("FilmService: валидация названия фильма не пройдена: {}", filmName);
             throw new ValidationException("название фильма не введено");
         }
-        if (filmDescription == null || filmDescription.length() > 200 || filmDescription.length() < 5) {
+        if (filmDescription == null || filmDescription.length() > 200) {
             log.info("FilmService: валидации описания фильма не пройдена: {}", filmDescription);
             throw new ValidationException("Не корректное описание");
         }
@@ -61,7 +61,7 @@ public class FilmServiceImpl implements FilmService {
             log.info("FilmService: валидации даты создания фильма не пройдена: {}", filmDate);
             throw new ValidationException("не корректная дата релиза");
         }
-        if (filmduration == null || filmduration < 0) {
+        if (filmduration == null || filmduration <= 0) {
             log.info("FilmService: валидации продолжительности фильма не пройдена: {}", filmduration);
             throw new ValidationException("Не корректная длительность фильма");
         }

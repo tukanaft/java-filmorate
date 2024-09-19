@@ -3,8 +3,8 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.*;
 
 
-import java.time.LocalDate;
 
+import java.time.LocalDate;
 /**
  * Film.
  */

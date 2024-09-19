@@ -32,7 +32,7 @@ class FilmServiceImplTest {
                 .releaseDate(LocalDate.of(1968,07,31))
                 .build();
         filmService.addFilm(film);
-        Film actual = filmService.getFilms().get(0);
+        Film actual = filmService.getFilms().get(film.getId());
         Assertions.assertThat(actual.getName()).isEqualTo(film.getName());
         Assertions.assertThat(actual.getDescription()).isEqualTo(film.getDescription());
         Assertions.assertThat(actual.getDuration()).isEqualTo(film.getDuration());
@@ -108,7 +108,7 @@ class FilmServiceImplTest {
                 .releaseDate(LocalDate.now())
                 .build();
         filmService.updateFilm(filmUpd);
-        Film actual = filmService.getFilms().get(0);
+        Film actual = filmService.getFilms().get(film.getId());
         Assertions.assertThat(actual.getName()).isEqualTo(film.getName());
         Assertions.assertThat(actual.getDescription()).isEqualTo(film.getDescription());
         Assertions.assertThat(actual.getDuration()).isEqualTo(film.getDuration());

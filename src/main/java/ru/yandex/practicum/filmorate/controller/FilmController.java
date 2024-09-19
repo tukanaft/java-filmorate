@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -30,7 +30,7 @@ public class FilmController {
     }
 
     @GetMapping
-    public List<Film> getFilms() {
+    public Map<Integer,Film> getFilms() {
         log.info("FilmController: выполнение запроса на получение фильма");
         return filmService.getFilms();
     }

@@ -2,14 +2,14 @@ package ru.yandex.practicum.filmorate.repository;
 
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.List;
+import java.util.Map;
 
 public interface UserRepository {
     User addUser(User newUser);
 
     User updateUser(User newUser);
 
-    List<User> getUsers();
+    Map<Integer, User> getUsers();
 
     void clear();
 }
