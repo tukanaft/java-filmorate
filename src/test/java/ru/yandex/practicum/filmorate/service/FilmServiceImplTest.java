@@ -29,7 +29,7 @@ class FilmServiceImplTest {
                 .description("ZjjWhnWFXYvnI\n" +
                         "  │ RPxaxyJX9EJJlwEuQ5ettTbhSxwd7L26gF0SQ")
                 .duration(104)
-                .releaseDate(LocalDate.of(1968,07,31))
+                .releaseDate(LocalDate.of(1968, 07, 31))
                 .build();
         filmService.addFilm(film);
         Film actual = filmService.getFilms().get(film.getId());

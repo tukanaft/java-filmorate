@@ -8,7 +8,7 @@ import java.util.*;
 @Component
 
 public class UserRepositoryImpl implements UserRepository {
-    private HashMap<Integer,User> users;
+    private HashMap<Integer, User> users;
     private Integer userId;
 
     public UserRepositoryImpl() {
@@ -24,12 +24,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     public User updateUser(User newUser) {
         Integer foundUser = 0;
-            if (users.containsKey(newUser.getId())) {
-                users.get(newUser.getId()).setEmail(newUser.getEmail());
-                users.get(newUser.getId()).setLogin(newUser.getLogin());
-                users.get(newUser.getId()).setBirthday(newUser.getBirthday());
-                foundUser = 1;
-            }
+        if (users.containsKey(newUser.getId())) {
+            users.get(newUser.getId()).setEmail(newUser.getEmail());
+            users.get(newUser.getId()).setLogin(newUser.getLogin());
+            users.get(newUser.getId()).setBirthday(newUser.getBirthday());
+            foundUser = 1;
+        }
         if (foundUser == 0) {
             throw new IllegalArgumentException("пользователь не найден");
         }
