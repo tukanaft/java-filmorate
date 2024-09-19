@@ -40,7 +40,7 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     public ArrayList<Film> getFilms() {
-        return (ArrayList<Film>) films.values();
+        return new ArrayList<>(films.values());
     }
 
     public void clear() {

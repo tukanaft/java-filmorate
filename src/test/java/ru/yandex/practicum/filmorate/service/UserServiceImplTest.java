@@ -30,7 +30,7 @@ class UserServiceImplTest {
                 .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(user);
-        User actual = userService.getUsers().get(user.getId());
+        User actual = userService.getUsers().get(0);
         Assertions.assertThat(actual.getName()).isEqualTo(user.getName());
         Assertions.assertThat(actual.getEmail()).isEqualTo(user.getEmail());
         Assertions.assertThat(actual.getLogin()).isEqualTo(user.getLogin());
@@ -93,7 +93,7 @@ class UserServiceImplTest {
                 .birthday(LocalDate.ofYearDay(2020, 20))
                 .build();
         userService.updateUser(userUpd);
-        User actual = userService.getUsers().get(1);
+        User actual = userService.getUsers().get(0);
         Assertions.assertThat(actual.getName()).isEqualTo(user.getName());
         Assertions.assertThat(actual.getEmail()).isEqualTo(user.getEmail());
         Assertions.assertThat(actual.getLogin()).isEqualTo(user.getLogin());

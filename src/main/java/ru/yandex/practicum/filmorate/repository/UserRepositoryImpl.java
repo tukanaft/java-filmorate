@@ -37,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public ArrayList<User> getUsers() {
-        return (ArrayList<User>) users.values();
+        return new ArrayList<User>(users.values());
     }
 
     public void clear() {
