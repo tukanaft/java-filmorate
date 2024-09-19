@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmRepositoryImpl;
 
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.ArrayList;
 
 @Slf4j
 @Service
@@ -31,7 +31,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public Map<Integer, Film> getFilms() {
+    public ArrayList<Film> getFilms() {
         log.info("FilmService: выполнение запроса на получение фильма");
         return filmRepository.getFilms();
     }

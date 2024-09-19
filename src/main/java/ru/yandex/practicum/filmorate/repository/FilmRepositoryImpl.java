@@ -39,8 +39,8 @@ public class FilmRepositoryImpl implements FilmRepository {
         return newFilm;
     }
 
-    public Map<Integer, Film> getFilms() {
-        return films;
+    public ArrayList<Film> getFilms() {
+        return (ArrayList<Film>) films.values();
     }
 
     public void clear() {

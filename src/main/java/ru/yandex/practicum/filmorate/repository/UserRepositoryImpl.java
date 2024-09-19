@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.repository;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
@@ -36,8 +37,8 @@ public class UserRepositoryImpl implements UserRepository {
         return newUser;
     }
 
-    public Map<Integer, User> getUsers() {
-        return users;
+    public ArrayList<User> getUsers() {
+        return (ArrayList<User>) users.values();
     }
 
     public void clear() {

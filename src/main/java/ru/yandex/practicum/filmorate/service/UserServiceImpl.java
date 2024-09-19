@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.UserRepositoryImpl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Slf4j
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<Integer, User> getUsers() {
+    public ArrayList<User> getUsers() {
         log.info("UserService: выполнение запроса на получение пользователей");
         return userRepository.getUsers();
     }
