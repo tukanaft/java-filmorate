@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.repository.UserRepositoryImpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Map;
 
 @Slf4j
 @Service
