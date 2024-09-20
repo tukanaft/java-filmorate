@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 /**
- * Film.
+ * User.
  */
 @Builder
 @AllArgsConstructor
@@ -14,10 +14,10 @@ import java.time.LocalDate;
 @ToString
 @Getter
 @Setter
-public class Film {
+public class User {
     private Integer id;
+    private String email;
     private String name;
-    private String description;
-    private LocalDate releaseDate;
-    private Integer duration;
+    private String login;
+    private LocalDate birthday;
 }
