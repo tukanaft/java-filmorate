@@ -23,7 +23,7 @@ public class User {
     private String name;
     private String login;
     private LocalDate birthday;
-    private Set<Integer>friendsId;
+    private Set<Integer> friendsId;
 
 
 }
