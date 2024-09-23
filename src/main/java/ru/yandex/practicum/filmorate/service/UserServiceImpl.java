@@ -43,10 +43,10 @@ class UserServiceImpl implements UserService {
     @Override
     public User addFriend(Integer userId, Integer friendsId) {
         log.info("UserService: выполнение запроса на добовление друга");
-        if (!userStorage.isUserExists(userId)){
+        if (!userStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        if (!userStorage.isUserExists(friendsId)){
+        if (!userStorage.isUserExists(friendsId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         if (userStorage.getUsers().get(userId).getFriendsId().contains(friendsId)) {
@@ -58,10 +58,10 @@ class UserServiceImpl implements UserService {
     @Override
     public User deleteFriend(Integer userId, Integer friendsId) {
         log.info("UserService: выполнение запроса на удаление друга");
-        if (!userStorage.isUserExists(userId)){
+        if (!userStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        if (!userStorage.isUserExists(friendsId)){
+        if (!userStorage.isUserExists(friendsId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         if (!userStorage.getUsers().get(userId).getFriendsId().contains(friendsId)) {
@@ -71,25 +71,25 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ArrayList<User> commonFriends (Integer userId, Integer friendsId) {
+    public ArrayList<User> commonFriends(Integer userId, Integer friendsId) {
         log.info("UserService: выполнение запроса на поиск общих друзей");
-        if (!userStorage.isUserExists(userId)){
+        if (!userStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        if (!userStorage.isUserExists(friendsId)){
+        if (!userStorage.isUserExists(friendsId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         User user = userStorage.getUsers().get(userId);
         User friend = userStorage.getUsers().get(friendsId);
         commonFriendsList.clear();
-        if (user.getFriendsId() == null){
+        if (user.getFriendsId() == null) {
             throw new ValidationException("У вас нет друзей");
         }
-        if (friend.getFriendsId() == null){
+        if (friend.getFriendsId() == null) {
             throw new ValidationException("У человека с которым вы пытаетесь найти общих друзей нет друзей");
         }
-        for (Integer usersFriendId : user.getFriendsId()){
-            if (friend.getFriendsId().contains(usersFriendId)){
+        for (Integer usersFriendId : user.getFriendsId()) {
+            if (friend.getFriendsId().contains(usersFriendId)) {
                 commonFriendsList.add(userStorage.getUsers().get(usersFriendId));
             }
         }
