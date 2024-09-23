@@ -43,10 +43,10 @@ class UserServiceImpl implements UserService {
     @Override
     public User addFriend(Integer userId, Integer friendsId) {
         log.info("UserService: выполнение запроса на добовление друга");
-        if (!userStorage.isUserExists(userId)) {
+        if (userStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        if (!userStorage.isUserExists(friendsId)) {
+        if (userStorage.isUserExists(friendsId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         if (userStorage.getUsers().get(userId).getFriendsId().contains(friendsId)) {
