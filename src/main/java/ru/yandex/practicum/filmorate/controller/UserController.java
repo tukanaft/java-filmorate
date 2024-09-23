@@ -34,4 +34,22 @@ public class UserController {
         log.info("UserController: выполнение запроса на получение пользователей");
         return userService.getUsers();
     }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable("id") Integer userId, @PathVariable("friendId") Integer friendsId) {
+        log.info("UserController: выполнение запроса на добавление друга: {}", userId);
+        return userService.addFriend(userId, friendsId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable("id") Integer userId, @PathVariable("friendId") Integer friendsId) {
+        log.info("UserController: выполнение запроса на удаление друга: {}", userId);
+        return userService.deleteFriend(userId, friendsId);
+    }
+
+    @GetMapping("{id}/friends/common/{otherId}")
+    public ArrayList<User> commonFriends(@PathVariable("uid") Integer userId, @PathVariable("otherId") Integer friendsId){
+        log.info("UserController: выполнение запроса на получение списка общих друзей: {}", userId);
+        return userService.commonFriends(userId,friendsId);
+    }
 }

@@ -7,11 +7,11 @@ import java.util.*;
 
 @Component
 
-public class UserRepositoryImpl implements UserRepository {
+public class InMemoryUserStorage implements UserStorage {
     private HashMap<Integer, User> users;
     private Integer userId;
 
-    public UserRepositoryImpl() {
+    public InMemoryUserStorage() {
         users = new HashMap<>();
         userId = 1;
     }
@@ -38,6 +38,20 @@ public class UserRepositoryImpl implements UserRepository {
 
     public ArrayList<User> getUsers() {
         return new ArrayList<User>(users.values());
+    }
+
+    public User addFriend(Integer userId, Integer friendsId) {
+        users.get(userId).getFriendsId().add(friendsId);
+        return users.get(userId);
+    }
+
+    public User deleteFriend(Integer userId, Integer friendsId) {
+        users.get(userId).getFriendsId().remove(friendsId);
+        return users.get(userId);
+    }
+
+    public Boolean isUserExists(Integer userId){
+        return users.containsKey(userId);
     }
 
     public void clear() {
