@@ -53,7 +53,7 @@ public class UserController {
         return userService.commonFriends(userId, friendsId);
     }
 
-    @GetMapping("{id}/friends/")
+    @GetMapping("{id}/friends")
     public ArrayList<User> getFriends(@PathVariable("id") Integer userId) {
         log.info("UserController: выполнение запроса на отправление списка друзей пользователя: {}", userId);
         return userService.getFriends(userId);
