@@ -162,4 +162,31 @@ class UserServiceImplTest {
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("не корректный логин");
     }
+
+    @Test
+    void whenAddFriendIsSuccess() {
+        User user = User.builder()
+                .id(2)
+                .name("name")
+                .email("email@yandex.ru")
+                .login("login")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .build();
+        userService.addUser(user);
+        User friend = User.builder()
+                .id(3)
+                .name("name")
+                .email("email@yandex.ru")
+                .login("login")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .build();
+        userService.addUser(user);
+        userService.addUser(friend);
+        userService.addFriend(user.getId(), friend.getId());
+        User actual = userService.getUsers().get(2);
+        Assertions.assertThat(actual.getName()).isEqualTo(friend.getName());
+        Assertions.assertThat(actual.getEmail()).isEqualTo(friend.getEmail());
+        Assertions.assertThat(actual.getLogin()).isEqualTo(friend.getLogin());
+        Assertions.assertThat(actual.getBirthday()).isEqualTo(friend.getBirthday());
+    }
 }

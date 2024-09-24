@@ -4,6 +4,7 @@ import lombok.*;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Set;
 
 
@@ -22,7 +23,7 @@ public class User {
     private String name;
     private String login;
     private LocalDate birthday;
-    private Set<Integer> friendsId;
+    private ArrayList<Integer> friendsId;
 
 
 }

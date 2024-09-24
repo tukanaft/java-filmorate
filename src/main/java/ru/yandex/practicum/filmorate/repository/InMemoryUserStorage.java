@@ -11,10 +11,13 @@ import java.util.*;
 public class InMemoryUserStorage implements UserStorage {
     private HashMap<Integer, User> users;
     private Integer userId;
+    private Integer[] array = {1};
+    private ArrayList<Integer> firstFriend;
 
     public InMemoryUserStorage() {
         users = new HashMap<>();
         userId = 1;
+        firstFriend = new ArrayList<Integer>(Arrays.asList(array));
     }
 
     public User addUser(User newUser) {
@@ -43,7 +46,12 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     public User addFriend(Integer userId, Integer friendsId) {
-        users.get(userId).getFriendsId().add(friendsId);
+        User user = users.get(userId);
+        if (user.getFriendsId() == null){
+            firstFriend.add(0,friendsId);
+            user.setFriendsId(firstFriend);
+        }
+        user.getFriendsId().add(friendsId);
         return users.get(userId);
     }
 
