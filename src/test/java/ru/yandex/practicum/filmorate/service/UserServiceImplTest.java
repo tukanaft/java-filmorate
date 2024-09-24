@@ -194,19 +194,12 @@ class UserServiceImplTest {
 
     @Test
     void whenCommonFriendIsSuccess() {
-        Integer[] arrayUser = {21, 18, 16, 5, 1, 5, 12, 16, 18, 21, 20};
-        ArrayList<Integer> userFriends = new ArrayList<Integer>(Arrays.asList(arrayUser));
-        ;
-        Integer[] arrayOther = {21, 21, 18, 16, 5, 1, 5, 12, 16, 18, 21, 20, 21};
-        ArrayList<Integer> otherFriends = new ArrayList<Integer>(Arrays.asList(arrayOther));
-        ;
         User user = User.builder()
                 .id(19)
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
                 .birthday(LocalDate.ofYearDay(2000, 20))
-                .friendsId(userFriends)
                 .build();
         userService.addUser(user);
         User otherUser = User.builder()
@@ -215,23 +208,15 @@ class UserServiceImplTest {
                 .email("email@yandex.ru")
                 .login("login")
                 .birthday(LocalDate.ofYearDay(2000, 20))
-                .friendsId(otherFriends)
                 .build();
         userService.addUser(otherUser);
-        User friend = User.builder()
-                .id(21)
-                .name("name")
-                .email("email@yandex.ru")
-                .login("login")
-                .birthday(LocalDate.ofYearDay(2000, 20))
-                .build();
-        userService.addUser(friend);
+        userService.addFriend(19, 20);
         ArrayList<User> friends = new ArrayList<User>(userService.commonFriends(user.getId(), otherUser.getId()));
         User actual = friends.get(0);
-        Assertions.assertThat(actual.getId()).isEqualTo(friend.getId());
-        Assertions.assertThat(actual.getName()).isEqualTo(friend.getName());
-        Assertions.assertThat(actual.getEmail()).isEqualTo(friend.getEmail());
-        Assertions.assertThat(actual.getLogin()).isEqualTo(friend.getLogin());
-        Assertions.assertThat(actual.getBirthday()).isEqualTo(friend.getBirthday());
+        Assertions.assertThat(actual.getId()).isEqualTo(otherUser.getId());
+        Assertions.assertThat(actual.getName()).isEqualTo(otherUser.getName());
+        Assertions.assertThat(actual.getEmail()).isEqualTo(otherUser.getEmail());
+        Assertions.assertThat(actual.getLogin()).isEqualTo(otherUser.getLogin());
+        Assertions.assertThat(actual.getBirthday()).isEqualTo(otherUser.getBirthday());
     }
 }

@@ -13,11 +13,13 @@ public class InMemoryUserStorage implements UserStorage {
     private Integer userId;
     private Integer[] array = {1};
     private ArrayList<Integer> firstFriend;
+    private ArrayList<Integer> friendsFirstFriend;
 
     public InMemoryUserStorage() {
         users = new HashMap<>();
         userId = 1;
         firstFriend = new ArrayList<Integer>(Arrays.asList(array));
+        friendsFirstFriend = new ArrayList<Integer>(Arrays.asList(array));
     }
 
     public User addUser(User newUser) {
@@ -58,9 +60,9 @@ public class InMemoryUserStorage implements UserStorage {
             user.getFriendsId().add(friendsId);
         }
         if (friend.getFriendsId() == null) {
-            firstFriend.clear();
-            firstFriend.add(userId);
-            friend.setFriendsId(firstFriend);
+            friendsFirstFriend.clear();
+            friendsFirstFriend.add(userId);
+            friend.setFriendsId(friendsFirstFriend);
         } else {
             friend.getFriendsId().add(userId);
         }
