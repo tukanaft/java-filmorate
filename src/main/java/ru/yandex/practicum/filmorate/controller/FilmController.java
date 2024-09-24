@@ -48,8 +48,8 @@ public class FilmController {
         return filmService.like(filmId, userId);
     }
 
-    @GetMapping("films/popular/count={count}")
-    public List<Film> commonFriends(@PathVariable("count") Integer count) {
+    @GetMapping("films/popular")
+    public List<Film> commonFriends(@RequestParam Integer count) {
         log.info("FilmController: выполнение запроса на получение самых популярных фильмов");
         return filmService.mostPopularFilms(count);
     }
