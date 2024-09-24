@@ -50,11 +50,6 @@ public class FilmServiceImpl implements FilmService {
         if (!userStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        if (!(filmStorage.getFilms().get(filmId).getLikes() == null)) {
-            if (filmStorage.getFilms().get(filmId).getLikes().contains(userId)) {
-                throw new ValidationException("вы уже лайкали этот фильм");
-            }
-        }
         return filmStorage.like(filmId, userId);
     }
 
