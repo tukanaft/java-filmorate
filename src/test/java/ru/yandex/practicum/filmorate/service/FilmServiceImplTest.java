@@ -98,6 +98,7 @@ class FilmServiceImplTest {
     @Test
     void whenUpdateFilmIsSuccess() {
         Film film = Film.builder()
+                .id(2)
                 .name("name")
                 .description("Description of film")
                 .duration(1)
@@ -105,7 +106,7 @@ class FilmServiceImplTest {
                 .build();
         filmService.addFilm(film);
         Film filmUpd = Film.builder()
-                .id(2)
+                .id(3)
                 .name("nameUpd")
                 .description("Description of filmUpd")
                 .duration(2)
@@ -222,7 +223,7 @@ class FilmServiceImplTest {
                 .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(user);
-        filmService.like(1, 13);
+        filmService.like(2, 13);
         Film actual = filmService.getFilms().get(0);
         Assertions.assertThat(actual.getName()).isEqualTo(film.getName());
         Assertions.assertThat(actual.getDescription()).isEqualTo(film.getDescription());
