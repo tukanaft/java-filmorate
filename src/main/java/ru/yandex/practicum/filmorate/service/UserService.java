@@ -18,4 +18,6 @@ public interface UserService {
     ArrayList<User> commonFriends(Integer userId, Integer friendsId);
 
     void clear();
+
+    ArrayList<User> getFriends(Integer userId);
 }

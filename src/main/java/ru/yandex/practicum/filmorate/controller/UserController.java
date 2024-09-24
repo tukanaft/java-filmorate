@@ -48,8 +48,14 @@ public class UserController {
     }
 
     @GetMapping("{id}/friends/common/{otherId}")
-    public ArrayList<User> commonFriends(@PathVariable("uid") Integer userId, @PathVariable("otherId") Integer friendsId) {
+    public ArrayList<User> commonFriends(@PathVariable("id") Integer userId, @PathVariable("otherId") Integer friendsId) {
         log.info("UserController: выполнение запроса на получение списка общих друзей: {}", userId);
         return userService.commonFriends(userId, friendsId);
+    }
+
+    @GetMapping("{id}/friends/")
+    public ArrayList<User> getFriends(@PathVariable("id") Integer userId) {
+        log.info("UserController: выполнение запроса на отправление списка друзей пользователя: {}", userId);
+        return userService.getFriends(userId);
     }
 }

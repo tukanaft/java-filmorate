@@ -103,6 +103,15 @@ class UserServiceImpl implements UserService {
         userStorage.clear();
     }
 
+    @Override
+    public ArrayList<User> getFriends(Integer userId) {
+        log.info("UserService: выполнение запроса на отправление списка друзей пользователя");
+        if (!userStorage.isUserExists(userId)) {
+            throw new NotFoundException("Такого пользователя не существует");
+        }
+        return userStorage.getFriends(userId);
+    }
+
     private void validateUser(User user) {
         log.info("UserService: выполнение вальдации");
         String email = user.getEmail();
