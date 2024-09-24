@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,10 +79,14 @@ public class FilmServiceImpl implements FilmService {
         if (count == null) {
             count = 10;
         }
-        Comparator<Film> comparator = (film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size());
-        List<Film> films = getFilms();
-        return films.stream()
-                .sorted(comparator)
+        List<Film> filmsTest = getFilms();
+        for (Film testFilm : filmStorage.getFilms().values()) {
+            if (testFilm.getLikes() == null) {
+                filmsTest.remove(testFilm);
+            }
+        }
+        filmsTest.sort((film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size()));
+        return filmsTest.stream()
                 .limit(count)
                 .collect(Collectors.toList());
 
