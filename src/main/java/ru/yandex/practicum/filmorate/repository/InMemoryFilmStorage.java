@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.repository;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
@@ -34,7 +35,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
 
         if (foundFilm == 0) {
-            throw new IllegalArgumentException("пользователь не найден");
+            throw new NotFoundException("фильм не найден");
         }
         return newFilm;
     }
