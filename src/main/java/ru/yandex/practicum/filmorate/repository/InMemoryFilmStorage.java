@@ -53,7 +53,6 @@ public class InMemoryFilmStorage implements FilmStorage {
             return films.get(filmId);
         }
         if (film.getLikes() == null) {
-            ;
             film.setLikes(firstLike);
         } else {
             films.get(filmId).getLikes().add(userId);
