@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 
 @SpringBootTest
@@ -208,13 +209,23 @@ class UserServiceImplTest {
                 .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(otherUser);
+        User commonFriend = User.builder()
+                .id(21)
+                .name("name")
+                .email("email@yandex.ru")
+                .login("login")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .build();
+        userService.addUser(commonFriend);
+        userService.addFriend(19, 21);
         userService.addFriend(19, 20);
-        //ArrayList<User> friends = new ArrayList<User>(userService.commonFriends(user.getId(), otherUser.getId()));
-        //User actual = friends.get(0);
-        //Assertions.assertThat(actual.getId()).isEqualTo(otherUser.getId());
-        //Assertions.assertThat(actual.getName()).isEqualTo(otherUser.getName());
-        //Assertions.assertThat(actual.getEmail()).isEqualTo(otherUser.getEmail());
-        //Assertions.assertThat(actual.getLogin()).isEqualTo(otherUser.getLogin());
-        //Assertions.assertThat(actual.getBirthday()).isEqualTo(otherUser.getBirthday());
+        userService.addFriend(20, 21);
+        ArrayList<User> friends = new ArrayList<User>(userService.commonFriends(user.getId(), otherUser.getId()));
+        User actual = friends.get(0);
+        Assertions.assertThat(actual.getId()).isEqualTo(commonFriend.getId());
+        Assertions.assertThat(actual.getName()).isEqualTo(commonFriend.getName());
+        Assertions.assertThat(actual.getEmail()).isEqualTo(commonFriend.getEmail());
+        Assertions.assertThat(actual.getLogin()).isEqualTo(commonFriend.getLogin());
+        Assertions.assertThat(actual.getBirthday()).isEqualTo(commonFriend.getBirthday());
     }
 }
