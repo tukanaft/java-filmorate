@@ -11,13 +11,10 @@ import java.util.*;
 public class InMemoryFilmStorage implements FilmStorage {
     private HashMap<Integer, Film> films;
     private Integer filmId;
-    private Integer[] array = {1};
-    private ArrayList<Integer> firstLike;
 
     public InMemoryFilmStorage() {
         films = new HashMap<>();
         filmId = 1;
-        firstLike = new ArrayList<Integer>(Arrays.asList(array));
     }
 
     public Film addFilm(Film newFilm) {
@@ -48,12 +45,15 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     public Film like(Integer filmId, Integer userId) {
-        Film film = films.get(userId);
+        Integer[] array = {userId};
+        ArrayList<Integer> firstLike = new ArrayList<Integer>(Arrays.asList(array));
+        Film film = films.get(filmId);
         if (film.getLikes() == null) {
-            firstLike.add(0, userId);
+            ;
             film.setLikes(firstLike);
+        } else {
+            films.get(filmId).getLikes().add(userId);
         }
-        films.get(filmId).getLikes().add(userId);
         return films.get(filmId);
     }
 

@@ -167,18 +167,18 @@ class UserServiceImplTest {
     @Test
     void whenAddFriendIsSuccess() {
         User user = User.builder()
-                .id(4)
-                .name("name")
-                .email("email@yandex.ru")
-                .login("login")
+                .id(13)
+                .name("Jerald Balistreri")
+                .email("Litzy.Hettinger4@yahoo.com")
+                .login("uONompBP6")
                 .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(user);
         User friend = User.builder()
-                .id(5)
-                .name("name")
-                .email("email@yandex.ru")
-                .login("login")
+                .id(14)
+                .name("Desiree Hirthe")
+                .email("Chad67@hotmail.com")
+                .login("aY40p9SxjJ")
                 .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
         userService.addUser(friend);
@@ -227,5 +227,33 @@ class UserServiceImplTest {
         Assertions.assertThat(actual.getEmail()).isEqualTo(commonFriend.getEmail());
         Assertions.assertThat(actual.getLogin()).isEqualTo(commonFriend.getLogin());
         Assertions.assertThat(actual.getBirthday()).isEqualTo(commonFriend.getBirthday());
+    }
+
+    @Test
+    void whenDeleteFriendIsSuccess() {
+        User user = User.builder()
+                .id(13)
+                .name("Jerald Balistreri")
+                .email("Litzy.Hettinger4@yahoo.com")
+                .login("uONompBP6")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .build();
+        userService.addUser(user);
+        User friend = User.builder()
+                .id(14)
+                .name("Desiree Hirthe")
+                .email("Chad67@hotmail.com")
+                .login("aY40p9SxjJ")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .build();
+        userService.addUser(friend);
+        userService.addFriend(user.getId(), friend.getId());
+        userService.deleteFriend(user.getId(), friend.getId());
+        User actual = userService.getUsers().get(1);
+        Assertions.assertThat(actual.getId()).isEqualTo(friend.getId());
+        Assertions.assertThat(actual.getName()).isEqualTo(friend.getName());
+        Assertions.assertThat(actual.getEmail()).isEqualTo(friend.getEmail());
+        Assertions.assertThat(actual.getLogin()).isEqualTo(friend.getLogin());
+        Assertions.assertThat(actual.getBirthday()).isEqualTo(friend.getBirthday());
     }
 }

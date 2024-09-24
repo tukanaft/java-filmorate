@@ -11,7 +11,6 @@ import java.util.*;
 public class InMemoryUserStorage implements UserStorage {
     private HashMap<Integer, User> users;
     private Integer userId;
-    private Integer[] array = {1};
 
 
     public InMemoryUserStorage() {
@@ -47,6 +46,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     public User addFriend(Integer userId, Integer friendsId) {
+        Integer[] array = {1};
         ArrayList<Integer> firstFriend = new ArrayList<Integer>(Arrays.asList(array));
         ArrayList<Integer> friendsFirstFriend = new ArrayList<Integer>(Arrays.asList(array));
         User user = users.get(userId);
