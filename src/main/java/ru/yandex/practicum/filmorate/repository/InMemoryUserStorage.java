@@ -50,7 +50,8 @@ public class InMemoryUserStorage implements UserStorage {
     public User addFriend(Integer userId, Integer friendsId) {
         User user = users.get(userId);
         if (user.getFriendsId() == null) {
-            firstFriend.add(0, friendsId);
+            firstFriend.clear();
+            firstFriend.add(friendsId);
             user.setFriendsId(firstFriend);
         }
         user.getFriendsId().add(friendsId);
