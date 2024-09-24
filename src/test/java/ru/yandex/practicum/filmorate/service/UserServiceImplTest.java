@@ -219,7 +219,7 @@ class UserServiceImplTest {
                 .build();
         userService.addUser(otherUser);
         User friend = User.builder()
-                .id(7)
+                .id(21)
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
