@@ -4,7 +4,9 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 @Component
 
@@ -35,7 +37,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
 
         if (foundFilm == 0) {
-            throw new NotFoundException("фильм не найден");
+            throw new NotFoundException("фильм не найден", filmId);
         }
         return newFilm;
     }
@@ -44,26 +46,26 @@ public class InMemoryFilmStorage implements FilmStorage {
         return new HashMap<Integer, Film>(films);
     }
 
-    public Film like(Integer filmId, Integer userId) {
+    public Boolean like(Integer filmId, Integer userId) {
         Integer[] array = {userId};
         ArrayList<Integer> firstLike = new ArrayList<Integer>(Arrays.asList(array));
         Film film = films.get(filmId);
-        if (!(film.getLikes() == null)) {
+        if ((film.getLikes() != null)) {
             if (film.getLikes().contains(userId)) {
-                return films.get(filmId);
+                return false;
             }
         }
         if (film.getLikes() == null) {
             film.setLikes(firstLike);
         } else {
-            films.get(filmId).getLikes().add(userId);
+            film.getLikes().add(userId);
         }
-        return films.get(filmId);
+        return true;
     }
 
-    public Film unlike(Integer filmId, Integer userId) {
+    public Boolean unlike(Integer filmId, Integer userId) {
         films.get(filmId).getLikes().remove(userId);
-        return films.get(filmId);
+        return true;
     }
 
 

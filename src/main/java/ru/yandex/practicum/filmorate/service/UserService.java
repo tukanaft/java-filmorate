@@ -11,9 +11,9 @@ public interface UserService {
 
     ArrayList<User> getUsers();
 
-    User addFriend(Integer userId, Integer friendsId);
+    Boolean addFriend(Integer userId, Integer friendsId);
 
-    User deleteFriend(Integer userId, Integer friendsId);
+    Boolean deleteFriend(Integer userId, Integer friendsId);
 
     ArrayList<User> commonFriends(Integer userId, Integer friendsId);
 

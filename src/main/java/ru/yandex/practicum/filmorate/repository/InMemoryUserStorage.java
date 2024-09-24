@@ -4,7 +4,9 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 @Component
 
@@ -36,7 +38,7 @@ public class InMemoryUserStorage implements UserStorage {
         }
         if (foundUser == 0) {
             throw new NotFoundException(
-                    "пользователь не найден");
+                    "пользователь не найден", newUser.getId());
         }
         return newUser;
     }
@@ -45,7 +47,7 @@ public class InMemoryUserStorage implements UserStorage {
         return new HashMap<Integer, User>(users);
     }
 
-    public User addFriend(Integer userId, Integer friendsId) {
+    public Boolean addFriend(Integer userId, Integer friendsId) {
         Integer[] array = {1};
         ArrayList<Integer> firstFriend = new ArrayList<Integer>(Arrays.asList(array));
         ArrayList<Integer> friendsFirstFriend = new ArrayList<Integer>(Arrays.asList(array));
@@ -67,16 +69,16 @@ public class InMemoryUserStorage implements UserStorage {
                 friend.getFriendsId().add(userId);
             }
         }
-        return user;
+        return true;
     }
 
-    public User deleteFriend(Integer userId, Integer friendsId) {
+    public Boolean deleteFriend(Integer userId, Integer friendsId) {
         if (users.get(userId).getFriendsId() == null) {
-            return users.get(userId);
+            return false;
         }
         users.get(userId).getFriendsId().remove(friendsId);
         users.get(friendsId).getFriendsId().remove(userId);
-        return users.get(userId);
+        return true;
     }
 
     public ArrayList<User> getFriends(Integer userId) {

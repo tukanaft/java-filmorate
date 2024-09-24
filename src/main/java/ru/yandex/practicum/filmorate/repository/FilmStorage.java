@@ -11,9 +11,9 @@ public interface FilmStorage {
 
     HashMap<Integer, Film> getFilms();
 
-    Film like(Integer filmId, Integer userId);
+    Boolean like(Integer filmId, Integer userId);
 
-    Film unlike(Integer filmId, Integer userId);
+    Boolean unlike(Integer filmId, Integer userId);
 
     Boolean isFilmExists(Integer filmId);
 

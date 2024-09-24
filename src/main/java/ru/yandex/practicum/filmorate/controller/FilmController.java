@@ -37,13 +37,13 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Film like(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId) {
+    public Boolean like(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId) {
         log.info("FilmController: выполнение запроса на добавление лайка: {}", filmId);
         return filmService.like(filmId, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public Film unlike(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId) {
+    public Boolean unlike(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId) {
         log.info("FilmController: выполнение запроса на удаление лайка: {}", filmId);
         return filmService.like(filmId, userId);
     }

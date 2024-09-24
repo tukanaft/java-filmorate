@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,25 +43,25 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public Film like(Integer filmId, Integer userId) {
+    public Boolean like(Integer filmId, Integer userId) {
         log.info("FilmService: выполнение запроса на добавление лайка");
         if (!filmStorage.isFilmExists(filmId)) {
-            throw new NotFoundException("Такого фильма нет в базе");
+            throw new NotFoundException("Такого фильма нет в базе", filmId);
         }
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", userId);
         }
         return filmStorage.like(filmId, userId);
     }
 
     @Override
-    public Film unlike(Integer filmId, Integer userId) {
+    public Boolean unlike(Integer filmId, Integer userId) {
         log.info("FilmService: выполнение запроса на удаление лайка");
         if (!filmStorage.isFilmExists(filmId)) {
-            throw new NotFoundException("Такого фильма нет в базе");
+            throw new NotFoundException("Такого фильма нет в базе", filmId);
         }
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", userId);
         }
         if (!filmStorage.getFilms().get(filmId).getLikes().contains(userId)) {
             throw new ValidationException("вы еще не лайкали этот фильм");
@@ -74,16 +75,14 @@ public class FilmServiceImpl implements FilmService {
         if (count == null) {
             count = 10;
         }
-        List<Film> filmsTest = getFilms();
-        for (Film testFilm : filmStorage.getFilms().values()) {
-            if (testFilm.getLikes() == null) {
-                filmsTest.remove(testFilm);
-            }
-        }
-        filmsTest.sort((film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size()));
-        return filmsTest.stream()
+        Comparator<Film> comparator = (film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size());
+        List<Film> films = getFilms()
+                .stream()
+                .filter(g -> g.getLikes() != null)
+                .sorted(comparator)
                 .limit(count)
                 .collect(Collectors.toList());
+        return films;
 
     }
 

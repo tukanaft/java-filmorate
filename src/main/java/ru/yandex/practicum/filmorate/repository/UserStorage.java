@@ -12,9 +12,9 @@ public interface UserStorage {
 
     HashMap<Integer, User> getUsers();
 
-    User addFriend(Integer user, Integer friendsId);
+    Boolean addFriend(Integer user, Integer friendsId);
 
-    User deleteFriend(Integer user, Integer friendsId);
+    Boolean deleteFriend(Integer user, Integer friendsId);
 
     Boolean isUserExists(Integer filmId);
 

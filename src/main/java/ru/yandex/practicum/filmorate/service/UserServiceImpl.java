@@ -17,7 +17,6 @@ import java.util.ArrayList;
 @Component
 @RequiredArgsConstructor
 class UserServiceImpl implements UserService {
-    private ArrayList<User> commonFriendsList;
     private final UserStorage userStorage;
 
     @Override
@@ -41,46 +40,47 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addFriend(Integer userId, Integer friendsId) {
+    public Boolean addFriend(Integer userId, Integer friendsId) {
+        User user = userStorage.getUsers().get(userId);
         log.info("UserService: выполнение запроса на добовление друга");
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", userId);
         }
         if (!userStorage.isUserExists(friendsId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", friendsId);
         }
-        if (!(userStorage.getUsers().get(userId).getFriendsId() == null)) {
-            if (userStorage.getUsers().get(userId).getFriendsId().contains(friendsId)) {
+        if (!(user.getFriendsId() == null)) {
+            if (user.getFriendsId().contains(friendsId)) {
                 throw new RuntimeException("такой друг уже добавлен");
             }
         }
-        return userStorage.addFriend(userId, friendsId);
+        return userStorage.addFriend(userId,friendsId);
     }
 
     @Override
-    public User deleteFriend(Integer userId, Integer friendsId) {
+    public Boolean deleteFriend(Integer userId, Integer friendsId) {
         log.info("UserService: выполнение запроса на удаление друга");
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", userId);
         }
         if (!userStorage.isUserExists(friendsId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", friendsId);
         }
-        return userStorage.deleteFriend(userId, friendsId);
+        return userStorage.addFriend(userId,friendsId);
     }
 
     @Override
     public ArrayList<User> commonFriends(Integer userId, Integer friendsId) {
         log.info("UserService: выполнение запроса на поиск общих друзей");
+        ArrayList<User> commonFriendsList = new ArrayList<User>();
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", userId);
         }
         if (!userStorage.isUserExists(friendsId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", friendsId);
         }
         User user = userStorage.getUsers().get(userId);
         User friend = userStorage.getUsers().get(friendsId);
-        commonFriendsList = new ArrayList<>();
         if (user.getFriendsId() == null) {
             throw new ValidationException("У вас нет друзей");
         }
@@ -104,7 +104,7 @@ class UserServiceImpl implements UserService {
     public ArrayList<User> getFriends(Integer userId) {
         log.info("UserService: выполнение запроса на отправление списка друзей пользователя");
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует");
+            throw new NotFoundException("Такого пользователя не существует", userId);
         }
         return userStorage.getFriends(userId);
     }
