@@ -49,9 +49,9 @@ class UserServiceImpl implements UserService {
         if (!userStorage.isUserExists(friendsId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        if (userStorage.getUsers().get(userId).getFriendsId().contains(friendsId)) {
-            throw new RuntimeException("такой друг уже добавлен");
-        }
+        //if (userStorage.getUsers().get(userId).getFriendsId().contains(friendsId)) {
+        //    throw new RuntimeException("такой друг уже добавлен");
+        //}
         return userStorage.addFriend(userId, friendsId);
     }
 
