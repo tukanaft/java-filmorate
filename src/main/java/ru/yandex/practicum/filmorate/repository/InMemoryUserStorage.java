@@ -43,14 +43,14 @@ public class InMemoryUserStorage implements UserStorage {
         return newUser;
     }
 
-    public HashMap<Integer,User> getUsers() {
-        return new HashMap<Integer,User>(users);
+    public HashMap<Integer, User> getUsers() {
+        return new HashMap<Integer, User>(users);
     }
 
     public User addFriend(Integer userId, Integer friendsId) {
         User user = users.get(userId);
-        if (user.getFriendsId() == null){
-            firstFriend.add(0,friendsId);
+        if (user.getFriendsId() == null) {
+            firstFriend.add(0, friendsId);
             user.setFriendsId(firstFriend);
         }
         user.getFriendsId().add(friendsId);

@@ -43,14 +43,14 @@ public class InMemoryFilmStorage implements FilmStorage {
         return newFilm;
     }
 
-    public HashMap<Integer,Film> getFilms() {
-        return new HashMap<Integer,Film>(films);
+    public HashMap<Integer, Film> getFilms() {
+        return new HashMap<Integer, Film>(films);
     }
 
     public Film like(Integer filmId, Integer userId) {
         Film film = films.get(userId);
-        if (film.getLikes() == null){
-            firstLike.add(0,userId);
+        if (film.getLikes() == null) {
+            firstLike.add(0, userId);
             film.setLikes(firstLike);
         }
         films.get(filmId).getLikes().add(userId);
