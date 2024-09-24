@@ -48,8 +48,10 @@ public class InMemoryFilmStorage implements FilmStorage {
         Integer[] array = {userId};
         ArrayList<Integer> firstLike = new ArrayList<Integer>(Arrays.asList(array));
         Film film = films.get(filmId);
-        if (film.getLikes().contains(userId)) {
-            return films.get(filmId);
+        if (!(film.getLikes() == null)) {
+            if (film.getLikes().contains(userId)) {
+                return films.get(filmId);
+            }
         }
         if (film.getLikes() == null) {
             film.setLikes(firstLike);
