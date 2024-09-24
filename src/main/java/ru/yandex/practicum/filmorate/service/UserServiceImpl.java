@@ -83,7 +83,7 @@ class UserServiceImpl implements UserService {
         }
         User user = userStorage.getUsers().get(userId);
         User friend = userStorage.getUsers().get(friendsId);
-        commonFriendsList.clear();
+        commonFriendsList = new ArrayList<>();
         if (user.getFriendsId() == null) {
             throw new ValidationException("У вас нет друзей");
         }

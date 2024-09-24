@@ -8,7 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 @SpringBootTest
@@ -183,6 +186,49 @@ class UserServiceImplTest {
         userService.addUser(friend);
         userService.addFriend(user.getId(), friend.getId());
         User actual = userService.getUsers().get(1);
+        Assertions.assertThat(actual.getId()).isEqualTo(friend.getId());
+        Assertions.assertThat(actual.getName()).isEqualTo(friend.getName());
+        Assertions.assertThat(actual.getEmail()).isEqualTo(friend.getEmail());
+        Assertions.assertThat(actual.getLogin()).isEqualTo(friend.getLogin());
+        Assertions.assertThat(actual.getBirthday()).isEqualTo(friend.getBirthday());
+    }
+
+    @Test
+    void whenCommonFriendIsSuccess() {
+        Integer[] arrayUser = {21, 18, 16, 5, 1, 5, 12, 16, 18, 21, 20};
+        ArrayList<Integer> userFriends = new ArrayList<Integer>(Arrays.asList(arrayUser));
+        ;
+        Integer[] arrayOther = {21, 21, 18, 16, 5, 1, 5, 12, 16, 18, 21, 20, 21};
+        ArrayList<Integer> otherFriends = new ArrayList<Integer>(Arrays.asList(arrayOther));
+        ;
+        User user = User.builder()
+                .id(19)
+                .name("name")
+                .email("email@yandex.ru")
+                .login("login")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .friendsId(userFriends)
+                .build();
+        userService.addUser(user);
+        User otherUser = User.builder()
+                .id(20)
+                .name("name")
+                .email("email@yandex.ru")
+                .login("login")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .friendsId(otherFriends)
+                .build();
+        userService.addUser(otherUser);
+        User friend = User.builder()
+                .id(21)
+                .name("name")
+                .email("email@yandex.ru")
+                .login("login")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .build();
+        userService.addUser(friend);
+        ArrayList<User> friends = new ArrayList<User>(userService.commonFriends(user.getId(), otherUser.getId()));
+        User actual = friends.get(0);
         Assertions.assertThat(actual.getId()).isEqualTo(friend.getId());
         Assertions.assertThat(actual.getName()).isEqualTo(friend.getName());
         Assertions.assertThat(actual.getEmail()).isEqualTo(friend.getEmail());
