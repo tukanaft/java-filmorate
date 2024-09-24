@@ -37,7 +37,7 @@ class UserServiceImpl implements UserService {
     @Override
     public ArrayList<User> getUsers() {
         log.info("UserService: выполнение запроса на получение пользователей");
-        return userStorage.getUsers();
+        return new ArrayList<>(userStorage.getUsers().values());
     }
 
     @Override
@@ -49,9 +49,10 @@ class UserServiceImpl implements UserService {
         if (!userStorage.isUserExists(friendsId)) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        if (!(userStorage.getUsers().get(userId).getFriendsId() == null) &&userStorage.getUsers().get(userId).getFriendsId().contains(friendsId)) {
+        if (!(userStorage.getUsers().get(userId).getFriendsId() == null)) {
+            if (userStorage.getUsers().get(userId).getFriendsId().contains(friendsId)) {
            throw new RuntimeException("такой друг уже добавлен");
-        }
+        }}
         return userStorage.addFriend(userId, friendsId);
     }
 

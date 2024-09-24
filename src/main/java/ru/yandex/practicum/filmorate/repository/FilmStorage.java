@@ -2,14 +2,14 @@ package ru.yandex.practicum.filmorate.repository;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface FilmStorage {
     Film addFilm(Film newFilm);
 
     Film updateFilm(Film newFilm);
 
-    ArrayList<Film> getFilms();
+    HashMap<Integer, Film> getFilms();
 
     Film like(Integer filmId, Integer userId);
 

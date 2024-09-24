@@ -166,7 +166,7 @@ class UserServiceImplTest {
     @Test
     void whenAddFriendIsSuccess() {
         User user = User.builder()
-                .id(2)
+                .id(4)
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
@@ -174,16 +174,16 @@ class UserServiceImplTest {
                 .build();
         userService.addUser(user);
         User friend = User.builder()
-                .id(3)
+                .id(5)
                 .name("name")
                 .email("email@yandex.ru")
                 .login("login")
                 .birthday(LocalDate.ofYearDay(2000, 20))
                 .build();
-        userService.addUser(user);
         userService.addUser(friend);
         userService.addFriend(user.getId(), friend.getId());
-        User actual = userService.getUsers().get(2);
+        User actual = userService.getUsers().get(1);
+        Assertions.assertThat(actual.getId()).isEqualTo(friend.getId());
         Assertions.assertThat(actual.getName()).isEqualTo(friend.getName());
         Assertions.assertThat(actual.getEmail()).isEqualTo(friend.getEmail());
         Assertions.assertThat(actual.getLogin()).isEqualTo(friend.getLogin());

@@ -39,7 +39,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public ArrayList<Film> getFilms() {
         log.info("FilmService: выполнение запроса на получение фильма");
-        return filmStorage.getFilms();
+        return new ArrayList<Film>(filmStorage.getFilms().values());
     }
 
     @Override
@@ -79,7 +79,7 @@ public class FilmServiceImpl implements FilmService {
             count = 10;
         }
         Comparator<Film> comparator = (film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size());
-        List<Film> films = filmStorage.getFilms();
+        List<Film> films = getFilms();
         return films.stream()
                 .sorted(comparator)
                 .limit(count)
