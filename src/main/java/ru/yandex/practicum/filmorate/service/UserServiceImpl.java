@@ -87,9 +87,9 @@ class UserServiceImpl implements UserService {
         if (friend.getFriendsId() == null) {
             throw new ValidationException("У человека с которым вы пытаетесь найти общих друзей нет друзей");
         }
-        for (Integer usersFriendId : user.getFriendsId()) {
-            if (friend.getFriendsId().contains(usersFriendId)) {
-                commonFriendsList.add(userStorage.getUsers().get(usersFriendId));
+        for (Integer commonFriendId : user.getFriendsId()) {
+            if (friend.getFriendsId().contains(commonFriendId)) {
+                commonFriendsList.add(userStorage.getUsers().get(commonFriendId));
             }
         }
         return commonFriendsList;
