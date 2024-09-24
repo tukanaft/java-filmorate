@@ -71,6 +71,9 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     public User deleteFriend(Integer userId, Integer friendsId) {
+        if (!users.get(userId).getFriendsId().contains(friendsId)) {
+            return users.get(userId);
+        }
         users.get(userId).getFriendsId().remove(friendsId);
         users.get(friendsId).getFriendsId().remove(userId);
         return users.get(userId);
