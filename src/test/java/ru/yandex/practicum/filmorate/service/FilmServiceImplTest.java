@@ -232,8 +232,7 @@ class FilmServiceImplTest {
     }
 
     @Test
-    void whenTopLikeFilmIsSuccess()
-    {
+    void whenTopLikeFilmIsSuccess() {
         Film film = Film.builder()
                 .name("bjB4aIilbD419ye")
                 .description("ZjjWhnWFXYvnI\n" +
@@ -286,20 +285,20 @@ class FilmServiceImplTest {
                 .build();
         userService.addUser(user1);
         User user2 = User.builder()
-            .id(15)
-            .name("Jerald Balistreri")
-            .email("Litzy.Hettinger4@yahoo.com")
-            .login("uONompBP6")
-            .birthday(LocalDate.ofYearDay(2000, 20))
-            .build();
+                .id(15)
+                .name("Jerald Balistreri")
+                .email("Litzy.Hettinger4@yahoo.com")
+                .login("uONompBP6")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .build();
         userService.addUser(user2);
         User user3 = User.builder()
-            .id(16)
-            .name("Jerald Balistreri")
-            .email("Litzy.Hettinger4@yahoo.com")
-            .login("uONompBP6")
-            .birthday(LocalDate.ofYearDay(2000, 20))
-            .build();
+                .id(16)
+                .name("Jerald Balistreri")
+                .email("Litzy.Hettinger4@yahoo.com")
+                .login("uONompBP6")
+                .birthday(LocalDate.ofYearDay(2000, 20))
+                .build();
         userService.addUser(user3);
         filmService.like(6, 13);
         filmService.like(7, 14);
