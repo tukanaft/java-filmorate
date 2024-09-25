@@ -1,22 +1,21 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.repository;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
-public interface FilmService {
+public interface FilmStorage {
     Film addFilm(Film newFilm);
 
     Film updateFilm(Film newFilm);
 
-    ArrayList<Film> getFilms();
+    HashMap<Integer, Film> getFilms();
 
     Boolean like(Integer filmId, Integer userId);
 
     Boolean unlike(Integer filmId, Integer userId);
 
-    List<Film> mostPopularFilms(Integer count);
+    Boolean isFilmExists(Integer filmId);
 
     void clear();
 }

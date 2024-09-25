@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
 
-
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  * Film.
@@ -20,4 +20,5 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
+    private ArrayList<Integer> likes;
 }

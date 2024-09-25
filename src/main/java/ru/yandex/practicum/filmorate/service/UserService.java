@@ -11,5 +11,13 @@ public interface UserService {
 
     ArrayList<User> getUsers();
 
+    Boolean addFriend(Integer userId, Integer friendsId);
+
+    Boolean deleteFriend(Integer userId, Integer friendsId);
+
+    ArrayList<User> commonFriends(Integer userId, Integer friendsId);
+
     void clear();
+
+    ArrayList<User> getFriends(Integer userId);
 }
