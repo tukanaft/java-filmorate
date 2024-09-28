@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -27,7 +26,7 @@ public class User {
     private String name;
     private String login;
     private LocalDate birthday;
-    private HashMap<Integer,Status> friendsId;
+    private HashMap<Integer, Status> friendsId;
 
 
 }

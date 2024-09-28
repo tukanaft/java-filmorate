@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.model.Status;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 @Component
@@ -49,30 +48,29 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     public Boolean addFriend(Integer userId, Integer friendsId) {
-        HashMap<Integer, Status> firstFriend = new HashMap<Integer,Status>();
-        firstFriend.put(friendsId,Status.UNAPPROVED);
-        HashMap<Integer, Status> friendsFirstFriend = new HashMap<Integer,Status>();
-        friendsFirstFriend.put(userId,Status.REQUESTED);
+        HashMap<Integer, Status> firstFriend = new HashMap<Integer, Status>();
+        firstFriend.put(friendsId, Status.UNAPPROVED);
+        HashMap<Integer, Status> friendsFirstFriend = new HashMap<Integer, Status>();
+        friendsFirstFriend.put(userId, Status.REQUESTED);
         User user = users.get(userId);
         User friend = users.get(friendsId);
         if (user.getFriendsId() == null) {
             user.setFriendsId(firstFriend);
         } else {
-            if (user.getFriendsId().containsKey(friendsId)){
-                if (user.getFriendsId().get(friendsId).equals(Status.REQUESTED)){
-                    user.getFriendsId().replace(friendsId,Status.APPROVED);
-                    friend.getFriendsId().replace(userId,Status.APPROVED);
+            if (user.getFriendsId().containsKey(friendsId)) {
+                if (user.getFriendsId().get(friendsId).equals(Status.REQUESTED)) {
+                    user.getFriendsId().replace(friendsId, Status.APPROVED);
+                    friend.getFriendsId().replace(userId, Status.APPROVED);
                 }
-            }
-            else {
-                user.getFriendsId().put(friendsId,Status.UNAPPROVED);
+            } else {
+                user.getFriendsId().put(friendsId, Status.UNAPPROVED);
             }
         }
         if (friend.getFriendsId() == null) {
             friend.setFriendsId(friendsFirstFriend);
         } else {
             if (!friend.getFriendsId().containsKey(userId)) {
-                friend.getFriendsId().put(userId,Status.REQUESTED);
+                friend.getFriendsId().put(userId, Status.REQUESTED);
             }
         }
         return true;

@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.repository.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.repository.UserDbStorage;
-import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,7 +56,7 @@ class UserServiceImpl implements UserService {
                 throw new RuntimeException("такой друг уже добавлен");
             }
         }
-        return userStorage.addFriend(userId,friendsId);
+        return userStorage.addFriend(userId, friendsId);
     }
 
     @Override
@@ -70,7 +68,7 @@ class UserServiceImpl implements UserService {
         if (!userStorage.isUserExists(friendsId)) {
             throw new NotFoundException("Такого пользователя не существует", friendsId);
         }
-        return userStorage.deleteFriend(userId,friendsId);
+        return userStorage.deleteFriend(userId, friendsId);
     }
 
     @Override

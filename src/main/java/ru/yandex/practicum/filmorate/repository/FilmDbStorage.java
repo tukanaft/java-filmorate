@@ -6,9 +6,7 @@ import ru.yandex.practicum.filmorate.dataBase.FilmDb;
 import ru.yandex.practicum.filmorate.dataBase.LikeDb;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Like;
-import ru.yandex.practicum.filmorate.model.Raiting;
 
 import java.util.HashMap;
 
@@ -72,7 +70,6 @@ public class FilmDbStorage implements FilmStorage {
         }
         return false;
     }
-
 
 
     @Override

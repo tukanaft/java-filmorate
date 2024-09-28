@@ -4,7 +4,8 @@ public enum Status {
     REQUESTED,
     APPROVED,
     UNAPPROVED;
-    private Status(){
+
+    private Status() {
 
     }
 }

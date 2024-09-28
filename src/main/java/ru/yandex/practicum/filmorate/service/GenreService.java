@@ -16,11 +16,11 @@ public class GenreService {
     @Autowired
     GenreDb genreDb;
 
-    public List<Genre> getGenres(){
+    public List<Genre> getGenres() {
         return genreDb.findAll();
     }
 
-    public Genre getGenreById(Integer genreId){
+    public Genre getGenreById(Integer genreId) {
         return genreDb.findById(genreId).get();
     }
 

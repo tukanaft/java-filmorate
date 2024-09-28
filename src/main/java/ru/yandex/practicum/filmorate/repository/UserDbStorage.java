@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dataBase.FriendsDb;
 import ru.yandex.practicum.filmorate.dataBase.UserDb;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Friends;
 import ru.yandex.practicum.filmorate.model.Status;
 import ru.yandex.practicum.filmorate.model.User;
@@ -56,8 +55,7 @@ public class UserDbStorage implements UserStorage {
             for (Friends friends : friendsDb.findAll()) {
                 if (friends.getUserid().equals(userId) && (friends.getFriend().equals(friendsId))) {
                     userFriend = friends;
-                }
-                else if (friends.getUserid().equals(friendsId) && (friends.getFriend().equals(userId))) {
+                } else if (friends.getUserid().equals(friendsId) && (friends.getFriend().equals(userId))) {
                     otherFriend = friends;
                 }
             }
@@ -104,8 +102,7 @@ public class UserDbStorage implements UserStorage {
             for (Friends friends : friendsDb.findAll()) {
                 if (friends.getUserid().equals(userId) && (friends.getFriend().equals(friendsId))) {
                     friendsDb.delete(friends);
-                }
-                else if (friends.getUserid().equals(friendsId) && (friends.getFriend().equals(userId))) {
+                } else if (friends.getUserid().equals(friendsId) && (friends.getFriend().equals(userId))) {
                     friendsDb.delete(friends);
                 }
             }
