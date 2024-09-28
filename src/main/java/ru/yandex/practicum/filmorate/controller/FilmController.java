@@ -53,4 +53,6 @@ public class FilmController {
         log.info("FilmController: выполнение запроса на получение самых популярных фильмов");
         return filmService.mostPopularFilms(count);
     }
+
 }
+
