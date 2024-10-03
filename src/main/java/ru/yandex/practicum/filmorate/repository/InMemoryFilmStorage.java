@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.repository;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.dto.FilmDto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,8 +43,19 @@ public class InMemoryFilmStorage implements FilmStorage {
         return newFilm;
     }
 
-    public HashMap<Integer, Film> getFilms() {
-        return new HashMap<Integer, Film>(films);
+    public HashMap<Integer, FilmDto> getFilms() {
+        HashMap<Integer, FilmDto> filmsUpload = new HashMap<>();
+        for (Film film : films.values()) {
+            FilmDto filmDto = new FilmDto();
+            filmDto.setId(film.getId());
+            filmDto.setName(film.getName());
+            filmDto.setDescription(film.getDescription());
+            filmDto.setReleaseDate(film.getReleaseDate());
+            filmDto.setReleaseDate(film.getReleaseDate());
+            filmDto.setLikes(film.getLikes());
+            filmsUpload.put(filmDto.getId(), filmDto);
+        }
+        return filmsUpload;
     }
 
     public Boolean like(Integer filmId, Integer userId) {

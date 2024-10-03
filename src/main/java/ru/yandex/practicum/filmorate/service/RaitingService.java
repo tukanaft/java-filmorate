@@ -2,9 +2,9 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dataBase.RaitingDb;
+import ru.yandex.practicum.filmorate.mapper.RaitingRowMapper;
 import ru.yandex.practicum.filmorate.model.Raiting;
 
 import java.util.List;
@@ -13,15 +13,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RaitingService {
-    @Autowired
-    RaitingDb raitingDb;
+    JdbcTemplate jdbcTemplate;
+    RaitingRowMapper raitingRowMapper;
 
     public List<Raiting> getRaitings() {
-        return raitingDb.findAll();
+        String query = "Select * from raiting";
+        return jdbcTemplate.query(query, raitingRowMapper);
     }
 
     public Raiting getRaitingById(Integer raitingId) {
-        return raitingDb.findById(raitingId).get();
+        String query = "Select * from raiting where id = ?";
+        return jdbcTemplate.queryForObject(query, raitingRowMapper, raitingId);
     }
 
 }

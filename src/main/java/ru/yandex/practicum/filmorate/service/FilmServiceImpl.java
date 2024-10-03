@@ -2,13 +2,12 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.repository.FilmDbStorage;
-import ru.yandex.practicum.filmorate.repository.UserDbStorage;
+import ru.yandex.practicum.filmorate.model.dto.FilmDto;
+import ru.yandex.practicum.filmorate.repository.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,66 +19,68 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FilmServiceImpl implements FilmService {
-    @Autowired
-    private final FilmDbStorage filmStorage;
-    @Autowired
-    private final UserDbStorage userStorage;
+    private final FilmDbStorage filmDbStorage;
+    private final UserDbStorage userDbStorage;
+    private final LikeStorage likeDbStorage;
 
     @Override
     public Film addFilm(Film newFilm) {
         log.info("FilmService: выполнение запроса на добавление фильма: {}", newFilm);
         validateFilm(newFilm);
-        return filmStorage.addFilm(newFilm);
+        return filmDbStorage.addFilm(newFilm);
     }
 
     @Override
     public Film updateFilm(Film newFilm) {
         log.info("FilmService: выполнение запроса на обновление фильма: {}", newFilm);
         validateFilm(newFilm);
-        return filmStorage.updateFilm(newFilm);
+        return filmDbStorage.updateFilm(newFilm);
     }
 
     @Override
-    public ArrayList<Film> getFilms() {
+    public ArrayList<FilmDto> getFilms() {
         log.info("FilmService: выполнение запроса на получение фильма");
-        return new ArrayList<Film>(filmStorage.getFilms().values());
+        return new ArrayList<>(filmDbStorage.getFilms().values());
     }
 
     @Override
     public Boolean like(Integer filmId, Integer userId) {
         log.info("FilmService: выполнение запроса на добавление лайка");
-        if (!filmStorage.isFilmExists(filmId)) {
+        if (!filmDbStorage.isFilmExists(filmId)) {
             throw new NotFoundException("Такого фильма нет в базе", filmId);
         }
-        if (!userStorage.isUserExists(userId)) {
+        if (!userDbStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует", userId);
         }
-        return filmStorage.like(filmId, userId);
+        if (likeDbStorage.isAlreadyLiked(filmId, userId)) {
+            return false;
+        }
+        return filmDbStorage.like(filmId, userId);
     }
 
     @Override
     public Boolean unlike(Integer filmId, Integer userId) {
         log.info("FilmService: выполнение запроса на удаление лайка");
-        if (!filmStorage.isFilmExists(filmId)) {
+        if (!filmDbStorage.isFilmExists(filmId)) {
             throw new NotFoundException("Такого фильма нет в базе", filmId);
         }
-        if (!userStorage.isUserExists(userId)) {
+        if (!userDbStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует", userId);
         }
-        if (!filmStorage.getFilms().get(filmId).getLikes().contains(userId)) {
+        if (!likeDbStorage.isAlreadyLiked(filmId, userId)) {
             throw new ValidationException("вы еще не лайкали этот фильм");
         }
-        return filmStorage.unlike(filmId, userId);
+        return filmDbStorage.unlike(filmId, userId);
     }
 
     @Override
-    public List<Film> mostPopularFilms(Integer count) {
+    public List<FilmDto> mostPopularFilms(Integer count) {
         log.info("FilmService: выполнение запроса на получение самых популярных фильмов");
         if (count == null) {
             count = 10;
         }
-        Comparator<Film> comparator = (film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size());
-        List<Film> films = getFilms()
+        Comparator<FilmDto> comparator = (film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size());
+        List<FilmDto> films = getFilms()
                 .stream()
                 .filter(g -> g.getLikes() != null)
                 .sorted(comparator)
@@ -90,7 +91,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void clear() {
-        filmStorage.clear();
+        filmDbStorage.clear();
     }
 
     private void validateFilm(Film film) {

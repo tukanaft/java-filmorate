@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("{id}/friends")
-    public ArrayList<User> getFriends(@PathVariable("id") Integer userId) {
+    public ArrayList<Integer> getFriends(@PathVariable("id") Integer userId) {
         log.info("UserController: выполнение запроса на отправление списка друзей пользователя: {}", userId);
         return userService.getFriends(userId);
     }

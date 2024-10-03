@@ -5,14 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
-public class Friends {
+public class FilmGenre {
     private Integer id;
-    private Integer userId;
-    private Integer friendId;
-    private String status;
+    private Integer filmId;
+    private Integer gernreId;
 }

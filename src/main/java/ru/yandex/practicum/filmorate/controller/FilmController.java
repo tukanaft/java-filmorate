@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.dto.FilmDto;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class FilmController {
     }
 
     @GetMapping
-    public ArrayList<Film> getFilms() {
+    public ArrayList<FilmDto> getFilms() {
         log.info("FilmController: выполнение запроса на получение фильма");
         return filmService.getFilms();
     }
@@ -49,7 +50,7 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Film> commonFriends(@RequestParam Integer count) {
+    public List<FilmDto> commonFriends(@RequestParam Integer count) {
         log.info("FilmController: выполнение запроса на получение самых популярных фильмов");
         return filmService.mostPopularFilms(count);
     }

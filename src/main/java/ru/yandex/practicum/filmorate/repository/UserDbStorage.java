@@ -1,37 +1,40 @@
 package ru.yandex.practicum.filmorate.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dataBase.FriendsDb;
-import ru.yandex.practicum.filmorate.dataBase.UserDb;
+import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.Friends;
+import ru.yandex.practicum.filmorate.mapper.LikeRowMapper;
+import ru.yandex.practicum.filmorate.mapper.UserRowMapper;
 import ru.yandex.practicum.filmorate.model.Status;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-@Component
+@RequiredArgsConstructor
+@Repository
 public class UserDbStorage implements UserStorage {
 
-    @Autowired
-    UserDb userDb;
-    @Autowired
-    FriendsDb friendsDb;
+    private final JdbcTemplate jdbcTemplate;
+    private final UserRowMapper userRowMapper;
+    private final LikeRowMapper likeRowMapper;
 
     @Override
     public User addUser(User newUser) {
-        userDb.save(newUser);
+        String query = "INSERT INTO users (name,login,birthday) values(?,?,?)";
+        newUser.setId(jdbcTemplate.update(query, newUser.getName(), newUser.getLogin(), newUser.getBirthday()));
         return newUser;
     }
 
     @Override
     public User updateUser(User newUser) {
         if (isUserExists(newUser.getId())) {
-            userDb.save(newUser);
+            String query = "UPDATE users SET name = ?, login=?, birthday = ? WHERE id = ?";
+            jdbcTemplate.update(query, newUser.getName(), newUser.getLogin(), newUser.getBirthday(), newUser.getId());
         } else {
-            throw new NotFoundException("такого пользователя не существует", newUser.getId());
+            throw new NotFoundException("фильм который вы пытаетесь обновить не существует", newUser.getId());
         }
         return newUser;
     }
@@ -39,7 +42,10 @@ public class UserDbStorage implements UserStorage {
     @Override
     public HashMap<Integer, User> getUsers() {
         HashMap<Integer, User> usersUpload = new HashMap<>();
-        for (User user : userDb.findAll()) {
+        String query = "SELECT * from users";
+        List<User> users = jdbcTemplate.query(query, userRowMapper);
+        for (User user : users) {
+            insertFriends(user);
             usersUpload.put(user.getId(), user);
         }
         return usersUpload;
@@ -47,90 +53,90 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public Boolean addFriend(Integer userId, Integer friendsId) {
-        Friends userFriend = new Friends();
-        Friends otherFriend = new Friends();
-        User user = userDb.findById(userId).get();
-        User friend = userDb.findById(friendsId).get();
-        if (user.getFriendsId().containsKey(friendsId)) {
-            for (Friends friends : friendsDb.findAll()) {
-                if (friends.getUserid().equals(userId) && (friends.getFriend().equals(friendsId))) {
-                    userFriend = friends;
-                } else if (friends.getUserid().equals(friendsId) && (friends.getFriend().equals(userId))) {
-                    otherFriend = friends;
-                }
-            }
+        if (isAlreadyFriend(friendsId, userId)) {
+            return changeStatus(friendsId, userId);
         }
-        if (user.getFriendsId().containsKey(friendsId)) {
-            if (user.getFriendsId().get(friendsId).equals(Status.REQUESTED)) {
-                user.getFriendsId().replace(friendsId, Status.APPROVED);
-                friend.getFriendsId().replace(userId, Status.APPROVED);
-                userDb.save(user);
-                userFriend.setUserid(userId);
-                userFriend.setFriend(friendsId);
-                userFriend.setStatus(Status.APPROVED);
-                friendsDb.save(userFriend);
-                userDb.save(friend);
-                otherFriend.setUserid(friendsId);
-                otherFriend.setFriend(userId);
-                otherFriend.setStatus(Status.APPROVED);
-                friendsDb.save(otherFriend);
-            }
-        } else {
-            user.getFriendsId().put(friendsId, Status.UNAPPROVED);
-            userFriend.setUserid(userId);
-            userFriend.setFriend(friendsId);
-            userFriend.setStatus(Status.UNAPPROVED);
-            friendsDb.save(userFriend);
-            userDb.save(user);
-            otherFriend.setUserid(userId);
-            otherFriend.setFriend(friendsId);
-            otherFriend.setStatus(Status.UNAPPROVED);
-            friendsDb.save(otherFriend);
-            userDb.save(friend);
-        }
+        String query = "INSERT INTO friends (user_id,friend_id,status) values(?,?,?)";
+        jdbcTemplate.update(query, userId, friendsId, Status.UNAPPROVED.toString());
         return true;
     }
 
     @Override
     public Boolean deleteFriend(Integer userId, Integer friendsId) {
-        User user = userDb.findById(userId).get();
-        User friend = userDb.findById(friendsId).get();
-        if (user.getFriendsId().containsKey(friendsId)) {
-            return false;
-        }
-        if (user.getFriendsId().containsKey(friendsId)) {
-            for (Friends friends : friendsDb.findAll()) {
-                if (friends.getUserid().equals(userId) && (friends.getFriend().equals(friendsId))) {
-                    friendsDb.delete(friends);
-                } else if (friends.getUserid().equals(friendsId) && (friends.getFriend().equals(userId))) {
-                    friendsDb.delete(friends);
-                }
-            }
-        }
-        user.getFriendsId().remove(friendsId);
-        userDb.save(user);
-        friend.getFriendsId().remove(userId);
-        userDb.save(friend);
-        return true;
-    }
-
-    @Override
-    public Boolean isUserExists(Integer filmId) {
-        for (User user : userDb.findAll()) {
-            if (user.getId().equals(filmId)) {
+        if (isAlreadyFriend(userId, friendsId)) {
+            if (isAlreadyFriend(friendsId, userId)) {
+                String query = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
+                jdbcTemplate.update(query, friendsId, userId);
                 return true;
             }
+            String query = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
+            jdbcTemplate.update(query, userId, friendsId);
+            return true;
         }
         return false;
     }
 
     @Override
-    public ArrayList<User> getFriends(Integer userId) {
-        return null;
+    public Boolean isUserExists(Integer userId) {
+        String query = "SELECT COUNT(*) FROM users WHERE id =?";
+        Integer count = jdbcTemplate.queryForObject(query, new Object[]{userId}, Integer.class);
+        return count != null && count > 0;
+    }
+
+    @Override
+    public ArrayList<Integer> getFriends(Integer userId) {
+        ArrayList<Integer> friendList = new ArrayList<>();
+        String queryFriendId = "SELECT friend_id from friends g WHERE user_id = ?";
+        List<Integer> friendsId = jdbcTemplate.queryForList(queryFriendId, new Object[]{userId}, Integer.class);
+        String queryFriendId2 = "SELECT friend_id from friends g WHERE friend_id = ?";
+        List<Integer> friendsId2 = jdbcTemplate.queryForList(queryFriendId2, new Object[]{userId}, Integer.class);
+        if (friendsId != null) {
+            friendList.addAll(friendsId);
+        }
+        if (friendsId2 != null) {
+            friendList.addAll(friendsId2);
+        }
+        return friendList;
     }
 
     @Override
     public void clear() {
 
     }
+
+    private Boolean isAlreadyFriend(Integer userId, Integer friends_id) {
+        String query = "SELECT COUNT(*) FROM friends WHERE user_id =? AND friend_id = ?";
+        Integer count = jdbcTemplate.queryForObject(query, new Object[]{userId, friends_id}, Integer.class);
+        return count != null && count > 0;
+    }
+
+    private Boolean changeStatus(Integer userId, Integer friendsId) {
+        String query = "UPDATE friends SET status = ? WHERE user_id = ? AND friend_id = ?";
+        jdbcTemplate.update(query, Status.APPROVED.toString(), userId, friendsId);
+        return true;
+    }
+
+    private User insertFriends(User user) {
+        Integer count = 0;
+        HashMap<Integer, Status> friends = new HashMap<>();
+        String queryFriendId = "SELECT friend_id from friends g WHERE user_id = ?";
+        String queryStatus = "SELECT status from friends WHERE user_id =?";
+        List<Integer> friendsId = jdbcTemplate.queryForList(queryFriendId, new Object[]{user.getId()}, Integer.class);
+        List<String> status = jdbcTemplate.queryForList(queryStatus, new Object[]{user.getId()}, String.class);
+        for (int i = 0; i < friendsId.size(); i++) {
+            friends.put(friendsId.get(i), Status.valueOf(status.get(i)));
+            count++;
+        }
+        String queryFriendId2 = "SELECT friend_id from friends g WHERE friend_id = ?";
+        String queryStatus2 = "SELECT status from friends WHERE friend_id =?";
+        List<Integer> friendsId2 = jdbcTemplate.queryForList(queryFriendId2, new Object[]{user.getId()}, Integer.class);
+        List<String> status2 = jdbcTemplate.queryForList(queryStatus2, new Object[]{user.getId()}, String.class);
+        for (int i = 0; i < friendsId.size(); i++) {
+            friends.put(friendsId2.get(count), Status.valueOf(status2.get(count)));
+            count++;
+        }
+        user.setFriendsId(friends);
+        return user;
+    }
 }
+

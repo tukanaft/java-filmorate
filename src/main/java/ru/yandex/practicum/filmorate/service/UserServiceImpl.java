@@ -103,7 +103,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ArrayList<User> getFriends(Integer userId) {
+    public ArrayList<Integer> getFriends(Integer userId) {
         log.info("UserService: выполнение запроса на отправление списка друзей пользователя");
         if (!userStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует", userId);

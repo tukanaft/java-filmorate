@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -16,11 +15,7 @@ import java.util.HashMap;
 @ToString
 @Getter
 @Setter
-@Entity
-@Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
     private String email;
     private String name;

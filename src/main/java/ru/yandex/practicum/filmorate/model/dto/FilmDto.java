@@ -1,9 +1,8 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.model.dto;
 
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,13 +14,13 @@ import java.util.List;
 @ToString
 @Getter
 @Setter
-public class Film {
+public class FilmDto {
     private Integer id;
     private String name;
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
-    private ArrayList<Integer> likes;
-    private List<Integer> genre;
-    private Raiting raiting;
+    private List<Integer> likes;
+    private List<String> genre;
+    private String raiting;
 }

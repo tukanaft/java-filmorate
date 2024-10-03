@@ -18,7 +18,7 @@ public interface UserStorage {
 
     Boolean isUserExists(Integer filmId);
 
-    ArrayList<User> getFriends(Integer userId);
+    ArrayList<Integer> getFriends(Integer userId);
 
     void clear();
 }
