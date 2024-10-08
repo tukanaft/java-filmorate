@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -21,7 +21,7 @@ public class User {
     private String name;
     private String login;
     private LocalDate birthday;
-    private ArrayList<Integer> friendsId;
+    private HashMap<Integer, Status> friendsId;
 
 
 }

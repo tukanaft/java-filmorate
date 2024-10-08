@@ -19,5 +19,5 @@ public interface UserService {
 
     void clear();
 
-    ArrayList<User> getFriends(Integer userId);
+    ArrayList<Integer> getFriends(Integer userId);
 }

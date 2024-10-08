@@ -2,10 +2,10 @@ package ru.yandex.practicum.filmorate.repository;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.Status;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 @Component
@@ -48,25 +48,29 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     public Boolean addFriend(Integer userId, Integer friendsId) {
-        Integer[] array = {1};
-        ArrayList<Integer> firstFriend = new ArrayList<Integer>(Arrays.asList(array));
-        ArrayList<Integer> friendsFirstFriend = new ArrayList<Integer>(Arrays.asList(array));
+        HashMap<Integer, Status> firstFriend = new HashMap<Integer, Status>();
+        firstFriend.put(friendsId, Status.UNAPPROVED);
+        HashMap<Integer, Status> friendsFirstFriend = new HashMap<Integer, Status>();
+        friendsFirstFriend.put(userId, Status.REQUESTED);
         User user = users.get(userId);
         User friend = users.get(friendsId);
         if (user.getFriendsId() == null) {
-            firstFriend.clear();
-            firstFriend.add(friendsId);
             user.setFriendsId(firstFriend);
         } else {
-            user.getFriendsId().add(friendsId);
+            if (user.getFriendsId().containsKey(friendsId)) {
+                if (user.getFriendsId().get(friendsId).equals(Status.REQUESTED)) {
+                    user.getFriendsId().replace(friendsId, Status.APPROVED);
+                    friend.getFriendsId().replace(userId, Status.APPROVED);
+                }
+            } else {
+                user.getFriendsId().put(friendsId, Status.UNAPPROVED);
+            }
         }
         if (friend.getFriendsId() == null) {
-            friendsFirstFriend.clear();
-            friendsFirstFriend.add(userId);
             friend.setFriendsId(friendsFirstFriend);
         } else {
-            if (!friend.getFriendsId().contains(userId)) {
-                friend.getFriendsId().add(userId);
+            if (!friend.getFriendsId().containsKey(userId)) {
+                friend.getFriendsId().put(userId, Status.REQUESTED);
             }
         }
         return true;
@@ -81,12 +85,12 @@ public class InMemoryUserStorage implements UserStorage {
         return true;
     }
 
-    public ArrayList<User> getFriends(Integer userId) {
-        ArrayList<User> friends = new ArrayList<>();
+    public ArrayList<Integer> getFriends(Integer userId) {
+        ArrayList<Integer> friends = new ArrayList<>();
         User user = users.get(userId);
         if (!(user.getFriendsId() == null)) {
-            for (Integer friendsId : user.getFriendsId()) {
-                friends.add(users.get(friendsId));
+            for (Integer friendsId : user.getFriendsId().keySet()) {
+                friends.add(friendsId);
             }
         }
         return friends;

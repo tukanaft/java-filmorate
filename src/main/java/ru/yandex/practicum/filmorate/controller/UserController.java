@@ -20,13 +20,17 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody User newUser) {
         log.info("UserController: выполнение запроса на добавление пользователя: {}", newUser);
-        return userService.addUser(newUser);
+        User addedUser = userService.addUser(newUser);
+        log.info("UserController: запрос на добавление пользователя выполнен: {}", addedUser);
+        return addedUser;
     }
 
     @PutMapping
     public User updateUser(@RequestBody User newUser) {
         log.info("UserController: выполнение запроса на обновление пользователя: {}", newUser);
-        return userService.updateUser(newUser);
+        User updatedUser = userService.updateUser(newUser);
+        log.info("UserController: запрос на обновление пользователя выполнен: {}", updatedUser);
+        return updatedUser;
     }
 
     @GetMapping
@@ -54,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("{id}/friends")
-    public ArrayList<User> getFriends(@PathVariable("id") Integer userId) {
+    public ArrayList<Integer> getFriends(@PathVariable("id") Integer userId) {
         log.info("UserController: выполнение запроса на отправление списка друзей пользователя: {}", userId);
         return userService.getFriends(userId);
     }
