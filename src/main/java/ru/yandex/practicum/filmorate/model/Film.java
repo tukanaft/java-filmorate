@@ -22,6 +22,6 @@ public class Film {
     private LocalDate releaseDate;
     private Integer duration;
     private ArrayList<Integer> likes;
-    private List<Integer> genre;
-    private Raiting raiting;
+    private List<Genre> genres;
+    private MPA MPA;
 }

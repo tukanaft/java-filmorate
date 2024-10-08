@@ -2,12 +2,18 @@ package ru.yandex.practicum.filmorate.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmDtoRowMapper;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.dto.FilmDto;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,13 +27,28 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film addFilm(Film newFilm) {
-        String query = "INSERT INTO films (name,description,release_date,duration,raiting_id) values(?,?,?,?,?)";
-        newFilm.setId(jdbcTemplate.update(query, newFilm.getName(),
-                newFilm.getDescription(), newFilm.getReleaseDate(), newFilm.getDuration(), newFilm.getRaiting().getId()));
-        List<Integer> genresID = newFilm.getGenre();
-        for (int i = 0; i < newFilm.getGenre().size(); i++) {
+        String query = "INSERT INTO films (name,description,release_date,duration,rating_id) values(?,?,?,?,?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement statement = connection.prepareStatement(query, new String[]{"id"});
+            statement.setString(1, newFilm.getName());
+            statement.setString(2, newFilm.getDescription());
+            statement.setDate(3, Date.valueOf(newFilm.getReleaseDate()));
+            statement.setInt(4, newFilm.getDuration());
+            statement.setInt(5, newFilm.getMPA().getId());
+            return statement;
+        }, keyHolder);
+        newFilm.setId(keyHolder.getKey().intValue());
+
+        if (newFilm.getGenres() == null) {
+            newFilm.setGenres(new ArrayList<>());
+            return newFilm;
+        }
+
+        List<Genre> genres = newFilm.getGenres();
+        for (int i = 0; i < newFilm.getGenres().size(); i++) {
             String queryGenre = "INSERT INTO film_genres (film_id, genres_Id) values(?,?)";
-            jdbcTemplate.update(queryGenre, newFilm.getId(), genresID.get(i));
+            jdbcTemplate.update(queryGenre, newFilm.getId(), genres.get(i).getId());
         }
         return newFilm;
     }
@@ -37,7 +58,7 @@ public class FilmDbStorage implements FilmStorage {
         if (isFilmExists(newFilm.getId())) {
             String query = "UPDATE films SET name = ?, description=?, release_date = ?, duration = ?, raiting_id = ? WHERE id = ?";
             jdbcTemplate.update(query, newFilm.getName(), newFilm.getDescription(), newFilm.getReleaseDate(),
-                    newFilm.getDuration(), newFilm.getRaiting().getId(), newFilm.getId());
+                    newFilm.getDuration(), newFilm.getMpa().getId(), newFilm.getId());
         } else {
             throw new NotFoundException("фильм который вы пытаетесь обновить не существует", newFilm.getId());
         }

@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 @Setter
 @Getter
-public class Raiting {
+public class MPA {
     Integer id;
     String raiting;
 }
