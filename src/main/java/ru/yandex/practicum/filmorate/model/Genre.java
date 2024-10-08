@@ -11,5 +11,5 @@ import lombok.*;
 @Getter
 public class Genre {
     private Integer id;
-    private String genre;
+    private String name;
 }

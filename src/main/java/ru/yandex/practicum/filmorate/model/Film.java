@@ -23,5 +23,5 @@ public class Film {
     private Integer duration;
     private ArrayList<Integer> likes;
     private List<Genre> genres;
-    private MPA mpa;
+    private MPA MPA;
 }

@@ -10,6 +10,6 @@ import lombok.*;
 @Setter
 @Getter
 public class MPA {
-    Integer id;
-    String raiting;
+    private Integer id;
+    private String name;
 }

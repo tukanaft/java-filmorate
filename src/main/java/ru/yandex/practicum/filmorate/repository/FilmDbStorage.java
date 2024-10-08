@@ -35,7 +35,7 @@ public class FilmDbStorage implements FilmStorage {
             statement.setString(2, newFilm.getDescription());
             statement.setDate(3, Date.valueOf(newFilm.getReleaseDate()));
             statement.setInt(4, newFilm.getDuration());
-            statement.setInt(5, newFilm.getMpa().getId());
+            statement.setInt(5, newFilm.getMPA().getId());
             return statement;
         }, keyHolder);
         newFilm.setId(keyHolder.getKey().intValue());
@@ -58,7 +58,7 @@ public class FilmDbStorage implements FilmStorage {
         if (isFilmExists(newFilm.getId())) {
             String query = "UPDATE films SET name = ?, description=?, release_date = ?, duration = ?, raiting_id = ? WHERE id = ?";
             jdbcTemplate.update(query, newFilm.getName(), newFilm.getDescription(), newFilm.getReleaseDate(),
-                    newFilm.getDuration(), newFilm.getMpa().getId(), newFilm.getId());
+                    newFilm.getDuration(), newFilm.getMPA().getId(), newFilm.getId());
         } else {
             throw new NotFoundException("фильм который вы пытаетесь обновить не существует", newFilm.getId());
         }

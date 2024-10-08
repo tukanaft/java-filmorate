@@ -13,10 +13,10 @@ public class RaitingRowMapper implements RowMapper<MPA> {
 
     @Override
     public MPA mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-        MPA mpa = new MPA();
-        mpa.setId(resultSet.getInt("id"));
-        mpa.setRaiting(resultSet.getString("raiting"));
+        MPA MPA = new MPA();
+        MPA.setId(resultSet.getInt("id"));
+        MPA.setName(resultSet.getString("rating"));
 
-        return mpa;
+        return MPA;
     }
 }
