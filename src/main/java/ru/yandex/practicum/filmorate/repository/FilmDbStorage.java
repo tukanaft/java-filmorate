@@ -36,7 +36,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film addFilm(Film newFilm) {
         String query = "INSERT INTO films (name,description,release_date,duration,rating_id) values(?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        if (!ifMPAExists(newFilm.getMPA().getId())) {
+        if (!ifMPAExists(newFilm.getMpa().getId())) {
             throw new ValidationException("такого рейтинга не существует");
         }
         jdbcTemplate.update(connection -> {
@@ -45,7 +45,7 @@ public class FilmDbStorage implements FilmStorage {
             statement.setString(2, newFilm.getDescription());
             statement.setDate(3, Date.valueOf(newFilm.getReleaseDate()));
             statement.setInt(4, newFilm.getDuration());
-            statement.setInt(5, newFilm.getMPA().getId());
+            statement.setInt(5, newFilm.getMpa().getId());
             return statement;
         }, keyHolder);
         newFilm.setId(keyHolder.getKey().intValue());
@@ -67,7 +67,8 @@ public class FilmDbStorage implements FilmStorage {
     public Film updateFilm(Film newFilm) {
         if (isFilmExists(newFilm.getId())) {
             String query = "UPDATE films SET name = ?, description=?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
-            jdbcTemplate.update(query, newFilm.getName(), newFilm.getDescription(), newFilm.getReleaseDate(), newFilm.getDuration(), newFilm.getMPA().getId(), newFilm.getId());
+            jdbcTemplate.update(query, newFilm.getName(), newFilm.getDescription(), newFilm.getReleaseDate(),
+                    newFilm.getDuration(), newFilm.getMpa().getId(), newFilm.getId());
         } else {
             throw new NotFoundException("фильм который вы пытаетесь обновить не существует", newFilm.getId());
         }
@@ -102,8 +103,8 @@ public class FilmDbStorage implements FilmStorage {
             film.setGenres(genres);
         }
         String queryMpa = "SELECT * from ratings where id =?";
-        MPA mpa = jdbcTemplate.queryForObject(queryMpa, raitingRowMapper, film.getMPA().getId());
-        film.setMPA(mpa);
+        MPA mpa = jdbcTemplate.queryForObject(queryMpa, raitingRowMapper, film.getMpa().getId());
+        film.setMpa(mpa);
         return film;
     }
 
