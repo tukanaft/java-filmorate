@@ -23,7 +23,7 @@ public class FilmController {
     public Film addFilm(@RequestBody Film newFilm) {
         log.info("FilmController: выполнение запроса на добавление фильма: {}", newFilm);
         Film film = filmService.addFilm(newFilm);
-        log.info("FilmController: запрос на добавление выполнен: {}",film);
+        log.info("FilmController: запрос на добавление выполнен: {}", film);
         return film;
     }
 
@@ -40,10 +40,10 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Film getFilm (@PathVariable("id") Integer filmId){
+    public Film getFilm(@PathVariable("id") Integer filmId) {
         log.info("FilmController: выполнение запроса на получение фильма: {}", filmId);
         Film film = filmService.getFilm(filmId);
-        log.info("FilmController: запрос на получение выполнен: {}",film);
+        log.info("FilmController: запрос на получение выполнен: {}", film);
         return film;
     }
 
