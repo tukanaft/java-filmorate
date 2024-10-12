@@ -22,7 +22,9 @@ public class FilmController {
     @ResponseStatus(HttpStatus.CREATED)
     public Film addFilm(@RequestBody Film newFilm) {
         log.info("FilmController: выполнение запроса на добавление фильма: {}", newFilm);
-        return filmService.addFilm(newFilm);
+        Film film = filmService.addFilm(newFilm);
+        log.info("FilmController: запрос на добавление выполнен: {}",film);
+        return film;
     }
 
     @PutMapping
@@ -33,8 +35,16 @@ public class FilmController {
 
     @GetMapping
     public ArrayList<FilmDto> getFilms() {
-        log.info("FilmController: выполнение запроса на получение фильма");
+        log.info("FilmController: выполнение запроса на получение фильмов");
         return filmService.getFilms();
+    }
+
+    @GetMapping("/{id}")
+    public Film getFilm (@PathVariable("id") Integer filmId){
+        log.info("FilmController: выполнение запроса на получение фильма: {}", filmId);
+        Film film = filmService.getFilm(filmId);
+        log.info("FilmController: запрос на получение выполнен: {}",film);
+        return film;
     }
 
     @PutMapping("/{id}/like/{userId}")

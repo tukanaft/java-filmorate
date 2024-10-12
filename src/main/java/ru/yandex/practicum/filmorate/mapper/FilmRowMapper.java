@@ -18,10 +18,9 @@ public class FilmRowMapper implements RowMapper<Film> {
         film.setId(resultSet.getInt("id"));
         film.setName(resultSet.getString("name"));
         film.setDescription(resultSet.getString("description"));
-        film.setReleaseDate(resultSet.getDate("releaseDate").toLocalDate());
+        film.setReleaseDate(resultSet.getDate("release_date").toLocalDate());
         film.setDuration(resultSet.getInt("duration"));
-        //film.setGenre(Genre.builder().id(resultSet.getArray("genre")).build());
-        film.setMPA(MPA.builder().id(resultSet.getInt("raiting_id")).build());
+        film.setMPA(MPA.builder().id(resultSet.getInt("rating_id")).build());
 
         return film;
     }

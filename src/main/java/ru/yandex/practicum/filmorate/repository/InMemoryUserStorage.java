@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Component
 
@@ -85,12 +86,12 @@ public class InMemoryUserStorage implements UserStorage {
         return true;
     }
 
-    public ArrayList<Integer> getFriends(Integer userId) {
-        ArrayList<Integer> friends = new ArrayList<>();
+    public List<User> getFriends(Integer userId) {
+        ArrayList<User> friends = new ArrayList<>();
         User user = users.get(userId);
         if (!(user.getFriendsId() == null)) {
             for (Integer friendsId : user.getFriendsId().keySet()) {
-                friends.add(friendsId);
+                friends.add(users.get(friendsId));
             }
         }
         return friends;

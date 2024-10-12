@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.mapper.GenreRowMapper;
 import ru.yandex.practicum.filmorate.model.Genre;
 
@@ -13,8 +15,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GenreService {
-    JdbcTemplate jdbcTemplate;
-    GenreRowMapper genreRowMapper;
+    private final JdbcTemplate jdbcTemplate;
+    private final GenreRowMapper genreRowMapper;
 
     public List<Genre> getGenres() {
         String query = "Select * from genres";
@@ -22,6 +24,9 @@ public class GenreService {
     }
 
     public Genre getGenreById(Integer genreId) {
+        if (genreId > 6 || genreId<0){
+            throw new NotFoundException("не существующий жанр", genreId);
+        }
         String query = "Select * from genres where id = ?";
         return jdbcTemplate.queryForObject(query, genreRowMapper, genreId);
     }

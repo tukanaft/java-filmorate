@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.RaitingRowMapper;
 import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.repository.FilmDbStorage;
 
 import java.util.List;
 
@@ -13,16 +15,20 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RaitingService {
-    JdbcTemplate jdbcTemplate;
-    RaitingRowMapper raitingRowMapper;
+    private final JdbcTemplate jdbcTemplate;
+    private final RaitingRowMapper raitingRowMapper;
+    private final FilmDbStorage filmDbStorage;
 
     public List<MPA> getRaitings() {
-        String query = "Select * from raiting";
+        String query = "Select * from ratings";
         return jdbcTemplate.query(query, raitingRowMapper);
     }
 
     public MPA getRaitingById(Integer raitingId) {
-        String query = "Select * from raiting where id = ?";
+        if (!filmDbStorage.ifMPAExists(raitingId)){
+           throw new NotFoundException("рейтинга не существует", raitingId);
+        }
+        String query = "Select * from ratings where id = ?";
         return jdbcTemplate.queryForObject(query, raitingRowMapper, raitingId);
     }
 

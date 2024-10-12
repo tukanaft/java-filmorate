@@ -99,19 +99,20 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public ArrayList<Integer> getFriends(Integer userId) {
+    public List<User> getFriends(Integer userId) {
+        ArrayList<User> users_frends = new ArrayList<>();
         ArrayList<Integer> friendList = new ArrayList<>();
         String queryFriendId = "SELECT friend_id from friends g WHERE user_id = ?";
         List<Integer> friendsId = jdbcTemplate.queryForList(queryFriendId, new Object[]{userId}, Integer.class);
-        String queryFriendId2 = "SELECT friend_id from friends g WHERE friend_id = ?";
-        List<Integer> friendsId2 = jdbcTemplate.queryForList(queryFriendId2, new Object[]{userId}, Integer.class);
         if (friendsId != null) {
             friendList.addAll(friendsId);
         }
-        if (friendsId2 != null) {
-            friendList.addAll(friendsId2);
+        String query = "SELECT * from users g WHERE id = ?";
+        for (Integer id : friendList){
+            User friend = jdbcTemplate.queryForObject(query, userRowMapper, id);
+            users_frends.add(friend);
         }
-        return friendList;
+        return users_frends;
     }
 
     @Override
@@ -132,7 +133,6 @@ public class UserDbStorage implements UserStorage {
     }
 
     private User insertFriends(User user) {
-        Integer count = 0;
         HashMap<Integer, Status> friends = new HashMap<>();
         String queryFriendId = "SELECT friend_id from friends g WHERE user_id = ?";
         String queryStatus = "SELECT status from friends WHERE user_id =?";
@@ -140,15 +140,6 @@ public class UserDbStorage implements UserStorage {
         List<String> status = jdbcTemplate.queryForList(queryStatus, new Object[]{user.getId()}, String.class);
         for (int i = 0; i < friendsId.size(); i++) {
             friends.put(friendsId.get(i), Status.valueOf(status.get(i)));
-            count++;
-        }
-        String queryFriendId2 = "SELECT friend_id from friends g WHERE friend_id = ?";
-        String queryStatus2 = "SELECT status from friends WHERE friend_id =?";
-        List<Integer> friendsId2 = jdbcTemplate.queryForList(queryFriendId2, new Object[]{user.getId()}, Integer.class);
-        List<String> status2 = jdbcTemplate.queryForList(queryStatus2, new Object[]{user.getId()}, String.class);
-        for (int i = 0; i < friendsId.size(); i++) {
-            friends.put(friendsId2.get(count), Status.valueOf(status2.get(count)));
-            count++;
         }
         user.setFriendsId(friends);
         return user;

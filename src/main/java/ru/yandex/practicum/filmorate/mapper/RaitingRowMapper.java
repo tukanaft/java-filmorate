@@ -15,7 +15,7 @@ public class RaitingRowMapper implements RowMapper<MPA> {
     public MPA mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         MPA MPA = new MPA();
         MPA.setId(resultSet.getInt("id"));
-        MPA.setName(resultSet.getString("rating"));
+        MPA.setName(resultSet.getString("name"));
 
         return MPA;
     }

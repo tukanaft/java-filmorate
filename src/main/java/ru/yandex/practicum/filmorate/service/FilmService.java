@@ -13,6 +13,8 @@ public interface FilmService {
 
     ArrayList<FilmDto> getFilms();
 
+    Film getFilm(Integer filmId);
+
     Boolean like(Integer filmId, Integer userId);
 
     Boolean unlike(Integer filmId, Integer userId);

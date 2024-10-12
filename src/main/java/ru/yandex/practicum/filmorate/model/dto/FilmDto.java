@@ -21,6 +21,6 @@ public class FilmDto {
     private LocalDate releaseDate;
     private Integer duration;
     private List<Integer> likes;
-    private List<String> genre;
-    private String raiting;
+    private List<String> genres;
+    private String mpa;
 }

@@ -39,8 +39,16 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public ArrayList<FilmDto> getFilms() {
-        log.info("FilmService: выполнение запроса на получение фильма");
+        log.info("FilmService: выполнение запроса на получение фильмов");
         return new ArrayList<>(filmDbStorage.getFilms().values());
+    }
+
+    public Film getFilm(Integer filmId){
+        log.info("FilmService: выполнение запроса на получение фильма");
+        if (!filmDbStorage.isFilmExists(filmId)){
+            throw new NotFoundException("фильм не найден", filmId);
+        }
+        return filmDbStorage.getFilm(filmId);
     }
 
     @Override

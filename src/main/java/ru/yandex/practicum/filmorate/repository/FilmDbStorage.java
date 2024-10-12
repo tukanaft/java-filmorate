@@ -6,14 +6,18 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.mapper.FilmDtoRowMapper;
+import ru.yandex.practicum.filmorate.mapper.FilmRowMapper;
+import ru.yandex.practicum.filmorate.mapper.GenreRowMapper;
+import ru.yandex.practicum.filmorate.mapper.RaitingRowMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.model.dto.FilmDto;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,12 +27,18 @@ public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final FilmDtoRowMapper filmDtoRowMapper;
+    private final FilmRowMapper filmRowMapper;
+    private final RaitingRowMapper raitingRowMapper;
+    private final GenreRowMapper genreRowMapper;
 
 
     @Override
     public Film addFilm(Film newFilm) {
         String query = "INSERT INTO films (name,description,release_date,duration,rating_id) values(?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        if (!ifMPAExists(newFilm.getMPA().getId())) {
+            throw new ValidationException("такого рейтинга не существует");
+        }
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(query, new String[]{"id"});
             statement.setString(1, newFilm.getName());
@@ -40,15 +50,15 @@ public class FilmDbStorage implements FilmStorage {
         }, keyHolder);
         newFilm.setId(keyHolder.getKey().intValue());
 
-        if (newFilm.getGenres() == null) {
-            newFilm.setGenres(new ArrayList<>());
-            return newFilm;
-        }
+        if (newFilm.getGenres() != null) {
 
-        List<Genre> genres = newFilm.getGenres();
-        for (int i = 0; i < newFilm.getGenres().size(); i++) {
-            String queryGenre = "INSERT INTO film_genres (film_id, genres_Id) values(?,?)";
-            jdbcTemplate.update(queryGenre, newFilm.getId(), genres.get(i).getId());
+            ifGanreExists(newFilm.getGenres());
+            List<Genre> genres = newFilm.getGenres();
+
+            for (int i = 0; i < newFilm.getGenres().size(); i++) {
+                String queryGenre = "INSERT INTO film_genres (film_id, genres_Id) values(?,?)";
+                jdbcTemplate.update(queryGenre, newFilm.getId(), genres.get(i).getId());
+            }
         }
         return newFilm;
     }
@@ -56,9 +66,8 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film updateFilm(Film newFilm) {
         if (isFilmExists(newFilm.getId())) {
-            String query = "UPDATE films SET name = ?, description=?, release_date = ?, duration = ?, raiting_id = ? WHERE id = ?";
-            jdbcTemplate.update(query, newFilm.getName(), newFilm.getDescription(), newFilm.getReleaseDate(),
-                    newFilm.getDuration(), newFilm.getMPA().getId(), newFilm.getId());
+            String query = "UPDATE films SET name = ?, description=?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
+            jdbcTemplate.update(query, newFilm.getName(), newFilm.getDescription(), newFilm.getReleaseDate(), newFilm.getDuration(), newFilm.getMPA().getId(), newFilm.getId());
         } else {
             throw new NotFoundException("фильм который вы пытаетесь обновить не существует", newFilm.getId());
         }
@@ -68,14 +77,34 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public HashMap<Integer, FilmDto> getFilms() {
         HashMap<Integer, FilmDto> filmsUpload = new HashMap<>();
-        String query = "SELECT f.id, f.name,f.description,f.release_date,f.duration,f.raiting FROM films f LEFT JOIN " +
-                "raitings r on f.raiting_id = r.id ";
+        String query = "SELECT f.id, f.name,f.description,f.release_date,f.duration,f.rating_id FROM films f LEFT JOIN " + "ratings r on f.rating_id = r.id ";
         List<FilmDto> films = jdbcTemplate.query(query, filmDtoRowMapper);
         for (FilmDto film : films) {
             insertGenresAndLikes(film);
             filmsUpload.put(film.getId(), film);
         }
         return filmsUpload;
+    }
+
+    public Film getFilm(Integer filmId) {
+        String query = "Select * from films WHERE id = ?";
+        Film film = jdbcTemplate.queryForObject(query, filmRowMapper, filmId);
+        String queryGenre = "SELECT * from genres g JOIN film_genres fg on fg.genres_id = g.id WHERE fg.film_id = ?";
+        List<Genre> genres = jdbcTemplate.query(queryGenre, new Object[]{filmId}, genreRowMapper);
+        if (genres != null) {
+            for (int i = 0; i < genres.size() - 1; i++) {
+                for (int j = i + 1; j < genres.size(); j++) {
+                    if (genres.get(i).getId().equals(genres.get(j).getId())) {
+                        genres.remove(genres.get(j));
+                    }
+                }
+            }
+            film.setGenres(genres);
+        }
+        String queryMpa = "SELECT * from ratings where id =?";
+        MPA mpa = jdbcTemplate.queryForObject(queryMpa, raitingRowMapper, film.getMPA().getId());
+        film.setMPA(mpa);
+        return film;
     }
 
     @Override
@@ -111,6 +140,23 @@ public class FilmDbStorage implements FilmStorage {
         List<String> genres = jdbcTemplate.queryForList(queryGenre, new Object[]{film.getId()}, String.class);
         List<Integer> likes = jdbcTemplate.queryForList(queryLike, new Object[]{film.getId()}, Integer.class);
         film.setLikes(likes);
-        film.setGenre(genres);
+        film.setGenres(genres);
+    }
+
+    public Boolean ifMPAExists(Integer MPAId) {
+        String query = "SELECT COUNT(*) FROM ratings WHERE id =?";
+        Integer count = jdbcTemplate.queryForObject(query, new Object[]{MPAId}, Integer.class);
+        return count != null && count > 0;
+    }
+
+    public void ifGanreExists(List<Genre> genres) {
+        if (genres == null) {
+            throw new ValidationException("жанра не существует");
+        }
+        for (Genre genre : genres) {
+            if (genre.getId() > 6 || genre.getId() < 0) {
+                throw new ValidationException("жанра не существует");
+            }
+        }
     }
 }

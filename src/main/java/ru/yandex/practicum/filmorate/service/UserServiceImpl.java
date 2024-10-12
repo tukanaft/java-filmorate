@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.repository.UserDbStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -103,7 +104,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ArrayList<Integer> getFriends(Integer userId) {
+    public List<User> getFriends(Integer userId) {
         log.info("UserService: выполнение запроса на отправление списка друзей пользователя");
         if (!userStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует", userId);
