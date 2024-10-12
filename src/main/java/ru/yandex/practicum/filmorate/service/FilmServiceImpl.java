@@ -7,7 +7,9 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.dto.FilmDto;
-import ru.yandex.practicum.filmorate.repository.*;
+import ru.yandex.practicum.filmorate.repository.FilmDbStorage;
+import ru.yandex.practicum.filmorate.repository.LikeStorage;
+import ru.yandex.practicum.filmorate.repository.UserDbStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,9 +45,9 @@ public class FilmServiceImpl implements FilmService {
         return new ArrayList<>(filmDbStorage.getFilms().values());
     }
 
-    public Film getFilm(Integer filmId){
+    public Film getFilm(Integer filmId) {
         log.info("FilmService: выполнение запроса на получение фильма");
-        if (!filmDbStorage.isFilmExists(filmId)){
+        if (!filmDbStorage.isFilmExists(filmId)) {
             throw new NotFoundException("фильм не найден", filmId);
         }
         return filmDbStorage.getFilm(filmId);

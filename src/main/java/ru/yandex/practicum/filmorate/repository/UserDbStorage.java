@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -17,7 +16,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Repository
@@ -108,7 +106,7 @@ public class UserDbStorage implements UserStorage {
             friendList.addAll(friendsId);
         }
         String query = "SELECT * from users g WHERE id = ?";
-        for (Integer id : friendList){
+        for (Integer id : friendList) {
             User friend = jdbcTemplate.queryForObject(query, userRowMapper, id);
             users_frends.add(friend);
         }

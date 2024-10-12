@@ -25,8 +25,8 @@ public class RaitingService {
     }
 
     public MPA getRaitingById(Integer raitingId) {
-        if (!filmDbStorage.ifMPAExists(raitingId)){
-           throw new NotFoundException("рейтинга не существует", raitingId);
+        if (!filmDbStorage.ifMPAExists(raitingId)) {
+            throw new NotFoundException("рейтинга не существует", raitingId);
         }
         String query = "Select * from ratings where id = ?";
         return jdbcTemplate.queryForObject(query, raitingRowMapper, raitingId);

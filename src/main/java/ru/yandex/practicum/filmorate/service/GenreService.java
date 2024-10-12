@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.mapper.GenreRowMapper;
 import ru.yandex.practicum.filmorate.model.Genre;
 
@@ -24,7 +23,7 @@ public class GenreService {
     }
 
     public Genre getGenreById(Integer genreId) {
-        if (genreId > 6 || genreId<0){
+        if (genreId > 6 || genreId < 0) {
             throw new NotFoundException("не существующий жанр", genreId);
         }
         String query = "Select * from genres where id = ?";
