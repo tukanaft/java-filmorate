@@ -23,7 +23,6 @@ public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserRowMapper userRowMapper;
-    private final LikeRowMapper likeRowMapper;
 
     @Override
     public User addUser(User newUser) {
@@ -98,7 +97,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getFriends(Integer userId) {
-        ArrayList<User> users_frends = new ArrayList<>();
+        ArrayList<User> usersFriends = new ArrayList<>();
         ArrayList<Integer> friendList = new ArrayList<>();
         String queryFriendId = "SELECT friend_id from friends g WHERE user_id = ?";
         List<Integer> friendsId = jdbcTemplate.queryForList(queryFriendId, new Object[]{userId}, Integer.class);
@@ -108,9 +107,9 @@ public class UserDbStorage implements UserStorage {
         String query = "SELECT * from users g WHERE id = ?";
         for (Integer id : friendList) {
             User friend = jdbcTemplate.queryForObject(query, userRowMapper, id);
-            users_frends.add(friend);
+            usersFriends.add(friend);
         }
-        return users_frends;
+        return usersFriends;
     }
 
     @Override
