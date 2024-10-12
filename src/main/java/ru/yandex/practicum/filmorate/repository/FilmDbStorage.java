@@ -144,9 +144,9 @@ public class FilmDbStorage implements FilmStorage {
         film.setGenres(genres);
     }
 
-    public Boolean ifMPAExists(Integer MPAId) {
+    public Boolean ifMPAExists(Integer MpaId) {
         String query = "SELECT COUNT(*) FROM ratings WHERE id =?";
-        Integer count = jdbcTemplate.queryForObject(query, new Object[]{MPAId}, Integer.class);
+        Integer count = jdbcTemplate.queryForObject(query, new Object[]{MpaId}, Integer.class);
         return count != null && count > 0;
     }
 
