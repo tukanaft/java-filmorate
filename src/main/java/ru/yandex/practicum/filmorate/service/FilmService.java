@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.dto.FilmDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,15 @@ public interface FilmService {
 
     Film updateFilm(Film newFilm);
 
-    ArrayList<Film> getFilms();
+    ArrayList<FilmDto> getFilms();
+
+    Film getFilm(Integer filmId);
 
     Boolean like(Integer filmId, Integer userId);
 
     Boolean unlike(Integer filmId, Integer userId);
 
-    List<Film> mostPopularFilms(Integer count);
+    List<FilmDto> mostPopularFilms(Integer count);
 
     void clear();
 }
