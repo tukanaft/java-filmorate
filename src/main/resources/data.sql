@@ -1,4 +1,4 @@
-merge into ratings(id, name)
+merge into MPA(id, name)
 values (1, 'G'),
        (2, 'PG'),
        (3, 'PG-13'),

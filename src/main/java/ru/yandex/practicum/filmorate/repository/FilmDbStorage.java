@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.mapper.FilmDtoRowMapper;
 import ru.yandex.practicum.filmorate.mapper.FilmRowMapper;
 import ru.yandex.practicum.filmorate.mapper.GenreRowMapper;
-import ru.yandex.practicum.filmorate.mapper.RaitingRowMapper;
+import ru.yandex.practicum.filmorate.mapper.MPARowMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
@@ -28,13 +28,13 @@ public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
     private final FilmDtoRowMapper filmDtoRowMapper;
     private final FilmRowMapper filmRowMapper;
-    private final RaitingRowMapper raitingRowMapper;
+    private final MPARowMapper MPARowMapper;
     private final GenreRowMapper genreRowMapper;
 
 
     @Override
     public Film addFilm(Film newFilm) {
-        String query = "INSERT INTO films (name,description,release_date,duration,rating_id) values(?,?,?,?,?)";
+        String query = "INSERT INTO films (name,description,release_date,duration,mpa_id) values(?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         if (!ifMPAExists(newFilm.getMpa().getId())) {
             throw new ValidationException("такого рейтинга не существует");
@@ -66,7 +66,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film updateFilm(Film newFilm) {
         if (isFilmExists(newFilm.getId())) {
-            String query = "UPDATE films SET name = ?, description=?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
+            String query = "UPDATE films SET name = ?, description=?, release_date = ?, duration = ?, mpa_id = ? WHERE id = ?";
             jdbcTemplate.update(query, newFilm.getName(), newFilm.getDescription(), newFilm.getReleaseDate(),
                     newFilm.getDuration(), newFilm.getMpa().getId(), newFilm.getId());
         } else {
@@ -78,7 +78,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public HashMap<Integer, FilmDto> getFilms() {
         HashMap<Integer, FilmDto> filmsUpload = new HashMap<>();
-        String query = "SELECT f.id, f.name,f.description,f.release_date,f.duration,f.rating_id FROM films f LEFT JOIN " + "ratings r on f.rating_id = r.id ";
+        String query = "SELECT f.id, f.name,f.description,f.release_date,f.duration,f.mpa_id FROM films f LEFT JOIN " + "ratings r on f.rating_id = r.id ";
         List<FilmDto> films = jdbcTemplate.query(query, filmDtoRowMapper);
         for (FilmDto film : films) {
             insertGenresAndLikes(film);
@@ -102,8 +102,8 @@ public class FilmDbStorage implements FilmStorage {
             }
             film.setGenres(genres);
         }
-        String queryMpa = "SELECT * from ratings where id =?";
-        MPA mpa = jdbcTemplate.queryForObject(queryMpa, raitingRowMapper, film.getMpa().getId());
+        String queryMpa = "SELECT * from MPA where id =?";
+        MPA mpa = jdbcTemplate.queryForObject(queryMpa, MPARowMapper, film.getMpa().getId());
         film.setMpa(mpa);
         return film;
     }
@@ -145,7 +145,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public Boolean ifMPAExists(Integer mpaId) {
-        String query = "SELECT COUNT(*) FROM ratings WHERE id =?";
+        String query = "SELECT COUNT(*) FROM MPA WHERE id =?";
         Integer count = jdbcTemplate.queryForObject(query, new Object[]{mpaId}, Integer.class);
         return count != null && count > 0;
     }

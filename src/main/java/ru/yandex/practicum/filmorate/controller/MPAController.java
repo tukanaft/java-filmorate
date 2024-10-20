@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.MPA;
-import ru.yandex.practicum.filmorate.service.RaitingService;
+import ru.yandex.practicum.filmorate.service.MPAService;
 
 import java.util.List;
 
@@ -17,20 +17,20 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/mpa")
-public class RaitingController {
+public class MPAController {
     @Autowired
-    private final RaitingService raitingService;
+    private final MPAService MPAService;
 
     @GetMapping
-    public List<MPA> getRaiting() {
+    public List<MPA> getMpas() {
         log.info("RaitingController: выполнение запроса на получение рейтингов");
-        return raitingService.getRaitings();
+        return MPAService.getMpas();
     }
 
     @GetMapping("/{id}")
-    public MPA getRaiting(@PathVariable("id") Integer raitingId) {
+    public MPA getMpaById(@PathVariable("id") Integer mpaId) {
         log.info("RaitingController: выполнение запроса на получение рейтинга");
-        return raitingService.getRaitingById(raitingId);
+        return MPAService.getMpaById(mpaId);
     }
 }
 

@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class RaitingRowMapper implements RowMapper<MPA> {
+public class MPARowMapper implements RowMapper<MPA> {
 
 
     @Override
