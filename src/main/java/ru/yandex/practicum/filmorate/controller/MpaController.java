@@ -17,20 +17,20 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/mpa")
-public class MPAController {
+public class MpaController {
     @Autowired
-    private final MpaService MPAService;
+    private final MpaService mpaService;
 
     @GetMapping
     public List<MPA> getMpas() {
         log.info("RaitingController: выполнение запроса на получение рейтингов");
-        return MPAService.getMpas();
+        return mpaService.getMpas();
     }
 
     @GetMapping("/{id}")
     public MPA getMpaById(@PathVariable("id") Integer mpaId) {
         log.info("RaitingController: выполнение запроса на получение рейтинга");
-        return MPAService.getMpaById(mpaId);
+        return mpaService.getMpaById(mpaId);
     }
 }
 
