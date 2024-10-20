@@ -6,16 +6,16 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.repository.FilmDbStorage;
-import ru.yandex.practicum.filmorate.repository.MPADbStorage;
+import ru.yandex.practicum.filmorate.repository.MpaDbStorage;
 
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MPAService {
+public class MpaService {
     private final FilmDbStorage filmDbStorage;
-    private final MPADbStorage MPADbStorage;
+    private final MpaDbStorage MPADbStorage;
 
     public List<MPA> getMpas() {
         log.info("GenreService: выполнение запроса на получение рейтингов");

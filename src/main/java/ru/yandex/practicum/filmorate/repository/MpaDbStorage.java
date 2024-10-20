@@ -3,16 +3,16 @@ package ru.yandex.practicum.filmorate.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.mapper.MPARowMapper;
+import ru.yandex.practicum.filmorate.mapper.MpaRowMapper;
 import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
-public class MPADbStorage {
+public class MpaDbStorage {
     private final JdbcTemplate jdbcTemplate;
-    private final MPARowMapper MPARowMapper;
+    private final MpaRowMapper MPARowMapper;
     private final FilmDbStorage filmDbStorage;
 
     public List<MPA> getMpas() {
