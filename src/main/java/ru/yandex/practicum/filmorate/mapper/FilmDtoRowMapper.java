@@ -18,7 +18,7 @@ public class FilmDtoRowMapper implements RowMapper<FilmDto> {
         film.setDescription(resultSet.getString("description"));
         film.setReleaseDate(resultSet.getDate("release_date").toLocalDate());
         film.setDuration(resultSet.getInt("duration"));
-        film.setMpa(resultSet.getString("rating_id"));
+        film.setMpa(resultSet.getString("mpa_id"));
 
 
         return film;

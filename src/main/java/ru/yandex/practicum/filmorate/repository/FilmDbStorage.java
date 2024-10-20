@@ -78,7 +78,8 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public HashMap<Integer, FilmDto> getFilms() {
         HashMap<Integer, FilmDto> filmsUpload = new HashMap<>();
-        String query = "SELECT f.id, f.name,f.description,f.release_date,f.duration,f.mpa_id FROM films f LEFT JOIN " + "ratings r on f.rating_id = r.id ";
+        String query = "SELECT f.id, f.name,f.description,f.release_date,f.duration,f.mpa_id FROM films f LEFT JOIN " + "MPA m on f.Mpa" +
+                "_id = m.id ";
         List<FilmDto> films = jdbcTemplate.query(query, filmDtoRowMapper);
         for (FilmDto film : films) {
             insertGenresAndLikes(film);
