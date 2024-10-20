@@ -28,7 +28,7 @@ public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
     private final FilmDtoRowMapper filmDtoRowMapper;
     private final FilmRowMapper filmRowMapper;
-    private final MpaRowMapper MPARowMapper;
+    private final MpaRowMapper mpaRowMapper;
     private final GenreRowMapper genreRowMapper;
 
 
@@ -103,7 +103,7 @@ public class FilmDbStorage implements FilmStorage {
             film.setGenres(genres);
         }
         String queryMpa = "SELECT * from MPA where id =?";
-        MPA mpa = jdbcTemplate.queryForObject(queryMpa, MPARowMapper, film.getMpa().getId());
+        MPA mpa = jdbcTemplate.queryForObject(queryMpa, mpaRowMapper, film.getMpa().getId());
         film.setMpa(mpa);
         return film;
     }
