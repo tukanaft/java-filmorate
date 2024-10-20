@@ -12,17 +12,16 @@ import java.util.List;
 @Repository
 public class MpaDbStorage {
     private final JdbcTemplate jdbcTemplate;
-    private final MpaRowMapper MPARowMapper;
-    private final FilmDbStorage filmDbStorage;
+    private final MpaRowMapper mpaRowMapper;
 
     public List<MPA> getMpas() {
         String query = "Select * from MPA";
-        return jdbcTemplate.query(query, MPARowMapper);
+        return jdbcTemplate.query(query, mpaRowMapper);
     }
 
     public MPA getMpaById(Integer mpaID) {
         String query = "Select * from MPA where id = ?";
-        return jdbcTemplate.queryForObject(query, MPARowMapper, mpaID);
+        return jdbcTemplate.queryForObject(query, mpaRowMapper, mpaID);
     }
 
 }
