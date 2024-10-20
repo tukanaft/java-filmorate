@@ -2,22 +2,25 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.repository.UserStorage;
+import ru.yandex.practicum.filmorate.repository.UserDbStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
 @Component
 @RequiredArgsConstructor
 class UserServiceImpl implements UserService {
-    private final UserStorage userStorage;
+    @Autowired
+    private final UserDbStorage userStorage;
 
     @Override
     public User addUser(User newUser) {
@@ -50,11 +53,11 @@ class UserServiceImpl implements UserService {
             throw new NotFoundException("Такого пользователя не существует", friendsId);
         }
         if (!(user.getFriendsId() == null)) {
-            if (user.getFriendsId().contains(friendsId)) {
+            if (user.getFriendsId().containsKey(friendsId)) {
                 throw new RuntimeException("такой друг уже добавлен");
             }
         }
-        return userStorage.addFriend(userId,friendsId);
+        return userStorage.addFriend(userId, friendsId);
     }
 
     @Override
@@ -66,7 +69,7 @@ class UserServiceImpl implements UserService {
         if (!userStorage.isUserExists(friendsId)) {
             throw new NotFoundException("Такого пользователя не существует", friendsId);
         }
-        return userStorage.deleteFriend(userId,friendsId);
+        return userStorage.deleteFriend(userId, friendsId);
     }
 
     @Override
@@ -87,8 +90,8 @@ class UserServiceImpl implements UserService {
         if (friend.getFriendsId() == null) {
             throw new ValidationException("У человека с которым вы пытаетесь найти общих друзей нет друзей");
         }
-        for (Integer commonFriendId : user.getFriendsId()) {
-            if (friend.getFriendsId().contains(commonFriendId)) {
+        for (Integer commonFriendId : user.getFriendsId().keySet()) {
+            if (friend.getFriendsId().containsKey(commonFriendId)) {
                 commonFriendsList.add(userStorage.getUsers().get(commonFriendId));
             }
         }
@@ -101,7 +104,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ArrayList<User> getFriends(Integer userId) {
+    public List<User> getFriends(Integer userId) {
         log.info("UserService: выполнение запроса на отправление списка друзей пользователя");
         if (!userStorage.isUserExists(userId)) {
             throw new NotFoundException("Такого пользователя не существует", userId);

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.dto.FilmDto;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.ArrayList;
@@ -21,7 +22,9 @@ public class FilmController {
     @ResponseStatus(HttpStatus.CREATED)
     public Film addFilm(@RequestBody Film newFilm) {
         log.info("FilmController: выполнение запроса на добавление фильма: {}", newFilm);
-        return filmService.addFilm(newFilm);
+        Film film = filmService.addFilm(newFilm);
+        log.info("FilmController: запрос на добавление выполнен: {}", film);
+        return film;
     }
 
     @PutMapping
@@ -31,9 +34,17 @@ public class FilmController {
     }
 
     @GetMapping
-    public ArrayList<Film> getFilms() {
-        log.info("FilmController: выполнение запроса на получение фильма");
+    public ArrayList<FilmDto> getFilms() {
+        log.info("FilmController: выполнение запроса на получение фильмов");
         return filmService.getFilms();
+    }
+
+    @GetMapping("/{id}")
+    public Film getFilm(@PathVariable("id") Integer filmId) {
+        log.info("FilmController: выполнение запроса на получение фильма: {}", filmId);
+        Film film = filmService.getFilm(filmId);
+        log.info("FilmController: запрос на получение выполнен: {}", film);
+        return film;
     }
 
     @PutMapping("/{id}/like/{userId}")
@@ -49,8 +60,10 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Film> commonFriends(@RequestParam Integer count) {
+    public List<FilmDto> commonFriends(@RequestParam Integer count) {
         log.info("FilmController: выполнение запроса на получение самых популярных фильмов");
         return filmService.mostPopularFilms(count);
     }
+
 }
+
