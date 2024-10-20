@@ -99,6 +99,7 @@ public class FilmServiceImpl implements FilmService {
         return films;
     }
 
+
     @Override
     public void clear() {
         filmDbStorage.clear();
