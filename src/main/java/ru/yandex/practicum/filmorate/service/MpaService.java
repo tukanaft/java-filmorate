@@ -15,11 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MpaService {
     private final FilmDbStorage filmDbStorage;
-    private final MpaDbStorage MPADbStorage;
+    private final MpaDbStorage mpaDbStorage;
 
     public List<MPA> getMpas() {
         log.info("GenreService: выполнение запроса на получение рейтингов");
-        return MPADbStorage.getMpas();
+        return mpaDbStorage.getMpas();
     }
 
     public MPA getMpaById(Integer mpaId) {
@@ -27,7 +27,7 @@ public class MpaService {
         if (!filmDbStorage.ifMPAExists(mpaId)) {
             throw new NotFoundException("рейтинга не существует", mpaId);
         }
-        return MPADbStorage.getMpaById(mpaId);
+        return mpaDbStorage.getMpaById(mpaId);
     }
 
 }
