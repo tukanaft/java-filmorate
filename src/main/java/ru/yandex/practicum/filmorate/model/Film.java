@@ -9,12 +9,7 @@ import java.util.List;
 /**
  * Film.
  */
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Getter
-@Setter
+@Data
 public class Film {
     private Integer id;
     private String name;

@@ -9,12 +9,7 @@ import java.util.HashMap;
 /**
  * User.
  */
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Getter
-@Setter
+@Data
 public class User {
     private Integer id;
     private String email;
