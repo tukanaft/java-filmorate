@@ -30,6 +30,13 @@ public class FilmDbStorage implements FilmStorage {
     private final FilmRowMapper filmRowMapper;
     private final MpaRowMapper mpaRowMapper;
     private final GenreRowMapper genreRowMapper;
+    private static final String GET_DIRECTOR_FOR_FILM =
+            """
+                    SELECT d.id, d.name FROM directors AS d
+                    JOIN film_directors AS fd ON d.id = fd.director_id
+                    JOIN films AS f ON fd.film_id = f.id
+                    WHERE f.id = ?
+                    """;
 
 
     @Override
