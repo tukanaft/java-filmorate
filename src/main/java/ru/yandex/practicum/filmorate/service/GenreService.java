@@ -23,7 +23,7 @@ public class GenreService {
     public Genre getGenreById(Integer genreId) {
         log.info("GenreService: выполнение запроса на получение жанра по id: {}", genreId);
         if (genreId > 6 || genreId < 0) {
-            throw new NotFoundException("не существующий жанр", genreId);
+            throw new NotFoundException("не существующий жанр");
         }
         return genreDbStorage.getGenreById(genreId);
     }

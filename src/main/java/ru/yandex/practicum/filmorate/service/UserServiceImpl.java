@@ -47,10 +47,10 @@ class UserServiceImpl implements UserService {
         User user = userStorage.getUsers().get(userId);
         log.info("UserService: выполнение запроса на добовление друга");
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует", userId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         if (!userStorage.isUserExists(friendsId)) {
-            throw new NotFoundException("Такого пользователя не существует", friendsId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         if (!(user.getFriendsId() == null)) {
             if (user.getFriendsId().containsKey(friendsId)) {
@@ -64,10 +64,10 @@ class UserServiceImpl implements UserService {
     public Boolean deleteFriend(Integer userId, Integer friendsId) {
         log.info("UserService: выполнение запроса на удаление друга");
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует", userId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         if (!userStorage.isUserExists(friendsId)) {
-            throw new NotFoundException("Такого пользователя не существует", friendsId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         return userStorage.deleteFriend(userId, friendsId);
     }
@@ -77,10 +77,10 @@ class UserServiceImpl implements UserService {
         log.info("UserService: выполнение запроса на поиск общих друзей");
         ArrayList<User> commonFriendsList = new ArrayList<User>();
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует", userId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         if (!userStorage.isUserExists(friendsId)) {
-            throw new NotFoundException("Такого пользователя не существует", friendsId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         User user = userStorage.getUsers().get(userId);
         User friend = userStorage.getUsers().get(friendsId);
@@ -107,7 +107,7 @@ class UserServiceImpl implements UserService {
     public List<User> getFriends(Integer userId) {
         log.info("UserService: выполнение запроса на отправление списка друзей пользователя");
         if (!userStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует", userId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         return userStorage.getFriends(userId);
     }

@@ -70,7 +70,7 @@ public class FilmDbStorage implements FilmStorage {
             jdbcTemplate.update(query, newFilm.getName(), newFilm.getDescription(), newFilm.getReleaseDate(),
                     newFilm.getDuration(), newFilm.getMpa().getId(), newFilm.getId());
         } else {
-            throw new NotFoundException("фильм который вы пытаетесь обновить не существует", newFilm.getId());
+            throw new NotFoundException("фильм который вы пытаетесь обновить не существует");
         }
         return newFilm;
     }

@@ -45,7 +45,7 @@ public class UserDbStorage implements UserStorage {
             String query = "UPDATE users SET name = ?, login=?, birthday = ? WHERE id = ?";
             jdbcTemplate.update(query, newUser.getName(), newUser.getLogin(), newUser.getBirthday(), newUser.getId());
         } else {
-            throw new NotFoundException("фильм который вы пытаетесь обновить не существует", newUser.getId());
+            throw new NotFoundException("фильм который вы пытаетесь обновить не существует");
         }
         return newUser;
     }

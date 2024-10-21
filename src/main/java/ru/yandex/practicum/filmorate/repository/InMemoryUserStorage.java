@@ -39,7 +39,7 @@ public class InMemoryUserStorage implements UserStorage {
         }
         if (foundUser == 0) {
             throw new NotFoundException(
-                    "пользователь не найден", newUser.getId());
+                    "пользователь не найден");
         }
         return newUser;
     }

@@ -38,7 +38,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
 
         if (foundFilm == 0) {
-            throw new NotFoundException("фильм не найден", filmId);
+            throw new NotFoundException("фильм не найден");
         }
         return newFilm;
     }

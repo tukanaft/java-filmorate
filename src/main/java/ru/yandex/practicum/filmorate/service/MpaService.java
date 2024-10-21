@@ -25,7 +25,7 @@ public class MpaService {
     public MPA getMpaById(Integer mpaId) {
         log.info("GenreService: выполнение запроса на получение рейтинга по id: {}", mpaId);
         if (!filmDbStorage.ifMPAExists(mpaId)) {
-            throw new NotFoundException("рейтинга не существует", mpaId);
+            throw new NotFoundException("рейтинга не существует");
         }
         return mpaDbStorage.getMpaById(mpaId);
     }

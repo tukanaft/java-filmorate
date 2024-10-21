@@ -48,7 +48,7 @@ public class FilmServiceImpl implements FilmService {
     public Film getFilm(Integer filmId) {
         log.info("FilmService: выполнение запроса на получение фильма");
         if (!filmDbStorage.isFilmExists(filmId)) {
-            throw new NotFoundException("фильм не найден", filmId);
+            throw new NotFoundException("фильм не найден");
         }
         return filmDbStorage.getFilm(filmId);
     }
@@ -57,10 +57,10 @@ public class FilmServiceImpl implements FilmService {
     public Boolean like(Integer filmId, Integer userId) {
         log.info("FilmService: выполнение запроса на добавление лайка");
         if (!filmDbStorage.isFilmExists(filmId)) {
-            throw new NotFoundException("Такого фильма нет в базе", filmId);
+            throw new NotFoundException("Такого фильма нет в базе");
         }
         if (!userDbStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует", userId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         if (likeDbStorage.isAlreadyLiked(filmId, userId)) {
             return false;
@@ -72,10 +72,10 @@ public class FilmServiceImpl implements FilmService {
     public Boolean unlike(Integer filmId, Integer userId) {
         log.info("FilmService: выполнение запроса на удаление лайка");
         if (!filmDbStorage.isFilmExists(filmId)) {
-            throw new NotFoundException("Такого фильма нет в базе", filmId);
+            throw new NotFoundException("Такого фильма нет в базе");
         }
         if (!userDbStorage.isUserExists(userId)) {
-            throw new NotFoundException("Такого пользователя не существует", userId);
+            throw new NotFoundException("Такого пользователя не существует");
         }
         if (!likeDbStorage.isAlreadyLiked(filmId, userId)) {
             throw new ValidationException("вы еще не лайкали этот фильм");
