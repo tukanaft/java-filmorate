@@ -93,7 +93,6 @@ public class FilmRepository extends BaseRepository<Film> {
                     WHERE fd.director_id = ?
                     GROUP BY id, name, description, release_date, duration, rating_id
                     ORDER BY COUNT(fuls.user_id) DESC ;
-
                     """;
 
     public FilmRepository(JdbcTemplate jdbc, RowMapper<Film> mapper) {
