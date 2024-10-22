@@ -45,6 +45,13 @@ public class InMemoryFilmService implements FilmService {
     }
 
     @Override
+    public List<FilmDto> getTopFilmsByGenreYear(int size, long genreId, Integer year) {
+        return filmRepository.getTopFilmsByGenreYear(size, genreId,year).stream()
+                .map(FilmMapper::mapToFilmDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public FilmDto findFilmById(Long filmId) {
         return filmRepository.findById(filmId)
                 .map(FilmMapper::mapToFilmDto)

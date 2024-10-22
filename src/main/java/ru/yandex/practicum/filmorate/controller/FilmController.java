@@ -50,11 +50,18 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<FilmDto> getFilmsTop(@RequestParam(defaultValue = "10") int size) {
+    public List<FilmDto> getFilmsTop(@RequestParam(defaultValue = "10") int size,
+                                     @RequestParam(required = false) Long genreId,
+                                     @RequestParam(required = false) Integer year) {
         if (size < 1) {
             throw new BadInputExceptionParametered("size", "Некорректный размер выборки. Размер должен быть больше нуля");
         }
-        return filmService.getTopFilms(size);
+        if (genreId == null) {
+            return filmService.getTopFilms(size);
+        }
+        else {
+            return filmService.getTopFilmsByGenreYear(size, genreId, year);
+        }
     }
 
     @PutMapping("/{filmId}/like/{userId}")
@@ -66,4 +73,5 @@ public class FilmController {
     public boolean deleteLike(@PathVariable Long filmId, @PathVariable Long userId) {
         return filmService.deleteLike(filmId, userId);
     }
+
 }

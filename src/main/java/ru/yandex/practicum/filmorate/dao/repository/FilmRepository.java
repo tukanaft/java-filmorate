@@ -41,6 +41,17 @@ public class FilmRepository extends BaseRepository<Film> {
                     LIMIT ?
                     """;
 
+    private static final String FIND_TOP_FILMS_BY_GENRE_YEAR =
+            """
+                    SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_id FROM films AS f
+                    LEFT JOIN film_user_likes_set AS ufl ON f.id = ufl.film_id
+                    LEFT JOIN film_genres AS fg ON f.id = fg.film_id
+                    WHERE f.release_date = ? AND fg.genre_id = ?
+                    GROUP BY f.id
+                    ORDER BY COUNT(ufl.film_id) DESC
+                    LIMIT ?
+                    """;
+
     public FilmRepository(JdbcTemplate jdbc, RowMapper<Film> mapper) {
         super(jdbc, mapper);
     }
@@ -97,6 +108,10 @@ public class FilmRepository extends BaseRepository<Film> {
 
     public List<Film> getTopFilms(int count) {
             return jdbc.query(FIND_TOP_FILMS, mapper, count);
+    }
+
+    public List<Film> getTopFilmsByGenreYear(int count, Long genreId, Integer year) {
+        return jdbc.query(FIND_TOP_FILMS_BY_GENRE_YEAR, mapper, year, genreId, count);
     }
 
     public void addGenreForFilm(Long id, Long genreId) {

@@ -11,6 +11,8 @@ import java.util.List;
 public interface FilmService {
     List<FilmDto> getTopFilms(int size);
 
+    List<FilmDto> getTopFilmsByGenreYear(int size, long genreId, Integer year);
+
     FilmDto findFilmById(Long filmId);
 
     boolean putLike(Long id, Long userId);
@@ -24,4 +26,5 @@ public interface FilmService {
     FilmDto update(FilmRequest filmRequest);
 
     boolean delete(Long id);
+
 }
