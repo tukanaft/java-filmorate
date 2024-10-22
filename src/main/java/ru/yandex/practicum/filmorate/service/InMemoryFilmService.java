@@ -3,14 +3,10 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dao.repository.DirectorRepository;
-import ru.yandex.practicum.filmorate.dao.repository.FilmRepository;
-import ru.yandex.practicum.filmorate.dao.repository.GenreRepository;
-import ru.yandex.practicum.filmorate.dao.repository.RatingRepository;
-import ru.yandex.practicum.filmorate.dao.repository.UserRepository;
+import ru.yandex.practicum.filmorate.dao.repository.*;
+import ru.yandex.practicum.filmorate.dto.director.DirectorRequest;
 import ru.yandex.practicum.filmorate.dto.film.FilmDto;
 import ru.yandex.practicum.filmorate.dto.film.FilmRequest;
-import ru.yandex.practicum.filmorate.dto.director.DirectorRequest;
 import ru.yandex.practicum.filmorate.dto.genre.GenreRequest;
 import ru.yandex.practicum.filmorate.exception.BadInputException;
 import ru.yandex.practicum.filmorate.exception.BadInputExceptionParametered;
@@ -21,6 +17,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +37,13 @@ public class InMemoryFilmService implements FilmService {
     @Override
     public List<FilmDto> getTopFilms(int size) {
         return filmRepository.getTopFilms(size).stream()
+                .map(FilmMapper::mapToFilmDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FilmDto> getTopFilmsByGenreYear(int size, long genreId, LocalDate date) {
+        return filmRepository.getTopFilmsByGenreYear(size, genreId, date).stream()
                 .map(FilmMapper::mapToFilmDto)
                 .collect(Collectors.toList());
     }
