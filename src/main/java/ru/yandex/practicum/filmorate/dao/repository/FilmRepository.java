@@ -28,17 +28,38 @@ public class FilmRepository extends BaseRepository<Film> {
                     SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_id
                     FROM films AS f
                     JOIN film_directors AS fd ON f.id = fd.film_id
-                    JOIN directors AS d ON fd.director_id = d.id
+                    JOIN directors_names AS d ON fd.director_id = d.id
                     WHERE LOWER(d.name) LIKE CONCAT('%',?,'%')
                     """;
 
     private static final String FIND_TOP_FILMS =
             """
                     SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_id FROM films AS f
-                    LEFT JOIN film_user_likes_set AS ufl ON f.id = ufl.film_id
+                    LEFT JOIN film_user_likes_set AS fuls ON f.id = fuls.film_id
                     GROUP BY f.id
-                    ORDER BY COUNT(ufl.film_id) DESC
+                    ORDER BY COUNT(fuls.film_id) DESC
                     LIMIT ?
+                    """;
+
+    private static final String FIND_FILMS_FOR_DIRECTOR_SORT_BY_YEAR_QUERY =
+            """
+                    SELECT id, name, description, release_date, duration, rating_id
+                    FROM films AS f
+                    LEFT JOIN film_directors AS fd ON f.id = fd.film_id
+                    WHERE fd.director_id = ?
+                    GROUP BY id, name, description, release_date, duration, rating_id
+                    ORDER BY f.release_date
+                    """;
+
+    private static final String FIND_FILMS_FOR_DIRECTOR_SORT_BY_LIKES_QUERY =
+            """
+                    SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_id
+                    FROM films AS f
+                    LEFT JOIN film_user_likes_set fuls ON f.id = fuls.film_id
+                    JOIN film_directors fd ON f.id = fd.film_id
+                    WHERE fd.director_id = ?
+                    GROUP BY id, name, description, release_date, duration, rating_id
+                    ORDER BY COUNT(fuls.user_id) DESC ;
                     """;
 
     public FilmRepository(JdbcTemplate jdbc, RowMapper<Film> mapper) {
@@ -121,5 +142,13 @@ public class FilmRepository extends BaseRepository<Film> {
 
     public List<Film> getSearchDirector(String query) {
         return jdbc.query(SEARCH_FILM_DIRECTOR, mapper, query);
+    }
+
+    public List<Film> getDirectorsFilmSortByYear(Long id) {
+        return jdbc.query(FIND_FILMS_FOR_DIRECTOR_SORT_BY_YEAR_QUERY, mapper, id);
+    }
+
+    public List<Film> getDirectorsFilmSortByLikes(Long id) {
+        return jdbc.query(FIND_FILMS_FOR_DIRECTOR_SORT_BY_LIKES_QUERY, mapper, id);
     }
 }
