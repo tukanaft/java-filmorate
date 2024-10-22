@@ -165,4 +165,28 @@ public class InMemoryFilmService implements FilmService {
                 .collect(Collectors.toSet());
         film.setDirectors(directors);
     }
+
+    public void checkDirectorId(DirectorRepository directorRepository, Long... ids) {
+        for (Long id : ids) {
+            if (directorRepository.findById(id).isEmpty()) {
+                throw new NotFoundException("Директора с ID " + id + " не существует");
+            }
+        }
+    }
+
+    @Override
+    public List<FilmDto> getDirectorsFilmsByYear(Long id) {
+        checkDirectorId(directorRepository, id);
+        return filmRepository.getDirectorsFilmSortByYear(id).stream()
+                .map(FilmMapper::mapToFilmDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FilmDto> getDirectorsFilmsByLikes(Long id) {
+        checkDirectorId(directorRepository, id);
+        return filmRepository.getDirectorsFilmSortByLikes(id).stream()
+                .map(FilmMapper::mapToFilmDto)
+                .collect(Collectors.toList());
+    }
 }
