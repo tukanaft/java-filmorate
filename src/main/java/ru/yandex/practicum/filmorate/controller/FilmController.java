@@ -48,7 +48,7 @@ public class FilmController {
         if (size < 1) {
             throw new BadInputExceptionParametered("size", "Некорректный размер выборки. Размер должен быть больше нуля");
         }
-        if (genreId == null) {
+        if (genreId == null && year == null) {
             return filmService.getTopFilms(size);
         } else {
             return filmService.getTopFilmsByGenreYear(size, genreId, year);
