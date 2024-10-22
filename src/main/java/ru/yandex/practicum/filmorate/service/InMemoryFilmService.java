@@ -17,6 +17,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -41,8 +42,8 @@ public class InMemoryFilmService implements FilmService {
     }
 
     @Override
-    public List<FilmDto> getTopFilmsByGenreYear(int size, long genreId, Integer year) {
-        return filmRepository.getTopFilmsByGenreYear(size, genreId, year).stream()
+    public List<FilmDto> getTopFilmsByGenreYear(int size, long genreId, LocalDate date) {
+        return filmRepository.getTopFilmsByGenreYear(size, genreId, date).stream()
                 .map(FilmMapper::mapToFilmDto)
                 .collect(Collectors.toList());
     }

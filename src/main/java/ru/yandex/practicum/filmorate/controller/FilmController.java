@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.dto.film.FilmRequest;
 import ru.yandex.practicum.filmorate.exception.BadInputExceptionParametered;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,15 +44,16 @@ public class FilmController {
 
     @GetMapping("/popular")
     public List<FilmDto> getFilmsTop(@RequestParam(defaultValue = "10") int size,
-                                     @RequestParam(required = false) Long genreId,
-                                     @RequestParam(required = false) Integer year) {
+                                     @RequestParam(defaultValue = "0") Long genreId,
+                                     @RequestParam(defaultValue = "0") Integer year) {
         if (size < 1) {
             throw new BadInputExceptionParametered("size", "Некорректный размер выборки. Размер должен быть больше нуля");
         }
-        if (genreId == null && year == null) {
+        LocalDate date = LocalDate.ofYearDay(year, 1);
+        if (genreId == 0 && year == 0) {
             return filmService.getTopFilms(size);
         } else {
-            return filmService.getTopFilmsByGenreYear(size, genreId, year);
+            return filmService.getTopFilmsByGenreYear(size, genreId, date);
         }
     }
 

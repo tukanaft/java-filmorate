@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +48,7 @@ public class FilmRepository extends BaseRepository<Film> {
                     SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_id FROM films AS f
                     LEFT JOIN film_user_likes_set AS ufl ON f.id = ufl.film_id
                     LEFT JOIN film_genres AS fg ON f.id = fg.film_id
-                    WHERE f.release_date = ? AND fg.genre_id = ?
+                    WHERE (f.release_date BETWEEN ? AND ?) AND fg.genre_id = ?
                     GROUP BY f.id
                     ORDER BY COUNT(ufl.film_id) DESC
                     LIMIT ?
@@ -66,7 +67,7 @@ public class FilmRepository extends BaseRepository<Film> {
             """
                     SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_id FROM films AS f
                     LEFT JOIN film_user_likes_set AS ufl ON f.id = ufl.film_id
-                    WHERE f.release_date = ?
+                    WHERE f.release_date BETWEEN ? AND ?
                     GROUP BY f.id
                     ORDER BY COUNT(ufl.film_id) DESC
                     LIMIT ?
@@ -130,13 +131,13 @@ public class FilmRepository extends BaseRepository<Film> {
         return jdbc.query(FIND_TOP_FILMS, mapper, count);
     }
 
-    public List<Film> getTopFilmsByGenreYear(int count, Long genreId, Integer year) {
-        if (year == null) {
+    public List<Film> getTopFilmsByGenreYear(int count, Long genreId, LocalDate date) {
+        if (date.isEqual(LocalDate.ofYearDay(0, 1))) {
             return jdbc.query(FIND_TOP_FILMS_BY_GENRE, mapper, genreId, count);
-        } else if (genreId == null) {
-            return jdbc.query(FIND_TOP_FILMS_BY_YEAR, mapper, year, count);
+        } else if (genreId == 0) {
+            return jdbc.query(FIND_TOP_FILMS_BY_YEAR, mapper, date, date.plusYears(1), count);
         } else {
-            return jdbc.query(FIND_TOP_FILMS_BY_GENRE_YEAR, mapper, year, genreId, count);
+            return jdbc.query(FIND_TOP_FILMS_BY_GENRE_YEAR, mapper, date, date.plusYears(1), genreId, count);
         }
     }
 
