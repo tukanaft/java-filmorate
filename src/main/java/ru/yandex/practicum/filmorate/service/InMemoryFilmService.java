@@ -3,14 +3,10 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dao.repository.DirectorRepository;
-import ru.yandex.practicum.filmorate.dao.repository.FilmRepository;
-import ru.yandex.practicum.filmorate.dao.repository.GenreRepository;
-import ru.yandex.practicum.filmorate.dao.repository.RatingRepository;
-import ru.yandex.practicum.filmorate.dao.repository.UserRepository;
+import ru.yandex.practicum.filmorate.dao.repository.*;
+import ru.yandex.practicum.filmorate.dto.director.DirectorRequest;
 import ru.yandex.practicum.filmorate.dto.film.FilmDto;
 import ru.yandex.practicum.filmorate.dto.film.FilmRequest;
-import ru.yandex.practicum.filmorate.dto.director.DirectorRequest;
 import ru.yandex.practicum.filmorate.dto.genre.GenreRequest;
 import ru.yandex.practicum.filmorate.exception.BadInputException;
 import ru.yandex.practicum.filmorate.exception.BadInputExceptionParametered;
@@ -46,7 +42,7 @@ public class InMemoryFilmService implements FilmService {
 
     @Override
     public List<FilmDto> getTopFilmsByGenreYear(int size, long genreId, Integer year) {
-        return filmRepository.getTopFilmsByGenreYear(size, genreId,year).stream()
+        return filmRepository.getTopFilmsByGenreYear(size, genreId, year).stream()
                 .map(FilmMapper::mapToFilmDto)
                 .collect(Collectors.toList());
     }
