@@ -72,7 +72,8 @@ public class FilmRepository extends BaseRepository<Film> {
                     GROUP BY f.id
                     ORDER BY COUNT(ufl.film_id) DESC
                     LIMIT ?
-=======
+                    """;
+    
     private static final String FIND_FILMS_FOR_DIRECTOR_SORT_BY_YEAR_QUERY =
             """
                     SELECT id, name, description, release_date, duration, rating_id
