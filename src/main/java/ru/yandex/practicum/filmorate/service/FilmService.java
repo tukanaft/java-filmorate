@@ -24,4 +24,8 @@ public interface FilmService {
     FilmDto update(FilmRequest filmRequest);
 
     boolean delete(Long id);
+
+    List<FilmDto> getDirectorsFilmsByYear(Long id);
+
+    List<FilmDto> getDirectorsFilmsByLikes(Long id);
 }

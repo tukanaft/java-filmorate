@@ -66,4 +66,16 @@ public class FilmController {
     public boolean deleteLike(@PathVariable Long filmId, @PathVariable Long userId) {
         return filmService.deleteLike(filmId, userId);
     }
+
+    @GetMapping("/director/{directorId}")
+    public List<FilmDto> getDirectorFilmsByYears(@RequestParam String sortBy, @PathVariable Long directorId) {
+        if (sortBy.equals("year")) {
+            return filmService.getDirectorsFilmsByYear(directorId);
+        }
+        if (sortBy.equals("likes")) {
+            return filmService.getDirectorsFilmsByLikes(directorId);
+        } else {
+            throw new BadInputExceptionParametered("error", "Некорректный запрос");
+        }
+    }
 }
