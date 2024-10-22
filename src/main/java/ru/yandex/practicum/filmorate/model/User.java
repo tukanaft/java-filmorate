@@ -1,22 +1,21 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.*;
+import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-
-/**
- * User.
- */
 @Data
 public class User {
-    private Integer id;
+    private Long id;
+    private Set<Long> friends;
     private String email;
-    private String name;
     private String login;
+    private String name;
     private LocalDate birthday;
-    private HashMap<Integer, Status> friendsId;
 
-
+    public User() {
+        friends = new HashSet<>();
+    }
 }
