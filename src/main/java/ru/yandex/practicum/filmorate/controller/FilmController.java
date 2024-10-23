@@ -97,8 +97,8 @@ public class FilmController {
                 return filmService.searchByDirector(query);
             }
             case "title" + ',' + "director", "director" + ',' + "title" -> {
-                List<FilmDto> searchDirector = filmService.searchByDirector(query);
-                searchDirector.addAll(filmService.searchByFilm(query));
+                List<FilmDto> searchDirector = filmService.searchByFilm(query);
+                searchDirector.addAll(filmService.searchByDirector(query));
                 return searchDirector.stream().distinct().collect(Collectors.toList());
             }
             default -> {
