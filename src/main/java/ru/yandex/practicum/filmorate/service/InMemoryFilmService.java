@@ -85,6 +85,7 @@ public class InMemoryFilmService implements FilmService {
 
     @Override
     public boolean delete(Long id) {
+        checkFilmId(filmRepository, id);
         return filmRepository.delete(id);
     }
 

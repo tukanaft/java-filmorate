@@ -43,6 +43,11 @@ public class FilmController {
         return filmService.update(filmRequest);
     }
 
+    @DeleteMapping("/{filmId}")
+    public void deleteFilmById(@PathVariable Long filmId) {
+        filmService.delete(filmId);
+    }
+
     @GetMapping("/popular")
     public List<FilmDto> getFilmsTop(@RequestParam(defaultValue = "10") int count,
                                      @RequestParam(defaultValue = "0") Long genreId,
