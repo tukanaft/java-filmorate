@@ -97,6 +97,8 @@ public class FilmRepository extends BaseRepository<Film> {
     private static final String FIND_COMMON_FILMS = "SELECT f.id, f.name, f.description, f.release_date, f.duration, " +
             "f.rating_id FROM films f JOIN film_user_likes_set u1 ON f.id = u1.film_id JOIN film_user_likes_set u2 " +
             "ON f.id = u2.film_id WHERE u1.user_id = ? AND u2.user_id = ?";
+    private static final String FIND_ALL_FILMS_LIKED_USER = "SELECT * FROM films WHERE id IN (SELECT film_id " +
+            "FROM film_user_likes_set WHERE user_id = ?) ORDER BY id ASC;";
 
     public FilmRepository(JdbcTemplate jdbc, RowMapper<Film> mapper) {
         super(jdbc, mapper);
@@ -200,5 +202,9 @@ public class FilmRepository extends BaseRepository<Film> {
 
     public Collection<Film> getCommonFilms(Long userId, Long friendId) {
         return findMany(FIND_COMMON_FILMS, userId, friendId);
+    }
+  
+    public Collection<Film> getLikedFilmsByUserId(Long userId) {
+        return findMany(FIND_ALL_FILMS_LIKED_USER, userId);
     }
 }

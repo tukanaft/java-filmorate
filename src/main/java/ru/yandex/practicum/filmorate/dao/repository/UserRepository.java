@@ -59,6 +59,10 @@ public class UserRepository extends BaseRepository<User> {
                     HAVING COUNT(*) > 1)
                     """;
 
+    private static final String FIND_USERS_LIKED_SAME_FILMS = "SELECT DISTINCT u.* FROM users u " +
+            "JOIN film_user_likes_set fu ON u.id = fu.user_id WHERE fu.film_id IN (SELECT film_id " +
+            "FROM film_user_likes_set WHERE user_id = ?) AND u.id != ?";
+
     public UserRepository(JdbcTemplate jdbc, RowMapper<User> mapper) {
         super(jdbc, mapper);
     }
@@ -131,5 +135,9 @@ public class UserRepository extends BaseRepository<User> {
     public Set<User> getCommonFriends(Object... params) {
         List<User> users = jdbc.query(GET_COMMON_FRIENDS, mapper, params[0], params[1], params[0], params[1]);
         return new HashSet<>(users);
+    }
+
+    public Set<User> getUsersLikedSameFilms(Long userId) {
+        return new HashSet<>(findMany(FIND_USERS_LIKED_SAME_FILMS, userId, userId));
     }
 }
