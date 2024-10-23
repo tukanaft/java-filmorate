@@ -87,6 +87,12 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
+    public void deleteUserById(Long userId) {
+        checkUserId(userRepository, userId);
+        userRepository.delete(userId);
+    }
+
+    @Override
     public UserDto get(Long id) {
         return userRepository.findById(id)
                 .map(UserMapper::mapToUserDto)

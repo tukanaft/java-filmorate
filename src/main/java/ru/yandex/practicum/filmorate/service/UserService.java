@@ -28,4 +28,6 @@ public interface UserService {
     UserDto update(UserRequest userRequest);
 
     Collection<FilmDto> getRecommendations(Long userId);
+
+    void deleteUserById(Long userId);
 }
