@@ -43,6 +43,11 @@ public class UserController {
         return userService.update(request);
     }
 
+    @GetMapping("/{id}")
+    public UserDto getUser(@PathVariable Long id) {
+        return userService.get(id);
+    }
+
     @GetMapping("/{userId}/friends")
     public List<UserDto> getFriends(@PathVariable Long userId) {
         return userService.getFriends(userId);

@@ -16,6 +16,8 @@ public interface UserService {
 
     Set<UserDto> getCommonFriends(Long userId, Long otherId);
 
+    UserDto get(Long id);
+
     List<UserDto> getFriends(Long userId);
 
     Collection<UserDto> findAll();
