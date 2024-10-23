@@ -32,4 +32,6 @@ public interface FilmService {
 
     List<FilmDto> getDirectorsFilmsByLikes(Long id);
 
+    Collection<FilmDto> getCommonFilms(Long userId, Long friendId);
+
 }

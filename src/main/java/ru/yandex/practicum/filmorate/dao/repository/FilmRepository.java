@@ -44,7 +44,6 @@ public class FilmRepository extends BaseRepository<Film> {
                     LIMIT ?
                     """;
 
-
     private static final String FIND_TOP_FILMS_BY_GENRE_YEAR =
             """
                     SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_id FROM films AS f
@@ -95,6 +94,9 @@ public class FilmRepository extends BaseRepository<Film> {
                     ORDER BY COUNT(fuls.user_id) DESC ;
                     """;
 
+    private static final String FIND_COMMON_FILMS = "SELECT f.id, f.name, f.description, f.release_date, f.duration, " +
+            "f.rating_id FROM films f JOIN film_user_likes_set u1 ON f.id = u1.film_id JOIN film_user_likes_set u2 " +
+            "ON f.id = u2.film_id WHERE u1.user_id = ? AND u2.user_id = ?";
     private static final String FIND_ALL_FILMS_LIKED_USER = "SELECT * FROM films WHERE id IN (SELECT film_id " +
             "FROM film_user_likes_set WHERE user_id = ?) ORDER BY id ASC;";
 
@@ -198,6 +200,10 @@ public class FilmRepository extends BaseRepository<Film> {
         return jdbc.query(FIND_FILMS_FOR_DIRECTOR_SORT_BY_LIKES_QUERY, mapper, id);
     }
 
+    public Collection<Film> getCommonFilms(Long userId, Long friendId) {
+        return findMany(FIND_COMMON_FILMS, userId, friendId);
+    }
+  
     public Collection<Film> getLikedFilmsByUserId(Long userId) {
         return findMany(FIND_ALL_FILMS_LIKED_USER, userId);
     }

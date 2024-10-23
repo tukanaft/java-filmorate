@@ -12,16 +12,10 @@ import ru.yandex.practicum.filmorate.exception.BadInputException;
 import ru.yandex.practicum.filmorate.exception.BadInputExceptionParametered;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
-import ru.yandex.practicum.filmorate.model.Director;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Rating;
+import ru.yandex.practicum.filmorate.model.*;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -108,6 +102,18 @@ public class InMemoryFilmService implements FilmService {
         addDirector(updatedFilm, filmRequest);
         updatedFilm = filmRepository.update(updatedFilm);
         return FilmMapper.mapToFilmDto(updatedFilm);
+    }
+
+    @Override
+    public Collection<FilmDto> getCommonFilms(Long userId, Long friendId) {
+        Optional<User> optUser = userRepository.findById(userId);
+        Optional<User> optFriend = userRepository.findById(friendId);
+        if (optUser.isEmpty() || optFriend.isEmpty()) {
+            log.error("Пользователь с id {} или с id {} не добавлен", userId, friendId);
+            throw new NotFoundException(String.format("Пользователь с id {} или с id {} не добавлен", userId, friendId));
+        }
+        Collection<Film> commonFilms = filmRepository.getCommonFilms(userId, friendId);
+        return commonFilms.stream().map(FilmMapper::mapToFilmDto).collect(Collectors.toList());
     }
 
     public void checkFilmId(FilmRepository filmRepository, Long... ids) {
