@@ -43,17 +43,17 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<FilmDto> getFilmsTop(@RequestParam(defaultValue = "10") int size,
+    public List<FilmDto> getFilmsTop(@RequestParam(defaultValue = "10") int count,
                                      @RequestParam(defaultValue = "0") Long genreId,
                                      @RequestParam(defaultValue = "0") Integer year) {
-        if (size < 1) {
-            throw new BadInputExceptionParametered("size", "Некорректный размер выборки. Размер должен быть больше нуля");
+        if (count < 1) {
+            throw new BadInputExceptionParametered("count", "Некорректный размер выборки. Размер должен быть больше нуля");
         }
         LocalDate date = LocalDate.ofYearDay(year, 1);
         if (genreId == 0 && year == 0) {
-            return filmService.getTopFilms(size);
+            return filmService.getTopFilms(count);
         } else {
-            return filmService.getTopFilmsByGenreYear(size, genreId, date);
+            return filmService.getTopFilmsByGenreYear(count, genreId, date);
         }
     }
 

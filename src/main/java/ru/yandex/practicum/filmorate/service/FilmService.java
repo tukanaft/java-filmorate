@@ -10,9 +10,9 @@ import java.util.List;
 
 @Service
 public interface FilmService {
-    List<FilmDto> getTopFilms(int size);
+    List<FilmDto> getTopFilms(int count);
 
-    List<FilmDto> getTopFilmsByGenreYear(int size, long genreId, LocalDate date);
+    List<FilmDto> getTopFilmsByGenreYear(int count, long genreId, LocalDate date);
 
     FilmDto findFilmById(Long filmId);
 

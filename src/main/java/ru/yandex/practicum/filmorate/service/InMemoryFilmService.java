@@ -35,15 +35,15 @@ public class InMemoryFilmService implements FilmService {
     private final DirectorRepository directorRepository;
 
     @Override
-    public List<FilmDto> getTopFilms(int size) {
-        return filmRepository.getTopFilms(size).stream()
+    public List<FilmDto> getTopFilms(int count) {
+        return filmRepository.getTopFilms(count).stream()
                 .map(FilmMapper::mapToFilmDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<FilmDto> getTopFilmsByGenreYear(int size, long genreId, LocalDate date) {
-        return filmRepository.getTopFilmsByGenreYear(size, genreId, date).stream()
+    public List<FilmDto> getTopFilmsByGenreYear(int count, long genreId, LocalDate date) {
+        return filmRepository.getTopFilmsByGenreYear(count, genreId, date).stream()
                 .map(FilmMapper::mapToFilmDto)
                 .collect(Collectors.toList());
     }
