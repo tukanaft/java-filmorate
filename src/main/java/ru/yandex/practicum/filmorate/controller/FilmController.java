@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -84,5 +85,25 @@ public class FilmController {
     public Collection<FilmDto> getCommonFilms(@RequestParam Long userId, @RequestParam Long friendId) {
         log.info("Получен запрос на вывод общих фильмов для пользователя id={} и пользователя с id={}", userId, friendId);
         return filmService.getCommonFilms(userId, friendId);
+    }
+
+    @GetMapping("/search")
+    public List<FilmDto> searchFilms(@RequestParam("query") String query, @RequestParam("by") String by) {
+        switch (by) {
+            case "title" -> {
+                return filmService.searchByFilm(query);
+            }
+            case "director" -> {
+                return filmService.searchByDirector(query);
+            }
+            case "title" + ',' + "director", "director" + ',' + "title" -> {
+                List<FilmDto> searchDirector = filmService.searchByFilm(query);
+                searchDirector.addAll(filmService.searchByDirector(query));
+                return searchDirector.stream().distinct().collect(Collectors.toList());
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 }

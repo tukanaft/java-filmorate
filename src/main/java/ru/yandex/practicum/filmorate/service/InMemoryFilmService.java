@@ -195,4 +195,18 @@ public class InMemoryFilmService implements FilmService {
                 .map(FilmMapper::mapToFilmDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<FilmDto> searchByFilm(String query) {
+        return filmRepository.searchByFilm(query.toLowerCase()).stream()
+                .map(FilmMapper::mapToFilmDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FilmDto> searchByDirector(String query) {
+        return filmRepository.searchByDirector(query.toLowerCase()).stream()
+                .map(FilmMapper::mapToFilmDto)
+                .collect(Collectors.toList());
+    }
 }

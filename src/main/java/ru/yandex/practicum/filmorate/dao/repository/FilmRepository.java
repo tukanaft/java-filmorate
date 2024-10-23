@@ -22,11 +22,11 @@ public class FilmRepository extends BaseRepository<Film> {
     private static final String DELETE_ALL_GENRE_FOR_FILM = "DELETE FROM film_genres WHERE film_id = ? ";
     private static final String ADD_DIRECTOR_FOR_FILM = "INSERT INTO film_directors(film_id, director_id) VALUES (?, ?) ";
     private static final String DELETE_ALL_DIRECTOR_FOR_FILM = "DELETE FROM film_directors WHERE film_id = ? ";
-    private static final String SEARCH_FILM = "SELECT * FROM films WHERE LOWER(name) LIKE CONCAT('%',?,'%')";
+    private static final String SEARCH_BY_FILM = "SELECT * FROM films WHERE LOWER(name) LIKE CONCAT('%',?,'%')";
     private static final String INSERT_QUERY = "INSERT INTO films(name, description, release_date, duration, rating_id) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
 
-    private static final String SEARCH_FILM_DIRECTOR =
+    private static final String SEARCH_BY_FILM_DIRECTOR =
             """
                     SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_id
                     FROM films AS f
@@ -184,12 +184,12 @@ public class FilmRepository extends BaseRepository<Film> {
         jdbc.update(DELETE_ALL_DIRECTOR_FOR_FILM, id);
     }
 
-    public List<Film> getSearchFilm(String query) {
-        return jdbc.query(SEARCH_FILM, mapper, query);
+    public List<Film> searchByFilm(String query) {
+        return jdbc.query(SEARCH_BY_FILM, mapper, query);
     }
 
-    public List<Film> getSearchDirector(String query) {
-        return jdbc.query(SEARCH_FILM_DIRECTOR, mapper, query);
+    public List<Film> searchByDirector(String query) {
+        return jdbc.query(SEARCH_BY_FILM_DIRECTOR, mapper, query);
     }
 
     public List<Film> getDirectorsFilmSortByYear(Long id) {
@@ -203,7 +203,7 @@ public class FilmRepository extends BaseRepository<Film> {
     public Collection<Film> getCommonFilms(Long userId, Long friendId) {
         return findMany(FIND_COMMON_FILMS, userId, friendId);
     }
-  
+
     public Collection<Film> getLikedFilmsByUserId(Long userId) {
         return findMany(FIND_ALL_FILMS_LIKED_USER, userId);
     }
