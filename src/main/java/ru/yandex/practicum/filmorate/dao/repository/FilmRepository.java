@@ -203,7 +203,7 @@ public class FilmRepository extends BaseRepository<Film> {
     public Collection<Film> getCommonFilms(Long userId, Long friendId) {
         return findMany(FIND_COMMON_FILMS, userId, friendId);
     }
-  
+
     public Collection<Film> getLikedFilmsByUserId(Long userId) {
         return findMany(FIND_ALL_FILMS_LIKED_USER, userId);
     }
