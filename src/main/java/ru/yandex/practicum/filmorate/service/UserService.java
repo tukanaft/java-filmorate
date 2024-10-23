@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dto.film.FilmDto;
 import ru.yandex.practicum.filmorate.dto.user.UserDto;
 import ru.yandex.practicum.filmorate.dto.user.UserRequest;
 
@@ -25,4 +26,6 @@ public interface UserService {
     UserDto create(UserRequest userRequest);
 
     UserDto update(UserRequest userRequest);
+
+    Collection<FilmDto> getRecommendations(Long userId);
 }
