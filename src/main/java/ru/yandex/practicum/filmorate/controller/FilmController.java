@@ -79,4 +79,10 @@ public class FilmController {
             throw new BadInputExceptionParametered("error", "Некорректный запрос");
         }
     }
+
+    @GetMapping("/common")
+    public Collection<FilmDto> getCommonFilms(@RequestParam Long userId, @RequestParam Long friendId) {
+        log.info("Получен запрос на вывод общих фильмов для пользователя id={} и пользователя с id={}", userId, friendId);
+        return filmService.getCommonFilms(userId, friendId);
+    }
 }

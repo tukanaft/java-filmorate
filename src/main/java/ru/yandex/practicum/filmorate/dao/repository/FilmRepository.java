@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,6 +95,10 @@ public class FilmRepository extends BaseRepository<Film> {
                     GROUP BY id, name, description, release_date, duration, rating_id
                     ORDER BY COUNT(fuls.user_id) DESC ;
                     """;
+
+    private static final String FIND_COMMON_FILMS = "SELECT f.id, f.name, f.description, f.release_date, f.duration, " +
+            "f.rating_id FROM films f JOIN film_user_likes_set u1 ON f.id = u1.film_id JOIN film_user_likes_set u2 " +
+            "ON f.id = u2.film_id WHERE u1.user_id = ? AND u2.user_id = ?";
 
     public FilmRepository(JdbcTemplate jdbc, RowMapper<Film> mapper) {
         super(jdbc, mapper);
@@ -193,5 +198,9 @@ public class FilmRepository extends BaseRepository<Film> {
 
     public List<Film> getDirectorsFilmSortByLikes(Long id) {
         return jdbc.query(FIND_FILMS_FOR_DIRECTOR_SORT_BY_LIKES_QUERY, mapper, id);
+    }
+
+    public Collection<Film> getCommonFilms(Long userId, Long friendId) {
+        return findMany(FIND_COMMON_FILMS, userId, friendId);
     }
 }
