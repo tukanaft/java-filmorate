@@ -1,25 +1,41 @@
 package ru.yandex.practicum.filmorate.service;
 
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.dto.FilmDto;
+import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dto.film.FilmDto;
+import ru.yandex.practicum.filmorate.dto.film.FilmRequest;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
+@Service
 public interface FilmService {
-    Film addFilm(Film newFilm);
+    List<FilmDto> getTopFilms(int count);
 
-    Film updateFilm(Film newFilm);
+    List<FilmDto> getTopFilmsByGenreYear(int count, long genreId, LocalDate date);
 
-    ArrayList<FilmDto> getFilms();
+    FilmDto findFilmById(Long filmId);
 
-    Film getFilm(Integer filmId);
+    boolean putLike(Long id, Long userId);
 
-    Boolean like(Integer filmId, Integer userId);
+    boolean deleteLike(Long filmId, Long userId);
 
-    Boolean unlike(Integer filmId, Integer userId);
+    Collection<FilmDto> findAll();
 
-    List<FilmDto> mostPopularFilms(Integer count);
+    FilmDto create(FilmRequest filmRequest);
 
-    void clear();
+    FilmDto update(FilmRequest filmRequest);
+
+    boolean delete(Long id);
+
+    List<FilmDto> getDirectorsFilmsByYear(Long id);
+
+    List<FilmDto> getDirectorsFilmsByLikes(Long id);
+
+    Collection<FilmDto> getCommonFilms(Long userId, Long friendId);
+
+    List<FilmDto> searchByFilm(String query);
+
+    List<FilmDto> searchByDirector(String query);
+
 }

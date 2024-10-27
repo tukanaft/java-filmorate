@@ -1,27 +1,21 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.*;
-
+import lombok.Data;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Film.
  */
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Getter
-@Setter
+@Data
 public class Film {
-    private Integer id;
+    private Long id;
     private String name;
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
-    private ArrayList<Integer> likes;
-    private List<Genre> genres;
-    private MPA mpa;
+    private Rating mpa;
+    private Set<Long> likes;
+    private Set<Genre> genres;
+    private Set<Director> directors;
 }

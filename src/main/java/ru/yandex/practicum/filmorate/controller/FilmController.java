@@ -1,69 +1,114 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.dto.FilmDto;
+import ru.yandex.practicum.filmorate.dto.film.FilmDto;
+import ru.yandex.practicum.filmorate.dto.film.FilmRequest;
+import ru.yandex.practicum.filmorate.exception.BadInputExceptionParametered;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/films")
 public class FilmController {
     private final FilmService filmService;
 
+    @GetMapping
+    public Collection<FilmDto> findAll() {
+        return filmService.findAll();
+    }
+
+    @GetMapping("/{filmId}")
+    @ResponseStatus(HttpStatus.OK)
+    public FilmDto findFilmById(@PathVariable Long filmId) {
+        return filmService.findFilmById(filmId);
+    }
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Film addFilm(@RequestBody Film newFilm) {
-        log.info("FilmController: выполнение запроса на добавление фильма: {}", newFilm);
-        Film film = filmService.addFilm(newFilm);
-        log.info("FilmController: запрос на добавление выполнен: {}", film);
-        return film;
+    public FilmDto create(@Valid @RequestBody FilmRequest filmRequest) {
+        return filmService.create(filmRequest);
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody Film newFilm) {
-        log.info("FilmController: выполнение запроса на обновление фильма: {}", newFilm);
-        return filmService.updateFilm(newFilm);
+    public FilmDto update(@Valid @RequestBody FilmRequest filmRequest) {
+        return filmService.update(filmRequest);
     }
 
-    @GetMapping
-    public ArrayList<FilmDto> getFilms() {
-        log.info("FilmController: выполнение запроса на получение фильмов");
-        return filmService.getFilms();
-    }
-
-    @GetMapping("/{id}")
-    public Film getFilm(@PathVariable("id") Integer filmId) {
-        log.info("FilmController: выполнение запроса на получение фильма: {}", filmId);
-        Film film = filmService.getFilm(filmId);
-        log.info("FilmController: запрос на получение выполнен: {}", film);
-        return film;
-    }
-
-    @PutMapping("/{id}/like/{userId}")
-    public Boolean like(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId) {
-        log.info("FilmController: выполнение запроса на добавление лайка: {}", filmId);
-        return filmService.like(filmId, userId);
-    }
-
-    @DeleteMapping("/{id}/like/{userId}")
-    public Boolean unlike(@PathVariable("id") Integer filmId, @PathVariable("userId") Integer userId) {
-        log.info("FilmController: выполнение запроса на удаление лайка: {}", filmId);
-        return filmService.like(filmId, userId);
+    @DeleteMapping("/{filmId}")
+    public void deleteFilmById(@PathVariable Long filmId) {
+        filmService.delete(filmId);
     }
 
     @GetMapping("/popular")
-    public List<FilmDto> commonFriends(@RequestParam Integer count) {
-        log.info("FilmController: выполнение запроса на получение самых популярных фильмов");
-        return filmService.mostPopularFilms(count);
+    public List<FilmDto> getFilmsTop(@RequestParam(defaultValue = "10") int count,
+                                     @RequestParam(defaultValue = "0") Long genreId,
+                                     @RequestParam(defaultValue = "0") Integer year) {
+        if (count < 1) {
+            throw new BadInputExceptionParametered("count", "Некорректный размер выборки. Размер должен быть больше нуля");
+        }
+        LocalDate date = LocalDate.ofYearDay(year, 1);
+        if (genreId == 0 && year == 0) {
+            return filmService.getTopFilms(count);
+        } else {
+            return filmService.getTopFilmsByGenreYear(count, genreId, date);
+        }
     }
 
-}
+    @PutMapping("/{filmId}/like/{userId}")
+    public boolean putLike(@PathVariable Long filmId, @PathVariable Long userId) {
+        return filmService.putLike(filmId, userId);
+    }
 
+    @DeleteMapping("/{filmId}/like/{userId}")
+    public boolean deleteLike(@PathVariable Long filmId, @PathVariable Long userId) {
+        return filmService.deleteLike(filmId, userId);
+    }
+
+
+    @GetMapping("/director/{directorId}")
+    public List<FilmDto> getDirectorFilmsByYears(@RequestParam String sortBy, @PathVariable Long directorId) {
+        if (sortBy.equals("year")) {
+            return filmService.getDirectorsFilmsByYear(directorId);
+        }
+        if (sortBy.equals("likes")) {
+            return filmService.getDirectorsFilmsByLikes(directorId);
+        } else {
+            throw new BadInputExceptionParametered("error", "Некорректный запрос");
+        }
+    }
+
+    @GetMapping("/common")
+    public Collection<FilmDto> getCommonFilms(@RequestParam Long userId, @RequestParam Long friendId) {
+        log.info("Получен запрос на вывод общих фильмов для пользователя id={} и пользователя с id={}", userId, friendId);
+        return filmService.getCommonFilms(userId, friendId);
+    }
+
+    @GetMapping("/search")
+    public List<FilmDto> searchFilms(@RequestParam("query") String query, @RequestParam("by") String by) {
+        switch (by) {
+            case "title" -> {
+                return filmService.searchByFilm(query);
+            }
+            case "director" -> {
+                return filmService.searchByDirector(query);
+            }
+            case "title" + ',' + "director", "director" + ',' + "title" -> {
+                List<FilmDto> searchDirector = filmService.searchByFilm(query);
+                searchDirector.addAll(filmService.searchByDirector(query));
+                return searchDirector.stream().distinct().collect(Collectors.toList());
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+}

@@ -1,24 +1,33 @@
 package ru.yandex.practicum.filmorate.service;
 
-import ru.yandex.practicum.filmorate.model.User;
+import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dto.film.FilmDto;
+import ru.yandex.practicum.filmorate.dto.user.UserDto;
+import ru.yandex.practicum.filmorate.dto.user.UserRequest;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
+@Service
 public interface UserService {
-    User addUser(User newUser);
+    boolean addFriend(Long userId, Long friendId);
 
-    User updateUser(User newUser);
+    boolean removeFriend(Long userId, Long friendId);
 
-    ArrayList<User> getUsers();
+    Set<UserDto> getCommonFriends(Long userId, Long otherId);
 
-    Boolean addFriend(Integer userId, Integer friendsId);
+    UserDto get(Long id);
 
-    Boolean deleteFriend(Integer userId, Integer friendsId);
+    List<UserDto> getFriends(Long userId);
 
-    List<User> commonFriends(Integer userId, Integer friendsId);
+    Collection<UserDto> findAll();
 
-    void clear();
+    UserDto create(UserRequest userRequest);
 
-    List<User> getFriends(Integer userId);
+    UserDto update(UserRequest userRequest);
+
+    Collection<FilmDto> getRecommendations(Long userId);
+
+    void deleteUserById(Long userId);
 }

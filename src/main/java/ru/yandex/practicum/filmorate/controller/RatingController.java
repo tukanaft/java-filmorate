@@ -9,26 +9,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.dto.genre.GenreDto;
-import ru.yandex.practicum.filmorate.service.GenreService;
+import ru.yandex.practicum.filmorate.dto.rating.RatingDto;
+import ru.yandex.practicum.filmorate.service.RatingService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/genres")
+@RequestMapping("/mpa")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class GenreController {
-    GenreService genreService;
+public class RatingController {
+    RatingService ratingService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public GenreDto get(@PathVariable Long id) {
-        return genreService.get(id);
+    public RatingDto get(@PathVariable Long id) {
+        return ratingService.get(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<GenreDto> getAll() {
-        return genreService.getAll();
+    public List<RatingDto> getAll() {
+        return ratingService.getAll();
     }
 }

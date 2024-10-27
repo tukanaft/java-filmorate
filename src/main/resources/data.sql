@@ -1,14 +1,18 @@
-merge into MPA(id, name)
-values (1, 'G'),
-       (2, 'PG'),
-       (3, 'PG-13'),
-       (4, 'R'),
-       (5, 'NC-17');
+SET SCHEMA public;
 
-merge into genres(id, name)
-values (1, 'Комедия'),
-       (2, 'Драма'),
-       (3, 'Мультфильм'),
-       (4, 'Триллер'),
-       (5, 'Документальный'),
-       (6, 'Боевик');
+INSERT INTO genres_names (name)
+VALUES
+    ('Комедия'),
+    ('Драма'),
+    ('Мультфильм'),
+    ('Триллер'),
+    ('Документальный'),
+    ('Боевик');
+
+INSERT INTO ratings (name)
+VALUES
+    ('G'),
+    ('PG'),
+    ('PG-13'),
+    ('R'),
+    ('NC-17');
