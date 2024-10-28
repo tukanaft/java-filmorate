@@ -39,7 +39,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("{id}/like/{userId}")
-    public Boolean deleteLikeToReview(@PathVariable("id") Long reviewId, @PathVariable("userId") Long userId) {
+    public Optional<Review> deleteLikeToReview(@PathVariable("id") Long reviewId, @PathVariable("userId") Long userId) {
         return reviewService.deleteLikeToReview(reviewId, userId);
     }
 
@@ -49,7 +49,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("{id}/dislike/{userId}")
-    public Boolean deleteDislikeToReview(@PathVariable("id") Long reviewId, @PathVariable("userId") Long userId) {
+    public Optional<Review> deleteDislikeToReview(@PathVariable("id") Long reviewId, @PathVariable("userId") Long userId) {
         return reviewService.deleteDislikeToReview(reviewId, userId);
     }
 

@@ -14,9 +14,9 @@ public interface ReviewService {
 
     public Optional<Review> addDislikeToReview(Long reviewId, Long userId);
 
-    public Boolean deleteLikeToReview(Long reviewId, Long userId);
+    public Optional<Review> deleteLikeToReview(Long reviewId, Long userId);
 
-    public Boolean deleteDislikeToReview(Long reviewId, Long userId);
+    public Optional<Review> deleteDislikeToReview(Long reviewId, Long userId);
 
     public Review addReview(Review newReview);
 

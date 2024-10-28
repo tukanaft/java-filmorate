@@ -40,7 +40,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        return reviewRepository.addLikeToReview(reviewId, userId);
+        return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "лайк");
     }
 
     @Override
@@ -51,29 +51,29 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        return reviewRepository.addDislikeToReview(reviewId, userId);
+        return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "дизлайк");
     }
 
     @Override
-    public Boolean deleteLikeToReview(Long reviewId, Long userId) {
+    public Optional<Review> deleteLikeToReview(Long reviewId, Long userId) {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        return reviewRepository.deleteLikeToReview(reviewId, userId);
+        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "лайк");
     }
 
     @Override
-    public Boolean deleteDislikeToReview(Long reviewId, Long userId) {
+    public Optional<Review> deleteDislikeToReview(Long reviewId, Long userId) {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        return reviewRepository.deleteDislikeToReview(reviewId, userId);
+        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "дизлайк");
     }
 
     @Override
