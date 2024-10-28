@@ -21,6 +21,7 @@ public class ReviewController {
     public Optional<Review> getReviewById(@PathVariable("id") Long reviewId) {
         return reviewService.getReviewById(reviewId);
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Review addReview(@RequestBody Review newReview) {

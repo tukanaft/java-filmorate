@@ -7,13 +7,21 @@ import java.util.Optional;
 
 public interface ReviewService {
     public Optional<Review> getReviewById(Long reviewId);
+
     public Optional<Review> updateReview(Review newReview);
+
     public Optional<Review> addLikeToReview(Long reviewId, Long userId);
+
     public Optional<Review> addDislikeToReview(Long reviewId, Long userId);
+
     public Boolean deleteLikeToReview(Long reviewId, Long userId);
+
     public Boolean deleteDislikeToReview(Long reviewId, Long userId);
+
     public Review addReview(Review newReview);
+
     public void deleteReview(Long reviewId);
+
     public List<Review> reviewsOfSelectedFilm(Long filmId, Integer count);
 
 }

@@ -37,7 +37,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId)==null) {
+        if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         return reviewRepository.addLikeToReview(reviewId, userId);
@@ -48,7 +48,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId)==null) {
+        if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         return reviewRepository.addDislikeToReview(reviewId, userId);
@@ -59,7 +59,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId)==null) {
+        if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         return reviewRepository.deleteLikeToReview(reviewId, userId);
@@ -70,7 +70,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId)==null) {
+        if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
         return reviewRepository.deleteDislikeToReview(reviewId, userId);
@@ -81,19 +81,19 @@ public class InMemoryReviewService implements ReviewService {
         if (newReview.getContent() == null) {
             throw new BadInputException("Контент отзыва не может быть пустым");
         }
-        if(newReview.getUserId()==null){
+        if (newReview.getUserId() == null) {
             throw new BadInputException("Не указан ID пользователя");
         }
-        if(newReview.getFilmId()==null){
+        if (newReview.getFilmId() == null) {
             throw new BadInputException("Не указан ID фильма");
         }
-        if(newReview.getIsPositive()==null){
+        if (newReview.getIsPositive() == null) {
             throw new BadInputException("Не указан ID фильма");
         }
-        if (inMemoryUserService.get(newReview.getUserId())==null) {
+        if (inMemoryUserService.get(newReview.getUserId()) == null) {
             throw new NotFoundException("Указанного пользователя для отзыва не существует");
         }
-        if (inMemoryFilmService.findFilmById(newReview.getFilmId())==null) {
+        if (inMemoryFilmService.findFilmById(newReview.getFilmId()) == null) {
             throw new NotFoundException("Указанного фильма для отзыва не существует");
         }
         newReview.setUseful(0);
