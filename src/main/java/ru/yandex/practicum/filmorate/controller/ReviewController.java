@@ -5,78 +5,60 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Review;
-import ru.yandex.practicum.filmorate.model.dto.FilmDto;
-import ru.yandex.practicum.filmorate.service.ReviewService;
+import ru.yandex.practicum.filmorate.service.InMemoryReviewService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reviews")
 public class ReviewController {
-    private final ReviewService reviewService;
+    private final InMemoryReviewService reviewService;
 
-/*    @GetMapping
-    public List<Review> getReviews() {
-        log.info("ReviewController: выполнение запроса на получение отзывов");
-        return reviewService.getReviews();
-    }
-
- */
     @GetMapping("/{id}")
-    public Review getReviewById(@PathVariable("id") Integer reviewId) {
-        log.info("ReviewController: выполнение запроса на получение отзыва по id: {}", reviewId);
+    public Optional<Review> getReviewById(@PathVariable("id") Long reviewId) {
         return reviewService.getReviewById(reviewId);
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Review addReview(@RequestBody Review newReview) {
-        log.info("ReviewController: выполнение запроса на добавление отзыва: {}", newReview);
         return reviewService.addReview(newReview);
     }
 
     @PutMapping
-    public Review updateReview(@RequestBody Review newReview) {
-        log.info("ReviewController: выполнение запроса на обновление отзыва: {}", newReview);
-        Review updatedReview = reviewService.updateReview(newReview);
-        log.info("ReviewController: запрос на обновление отзыва выполнен: {}", updatedReview);
-        return updatedReview;
+    public Optional<Review> updateReview(@RequestBody Review newReview) {
+        return reviewService.updateReview(newReview);
     }
 
     @PutMapping("{id}/like/{userId}")
-    public Review addLikeToReview(@PathVariable("id") Integer reviewId, @PathVariable("userId") Integer userId) {
-        log.info("ReviewController: выполнение запроса на установку лайка для отзыва: {} пользователем {}", reviewId, userId);
+    public Optional<Review> addLikeToReview(@PathVariable("id") Long reviewId, @PathVariable("userId") Long userId) {
         return reviewService.addLikeToReview(reviewId, userId);
     }
 
     @DeleteMapping("{id}/like/{userId}")
-    public Boolean deleteLikeToReview(@PathVariable("id") Integer reviewId, @PathVariable("userId") Integer userId) {
-        log.info("ReviewController: выполнение запроса на удаления лайка для отзыва: {} пользователем {}", reviewId, userId);
+    public Boolean deleteLikeToReview(@PathVariable("id") Long reviewId, @PathVariable("userId") Long userId) {
         return reviewService.deleteLikeToReview(reviewId, userId);
     }
 
     @PutMapping("{id}/dislike/{userId}")
-    public Review addDislikeToReview(@PathVariable("id") Integer reviewId, @PathVariable("userId") Integer userId) {
-        log.info("ReviewController: выполнение запроса на установку дизлайка для отзыва: {} пользователем {}", reviewId, userId);
+    public Optional<Review> addDislikeToReview(@PathVariable("id") Long reviewId, @PathVariable("userId") Long userId) {
         return reviewService.addDislikeToReview(reviewId, userId);
     }
 
     @DeleteMapping("{id}/dislike/{userId}")
-    public Boolean deleteDislikeToReview(@PathVariable("id") Integer reviewId, @PathVariable("userId") Integer userId) {
-        log.info("ReviewController: выполнение запроса на удаление дизлайка для отзыва: {} пользователем {}", reviewId, userId);
+    public Boolean deleteDislikeToReview(@PathVariable("id") Long reviewId, @PathVariable("userId") Long userId) {
         return reviewService.deleteDislikeToReview(reviewId, userId);
     }
 
     @DeleteMapping("/{id}")
-    public Boolean deleteReview(@PathVariable("id") Integer reviewId) {
-        log.info("ReviewController: выполнение запроса на удаление отзыва: {}", reviewId);
-        return reviewService.deleteReview(reviewId);
+    public void deleteReview(@PathVariable("id") Long reviewId) {
+        reviewService.deleteReview(reviewId);
     }
 
     @GetMapping
-    public List<Review> reviewsOfSelectedFilm(@RequestParam Integer filmId, @RequestParam(defaultValue = "10") Integer count) {
-        log.info("ReviewController: выполнение запроса на получение всех отзывов фильма");
+    public List<Review> reviewsOfSelectedFilm(@RequestParam Long filmId, @RequestParam(defaultValue = "10") Integer count) {
         return reviewService.reviewsOfSelectedFilm(filmId, count);
     }
 }

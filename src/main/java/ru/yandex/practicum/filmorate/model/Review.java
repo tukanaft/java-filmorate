@@ -10,13 +10,11 @@ import lombok.*;
 @Getter
 @Setter
 public class Review {
-    private Integer reviewId;
+    private Long reviewId;
     private String content;
     @JsonProperty
-    private boolean isPositive;
-    private Integer userId;
-    private Integer filmId;
+    private Boolean isPositive;
+    private Long userId;
+    private Long filmId;
     private Integer useful;
-    //Рейтинг - калькулируемая величина в зависимости от кол-ва выставленных пользователями полезностей этого отзыва.
-    private Integer reviewRate;
 }
