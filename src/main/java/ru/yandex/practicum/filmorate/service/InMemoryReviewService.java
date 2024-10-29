@@ -46,7 +46,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.ADD, reviewId, Instant.now().toEpochMilli()));
+        //eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.ADD, reviewId, Instant.now().toEpochMilli()));
         return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "лайк");
     }
 
@@ -58,7 +58,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.ADD, reviewId, Instant.now().toEpochMilli()));
+        //eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.ADD, reviewId, Instant.now().toEpochMilli()));
         return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "дизлайк");
     }
 
@@ -70,7 +70,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.REMOVE, reviewId, Instant.now().toEpochMilli()));
+        //eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.REMOVE, reviewId, Instant.now().toEpochMilli()));
         return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "лайк");
     }
 
@@ -82,7 +82,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
-        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.REMOVE, reviewId, Instant.now().toEpochMilli()));
+        //eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.REMOVE, reviewId, Instant.now().toEpochMilli()));
         return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "дизлайк");
     }
 
@@ -107,8 +107,9 @@ public class InMemoryReviewService implements ReviewService {
             throw new NotFoundException("Указанного фильма для отзыва не существует");
         }
         newReview.setUseful(0);
+        Review review = reviewRepository.addReview(newReview);
         eventService.addEvent(new Event(newReview.getUserId(), EventType.REVIEW, OperationType.ADD, newReview.getReviewId(), Instant.now().toEpochMilli()));
-        return reviewRepository.addReview(newReview);
+        return review;
     }
 
     @Override
