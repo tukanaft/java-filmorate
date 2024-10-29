@@ -14,6 +14,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.model.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class InMemoryFilmService implements FilmService {
     private final RatingRepository ratingRepository;
     private final GenreRepository genreRepository;
     private final DirectorRepository directorRepository;
+    private final EventService eventService;
 
     @Override
     public List<FilmDto> getTopFilms(int count) {
@@ -56,6 +58,7 @@ public class InMemoryFilmService implements FilmService {
         if (filmRepository.findLike(id, userId)) {
             return false;
         }
+        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.ADD, id, Instant.now().toEpochMilli()));
         return filmRepository.putLike(id, userId);
     }
 
@@ -63,6 +66,7 @@ public class InMemoryFilmService implements FilmService {
     public boolean deleteLike(Long filmId, Long userId) {
         checkFilmId(filmRepository, filmId);
         checkUserId(userRepository, userId);
+        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.REMOVE, filmId, Instant.now().toEpochMilli()));
         return filmRepository.deleteLike(filmId, userId);
     }
 

@@ -6,8 +6,12 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dao.repository.ReviewRepository;
 import ru.yandex.practicum.filmorate.exception.BadInputException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.model.EventType;
+import ru.yandex.practicum.filmorate.model.OperationType;
 import ru.yandex.practicum.filmorate.model.Review;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +22,7 @@ public class InMemoryReviewService implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final InMemoryUserService inMemoryUserService;
     private final InMemoryFilmService inMemoryFilmService;
+    private final EventService eventService;
 
     @Override
     public Optional<Review> getReviewById(Long reviewId) {
@@ -29,6 +34,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(newReview.getReviewId())) {
             throw new NotFoundException("Такого отзыва не существует");
         }
+        eventService.addEvent(new Event(newReview.getUserId(), EventType.REVIEW, OperationType.UPDATE, newReview.getReviewId(), Instant.now().toEpochMilli()));
         return reviewRepository.updateReview(newReview);
     }
 
@@ -40,6 +46,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
+        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.ADD, reviewId, Instant.now().toEpochMilli()));
         return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "лайк");
     }
 
@@ -51,6 +58,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
+        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.ADD, reviewId, Instant.now().toEpochMilli()));
         return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "дизлайк");
     }
 
@@ -62,6 +70,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
+        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.REMOVE, reviewId, Instant.now().toEpochMilli()));
         return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "лайк");
     }
 
@@ -73,6 +82,7 @@ public class InMemoryReviewService implements ReviewService {
         if (inMemoryUserService.get(userId) == null) {
             throw new NotFoundException("Такого пользователя не существует");
         }
+        eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.REMOVE, reviewId, Instant.now().toEpochMilli()));
         return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "дизлайк");
     }
 
@@ -97,6 +107,7 @@ public class InMemoryReviewService implements ReviewService {
             throw new NotFoundException("Указанного фильма для отзыва не существует");
         }
         newReview.setUseful(0);
+        eventService.addEvent(new Event(newReview.getUserId(), EventType.REVIEW, OperationType.ADD, newReview.getReviewId(), Instant.now().toEpochMilli()));
         return reviewRepository.addReview(newReview);
     }
 
@@ -105,6 +116,8 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
+        Long userId = (reviewRepository.getReviewById(reviewId)).get().getUserId();
+        eventService.addEvent(new Event(userId, EventType.REVIEW, OperationType.REMOVE, reviewId, Instant.now().toEpochMilli()));
         reviewRepository.deleteReview(reviewId);
     }
 
