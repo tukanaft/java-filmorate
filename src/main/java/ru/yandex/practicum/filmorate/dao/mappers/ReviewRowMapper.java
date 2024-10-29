@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.mapper;
+package ru.yandex.practicum.filmorate.dao.mappers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.RowMapper;
