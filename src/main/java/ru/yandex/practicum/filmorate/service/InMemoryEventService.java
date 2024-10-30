@@ -27,5 +27,4 @@ public class InMemoryEventService implements EventService {
         }
         return eventRepository.getUserFeed(userId);
     }
-
 }

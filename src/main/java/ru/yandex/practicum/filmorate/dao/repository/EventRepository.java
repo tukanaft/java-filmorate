@@ -11,8 +11,7 @@ import java.util.List;
 @Repository("eventRepository")
 public class EventRepository extends BaseRepository<Event> {
     private static final String INSERT_QUERY = "INSERT INTO users_feed (user_id, operation, event_type, timestamp, entity_id) VALUES (?, ?, ?, ?, ?)";
-    private static final String GET_USER_FEED = "SELECT * FROM users_feed WHERE user_id = ? ORDER BY timestamp DESC";
-    private static final String FIND_BY_EVENT_ID = "SELECT COUNT(*) FROM users_feed WHERE event_id = ?";
+    private static final String GET_USER_FEED = "SELECT * FROM users_feed WHERE user_id = ? ORDER BY timestamp ASC";
     private static final String FIND_BY_USER_ID = "SELECT COUNT(*) FROM users_feed WHERE user_id = ?";
 
     public EventRepository(JdbcTemplate jdbc, RowMapper<Event> mapper) {
@@ -25,11 +24,6 @@ public class EventRepository extends BaseRepository<Event> {
         long id = insert(INSERT_QUERY, event.getUserId(), event.getOperation().toString(),
                 event.getEventType().toString(), timestamp, event.getEntityId());
         event.setEventId(id);
-    }
-
-    public boolean existsByEventId(Long eventId) {
-        Long count = jdbc.queryForObject(FIND_BY_EVENT_ID, Long.class, eventId);
-        return count != null && count > 0;
     }
 
     public boolean existsByUserId(Long userId) {
