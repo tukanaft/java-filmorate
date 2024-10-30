@@ -12,9 +12,9 @@ import ru.yandex.practicum.filmorate.exception.BadInputExceptionParametered;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.mapper.UserMapper;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.*;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class InMemoryUserService implements UserService {
     private final UserRepository userRepository;
     private final FilmRepository filmRepository;
+    private final EventService eventService;
 
     @Override
     public boolean addFriend(Long userId, Long friendId) {
@@ -35,6 +36,7 @@ public class InMemoryUserService implements UserService {
         if (userRepository.isFriendRequest(userId, friendId)) {
             return userRepository.acceptRequest(userId, friendId);
         }
+        eventService.addEvent(new Event(userId, EventType.FRIEND, OperationType.ADD, friendId, Instant.now().toEpochMilli()));
         return userRepository.addFriend(userId, friendId);
     }
 
@@ -48,6 +50,7 @@ public class InMemoryUserService implements UserService {
         if (userRepository.isFriend(userId, friendId)) {
             return userRepository.removeRequest(userId, friendId);
         }
+        eventService.addEvent(new Event(userId, EventType.FRIEND, OperationType.REMOVE, friendId, Instant.now().toEpochMilli()));
         return userRepository.deleteFriend(userId, friendId);
     }
 
