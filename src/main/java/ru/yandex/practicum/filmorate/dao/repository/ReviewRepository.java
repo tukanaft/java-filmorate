@@ -17,12 +17,14 @@ public class ReviewRepository extends BaseRepository<Review> {
     private static final String ADD_LIKE_OR_DISLIKE_QUERY = "INSERT INTO reviews_likes (review_id, user_id, liketype) values(?,?,?)";
     private static final String DELETE_LIKE_OR_DISLIKE_QUERY = "DELETE FROM reviews_likes WHERE review_id = ? and user_id = ? and liketype = ?";
     private static final String DELETE_REVIEW_BY_ID_QUERY = "DELETE FROM reviews WHERE id = ?";
-    private static final String GET_REVIEW_FOR_FILM_BY_ID_QUERY = "SELECT id, content, user_id, film_id, isPositive, useful FROM reviews WHERE film_id = ?";
-    private static final String GET_REVIEW_FOR_ALL_FILMS_QUERY = "SELECT id, content, user_id, film_id, isPositive, useful FROM reviews";
+    private static final String DELETE_REVIEWS_LIKES_BY_REVIEW_ID_QUERY ="DELETE FROM reviews_likes WHERE review_id = ?";
+    private static final String GET_REVIEW_FOR_FILM_BY_ID_QUERY = "SELECT * FROM reviews WHERE film_id = ? LIMIT ?";
+    private static final String GET_REVIEW_FOR_ALL_FILMS_QUERY = "SELECT * FROM reviews LIMIT ?";
     private static final String CHECK_REVIEW_EXISTS_QUERY = "SELECT COUNT(*) FROM reviews WHERE id =?";
     private static final String CHECK_LIKE_OR_DISLIKE_EXISTS_QUERY = "SELECT COUNT(*) FROM reviews_likes WHERE review_id=? and user_id=? and liketype = ?";
     private static final String UPDATE_REVIEW_QUERY = "UPDATE reviews SET content = ?, isPositive=? WHERE id = ?";
     private static final String UPDATE_REVIEW_WITH_USEFUL_QUERY = "UPDATE reviews SET content = ?, isPositive=?, useful=? WHERE id = ?";
+
 
     public ReviewRepository(JdbcTemplate jdbc, RowMapper<Review> mapper) {
         super(jdbc, mapper);
@@ -37,6 +39,7 @@ public class ReviewRepository extends BaseRepository<Review> {
     }
 
     public Review addReview(Review newReview) {
+        newReview.setUseful(0);
         long id = insert(
                 ADD_REVIEW_QUERY,
                 newReview.getUserId(),
@@ -58,7 +61,6 @@ public class ReviewRepository extends BaseRepository<Review> {
                         newReview.getIsPositive(),
                         newReview.getUseful(),
                         newReview.getReviewId()
-
                 );
             } else {
                 update(
@@ -100,20 +102,16 @@ public class ReviewRepository extends BaseRepository<Review> {
 
     public void deleteReview(Long reviewId) {
         if (isReviewExists(reviewId)) {
+            jdbc.update(DELETE_REVIEWS_LIKES_BY_REVIEW_ID_QUERY, reviewId);
             jdbc.update(DELETE_REVIEW_BY_ID_QUERY, reviewId);
         }
     }
 
     public List<Review> reviewsOfSelectedFilm(Long filmId, Integer count) {
-        Long id;
-        String query = null;
-        if (filmId != null) {
-            id = filmId;
-            query = GET_REVIEW_FOR_FILM_BY_ID_QUERY;
-            return findMany(query, id);
+        if (filmId != 0) {
+            return jdbc.query(GET_REVIEW_FOR_FILM_BY_ID_QUERY,mapper,filmId, count);
         } else {
-            query = GET_REVIEW_FOR_ALL_FILMS_QUERY;
-            return findMany(query);
+            return jdbc.query(GET_REVIEW_FOR_ALL_FILMS_QUERY, mapper,count);
         }
     }
 
