@@ -157,4 +157,5 @@ public class ReviewRepository extends BaseRepository<Review> {
         Integer count = jdbc.queryForObject(CHECK_LIKE_OR_DISLIKE_EXISTS_QUERY, Integer.class, reviewId, userId, likeType);
         return count > 0;
     }
+
 }
