@@ -50,6 +50,7 @@ public class ReviewRepository extends BaseRepository<Review> {
         );
         newReview.setReviewId(id);
         return newReview;
+
     }
 
     public Optional<Review> updateReviewWithoutUseful(Review newReview) {
