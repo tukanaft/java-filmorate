@@ -17,9 +17,9 @@ public class ReviewRepository extends BaseRepository<Review> {
     private static final String ADD_LIKE_OR_DISLIKE_QUERY = "INSERT INTO reviews_likes (review_id, user_id, liketype) values(?,?,?)";
     private static final String DELETE_LIKE_OR_DISLIKE_QUERY = "DELETE FROM reviews_likes WHERE review_id = ? and user_id = ? and liketype = ?";
     private static final String DELETE_REVIEW_BY_ID_QUERY = "DELETE FROM reviews WHERE id = ?";
-    private static final String DELETE_REVIEWS_LIKES_BY_REVIEW_ID_QUERY ="DELETE FROM reviews_likes WHERE review_id = ?";
-    private static final String GET_REVIEW_FOR_FILM_BY_ID_QUERY = "SELECT * FROM reviews WHERE film_id = ? LIMIT ?";
-    private static final String GET_REVIEW_FOR_ALL_FILMS_QUERY = "SELECT * FROM reviews LIMIT ?";
+    private static final String DELETE_REVIEWS_LIKES_BY_REVIEW_ID_QUERY = "DELETE FROM reviews_likes WHERE review_id = ?";
+    private static final String GET_REVIEW_FOR_FILM_BY_ID_QUERY = "SELECT * FROM reviews WHERE film_id = ? ORDER BY useful DESC LIMIT ?";
+    private static final String GET_REVIEW_FOR_ALL_FILMS_QUERY = "SELECT * FROM reviews ORDER BY useful DESC LIMIT ?";
     private static final String CHECK_REVIEW_EXISTS_QUERY = "SELECT COUNT(*) FROM reviews WHERE id =?";
     private static final String CHECK_LIKE_OR_DISLIKE_EXISTS_QUERY = "SELECT COUNT(*) FROM reviews_likes WHERE review_id=? and user_id=? and liketype = ?";
     private static final String UPDATE_REVIEW_QUERY = "UPDATE reviews SET content = ?, isPositive=? WHERE id = ?";
@@ -50,6 +50,21 @@ public class ReviewRepository extends BaseRepository<Review> {
         );
         newReview.setReviewId(id);
         return newReview;
+
+    }
+
+    public Optional<Review> updateReviewWithoutUseful(Review newReview) {
+        if (isReviewExists(newReview.getReviewId())) {
+            update(
+                    UPDATE_REVIEW_QUERY,
+                    newReview.getContent(),
+                    newReview.getIsPositive(),
+                    newReview.getReviewId()
+            );
+        } else {
+            throw new NotFoundException("Отзыв который вы пытаетесь обновить не существует");
+        }
+        return getReviewById(newReview.getReviewId());
     }
 
     public Optional<Review> updateReview(Review newReview) {
@@ -109,9 +124,9 @@ public class ReviewRepository extends BaseRepository<Review> {
 
     public List<Review> reviewsOfSelectedFilm(Long filmId, Integer count) {
         if (filmId != 0) {
-            return jdbc.query(GET_REVIEW_FOR_FILM_BY_ID_QUERY,mapper,filmId, count);
+            return jdbc.query(GET_REVIEW_FOR_FILM_BY_ID_QUERY, mapper, filmId, count);
         } else {
-            return jdbc.query(GET_REVIEW_FOR_ALL_FILMS_QUERY, mapper,count);
+            return jdbc.query(GET_REVIEW_FOR_ALL_FILMS_QUERY, mapper, count);
         }
     }
 
@@ -143,4 +158,5 @@ public class ReviewRepository extends BaseRepository<Review> {
         Integer count = jdbc.queryForObject(CHECK_LIKE_OR_DISLIKE_EXISTS_QUERY, Integer.class, reviewId, userId, likeType);
         return count > 0;
     }
+
 }
