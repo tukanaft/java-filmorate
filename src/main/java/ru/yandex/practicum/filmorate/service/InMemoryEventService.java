@@ -17,7 +17,9 @@ public class InMemoryEventService implements EventService {
 
     @Override
     public void addEvent(Event event) {
-        eventRepository.saveEvent(event);
+        if (!eventRepository.eventExists(event)) {
+            eventRepository.saveEvent(event);
+        }
     }
 
     @Override
