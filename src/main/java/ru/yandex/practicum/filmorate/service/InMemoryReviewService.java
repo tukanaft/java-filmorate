@@ -34,7 +34,8 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(newReview.getReviewId())) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        eventService.addEvent(new Event(newReview.getUserId(), EventType.REVIEW, OperationType.UPDATE, newReview.getReviewId(), Instant.now().toEpochMilli()));
+        Long userId = (reviewRepository.getReviewById(newReview.getReviewId())).get().getUserId();
+        eventService.addEvent(new Event(userId, EventType.REVIEW, OperationType.UPDATE, newReview.getReviewId(), Instant.now().toEpochMilli()));
         return reviewRepository.updateReviewWithoutUseful(newReview);
     }
 

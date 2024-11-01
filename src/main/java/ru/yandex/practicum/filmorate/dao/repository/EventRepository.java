@@ -11,9 +11,8 @@ import java.util.List;
 @Repository("eventRepository")
 public class EventRepository extends BaseRepository<Event> {
     private static final String INSERT_QUERY = "INSERT INTO users_feed (user_id, operation, event_type, timestamp, entity_id) VALUES (?, ?, ?, ?, ?)";
-    private static final String GET_USER_FEED = "SELECT event_id, user_id, operation, event_type, timestamp, entity_id FROM users_feed WHERE user_id = ? ORDER BY timestamp ASC";
+    private static final String GET_USER_FEED = "SELECT event_id, user_id, operation, event_type, timestamp, entity_id FROM users_feed WHERE user_id = ? ";
     private static final String FIND_BY_USER_ID = "SELECT COUNT(*) FROM users_feed WHERE user_id = ?";
-    private static final String CHECK_EVENT_EXISTS = "SELECT COUNT(*) FROM users_feed WHERE user_id = ? AND operation = ? AND event_type = ? AND entity_id = ?";
 
     public EventRepository(JdbcTemplate jdbc, RowMapper<Event> mapper) {
         super(jdbc, mapper);
@@ -29,18 +28,6 @@ public class EventRepository extends BaseRepository<Event> {
 
     public boolean existsByUserId(Long userId) {
         Long count = jdbc.queryForObject(FIND_BY_USER_ID, Long.class, userId);
-        return count != null && count > 0;
-    }
-
-    public boolean eventExists(Event event) {
-        Long count = jdbc.queryForObject(
-                CHECK_EVENT_EXISTS,
-                Long.class,
-                event.getUserId(),
-                event.getOperation().toString(),
-                event.getEventType().toString(),
-                event.getEntityId()
-        );
         return count != null && count > 0;
     }
 
