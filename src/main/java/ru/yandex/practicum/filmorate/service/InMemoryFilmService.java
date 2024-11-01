@@ -55,9 +55,6 @@ public class InMemoryFilmService implements FilmService {
     public boolean putLike(Long id, Long userId) {
         checkFilmId(filmRepository, id);
         checkUserId(userRepository, userId);
-        if (filmRepository.findLike(id, userId)) {
-            return false;
-        }
         eventService.addEvent(new Event(userId, EventType.LIKE, OperationType.ADD, id, Instant.now().toEpochMilli()));
         return filmRepository.putLike(id, userId);
     }

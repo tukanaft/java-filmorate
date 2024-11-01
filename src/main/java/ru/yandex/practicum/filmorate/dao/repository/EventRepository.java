@@ -11,7 +11,7 @@ import java.util.List;
 @Repository("eventRepository")
 public class EventRepository extends BaseRepository<Event> {
     private static final String INSERT_QUERY = "INSERT INTO users_feed (user_id, operation, event_type, timestamp, entity_id) VALUES (?, ?, ?, ?, ?)";
-    private static final String GET_USER_FEED = "SELECT * FROM users_feed WHERE user_id = ? ORDER BY timestamp ASC";
+    private static final String GET_USER_FEED = "SELECT event_id, user_id, operation, event_type, timestamp, entity_id FROM users_feed WHERE user_id = ? ";
     private static final String FIND_BY_USER_ID = "SELECT COUNT(*) FROM users_feed WHERE user_id = ?";
 
     public EventRepository(JdbcTemplate jdbc, RowMapper<Event> mapper) {
