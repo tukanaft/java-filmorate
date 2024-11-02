@@ -38,4 +38,6 @@ public interface FilmService {
 
     List<FilmDto> searchByDirector(String query);
 
+    List<FilmDto> searchFilms(String query, String by);
+
 }

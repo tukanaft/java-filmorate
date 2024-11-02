@@ -211,4 +211,22 @@ public class InMemoryFilmService implements FilmService {
                 .map(FilmMapper::mapToFilmDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<FilmDto> searchFilms(String query, String by) {
+        switch (by) {
+            case "title" -> {
+                return searchByFilm(query);
+            }
+            case "director" -> {
+                return searchByDirector(query);
+            }
+            case "title" + ',' + "director", "director" + ',' + "title" -> {
+                List<FilmDto> searchDirector = searchByDirector(query);
+                searchDirector.addAll(searchByFilm(query));
+                return searchDirector.stream().distinct().collect(Collectors.toList());
+            }
+            default -> throw new BadInputException("Поиск должен быть по director или title");
+        }
+    }
 }
