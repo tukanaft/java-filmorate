@@ -80,7 +80,7 @@ public class InMemoryReviewService implements ReviewService {
             throw new BadInputException("Не указан ID фильма");
         }
         if (newReview.getIsPositive() == null) {
-            throw new BadInputException("Не указан ID фильма");
+            throw new BadInputException("Тип отзыва не может быть пустым");
         }
         inMemoryUserService.get(newReview.getUserId());
         inMemoryFilmService.findFilmById(newReview.getFilmId());
