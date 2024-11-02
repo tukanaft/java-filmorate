@@ -144,12 +144,11 @@ public class ReviewRepository extends BaseRepository<Review> {
 
     public Boolean isReviewExists(Long userId) {
         Integer count = jdbc.queryForObject(CHECK_REVIEW_EXISTS_QUERY, Integer.class, userId);
-        return count !=null && count > 0;
+        return count != null && count > 0;
     }
 
     public Boolean isLikeOrDislikeExists(Long reviewId, Long userId, String likeType) {
         Integer count = jdbc.queryForObject(CHECK_LIKE_OR_DISLIKE_EXISTS_QUERY, Integer.class, reviewId, userId, likeType);
-        return count !=null && count > 0;
+        return count != null && count > 0;
     }
-
 }
