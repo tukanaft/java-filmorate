@@ -13,7 +13,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -94,21 +93,6 @@ public class FilmController {
 
     @GetMapping("/search")
     public List<FilmDto> searchFilms(@RequestParam("query") String query, @RequestParam("by") String by) {
-        switch (by) {
-            case "title" -> {
-                return filmService.searchByFilm(query);
-            }
-            case "director" -> {
-                return filmService.searchByDirector(query);
-            }
-            case "title" + ',' + "director", "director" + ',' + "title" -> {
-                List<FilmDto> searchDirector = filmService.searchByDirector(query);
-                searchDirector.addAll(filmService.searchByFilm(query));
-                return searchDirector.stream().distinct().collect(Collectors.toList());
-            }
-            default -> {
-                return null;
-            }
-        }
+        return filmService.searchFilms(query, by);
     }
 }
