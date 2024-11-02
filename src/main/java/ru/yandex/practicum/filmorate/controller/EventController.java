@@ -20,9 +20,7 @@ public class EventController {
 
     @GetMapping
     public List<Event> getUserFeed(@PathVariable Long id) {
-        List<Event> event = eventService.getUserFeed(id);
-        System.out.println(event.toArray().length);
-        return event;
+        return eventService.getUserFeed(id);
     }
 
 }
