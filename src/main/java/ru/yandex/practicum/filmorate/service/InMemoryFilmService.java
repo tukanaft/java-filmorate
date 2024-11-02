@@ -214,19 +214,19 @@ public class InMemoryFilmService implements FilmService {
 
     @Override
     public List<FilmDto> searchFilms(String query, String by) {
+        List<FilmDto> results;
+
         switch (by) {
-            case "title" -> {
-                return searchByFilm(query);
-            }
-            case "director" -> {
-                return searchByDirector(query);
-            }
-            case "title" + ',' + "director", "director" + ',' + "title" -> {
-                List<FilmDto> searchDirector = searchByDirector(query);
-                searchDirector.addAll(searchByFilm(query));
-                return searchDirector.stream().distinct().collect(Collectors.toList());
+            case "title" -> results = searchByFilm(query);
+            case "director" -> results = searchByDirector(query);
+            case "title,director", "director,title" -> {
+                results = new ArrayList<>(searchByDirector(query));
+                results.addAll(searchByFilm(query));
+                return results.stream().distinct().collect(Collectors.toList());
             }
             default -> throw new BadInputException("Поиск должен быть по director или title");
         }
+
+        return results;
     }
 }
