@@ -49,10 +49,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId) == null) {
-            throw new NotFoundException("Такого пользователя не существует");
-        }
-        return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "дизлайк");
+        return reviewRepository.addLikeOrDislikeToReview(reviewId, inMemoryUserService.get(userId).getId(), "дизлайк");
     }
 
     @Override
@@ -60,10 +57,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId) == null) {
-            throw new NotFoundException("Такого пользователя не существует");
-        }
-        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "лайк");
+        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, inMemoryUserService.get(userId).getId(), "лайк");
     }
 
     @Override
@@ -71,10 +65,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId) == null) {
-            throw new NotFoundException("Такого пользователя не существует");
-        }
-        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "дизлайк");
+        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, inMemoryUserService.get(userId).getId(), "дизлайк");
     }
 
     @Override
