@@ -39,7 +39,6 @@ public class ReviewRepository extends BaseRepository<Review> {
     }
 
     public Review addReview(Review newReview) {
-        newReview.setUseful(0);
         long id = insert(
                 ADD_REVIEW_QUERY,
                 newReview.getUserId(),
@@ -54,16 +53,12 @@ public class ReviewRepository extends BaseRepository<Review> {
     }
 
     public Optional<Review> updateReviewWithoutUseful(Review newReview) {
-        if (isReviewExists(newReview.getReviewId())) {
-            update(
-                    UPDATE_REVIEW_QUERY,
-                    newReview.getContent(),
-                    newReview.getIsPositive(),
-                    newReview.getReviewId()
-            );
-        } else {
-            throw new NotFoundException("Отзыв который вы пытаетесь обновить не существует");
-        }
+        update(
+                UPDATE_REVIEW_QUERY,
+                newReview.getContent(),
+                newReview.getIsPositive(),
+                newReview.getReviewId()
+        );
         return getReviewById(newReview.getReviewId());
     }
 
@@ -116,10 +111,8 @@ public class ReviewRepository extends BaseRepository<Review> {
     }
 
     public void deleteReview(Long reviewId) {
-        if (isReviewExists(reviewId)) {
-            jdbc.update(DELETE_REVIEWS_LIKES_BY_REVIEW_ID_QUERY, reviewId);
-            jdbc.update(DELETE_REVIEW_BY_ID_QUERY, reviewId);
-        }
+        jdbc.update(DELETE_REVIEWS_LIKES_BY_REVIEW_ID_QUERY, reviewId);
+        jdbc.update(DELETE_REVIEW_BY_ID_QUERY, reviewId);
     }
 
     public List<Review> reviewsOfSelectedFilm(Long filmId, Integer count) {
@@ -150,13 +143,12 @@ public class ReviewRepository extends BaseRepository<Review> {
     }
 
     public Boolean isReviewExists(Long userId) {
-        int count = jdbc.queryForObject(CHECK_REVIEW_EXISTS_QUERY, Integer.class, userId);
-        return count > 0;
+        Integer count = jdbc.queryForObject(CHECK_REVIEW_EXISTS_QUERY, Integer.class, userId);
+        return count != null && count > 0;
     }
 
     public Boolean isLikeOrDislikeExists(Long reviewId, Long userId, String likeType) {
         Integer count = jdbc.queryForObject(CHECK_LIKE_OR_DISLIKE_EXISTS_QUERY, Integer.class, reviewId, userId, likeType);
-        return count > 0;
+        return count != null && count > 0;
     }
-
 }

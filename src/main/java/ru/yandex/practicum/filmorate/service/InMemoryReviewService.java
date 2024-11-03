@@ -31,9 +31,6 @@ public class InMemoryReviewService implements ReviewService {
 
     @Override
     public Optional<Review> updateReview(Review newReview) {
-        if (!reviewRepository.isReviewExists(newReview.getReviewId())) {
-            throw new NotFoundException("Такого отзыва не существует");
-        }
         Long userId = (reviewRepository.getReviewById(newReview.getReviewId())).get().getUserId();
         eventService.addEvent(new Event(userId, EventType.REVIEW, OperationType.UPDATE, newReview.getReviewId(), Instant.now().toEpochMilli()));
         return reviewRepository.updateReviewWithoutUseful(newReview);
@@ -44,10 +41,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId) == null) {
-            throw new NotFoundException("Такого пользователя не существует");
-        }
-        return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "лайк");
+        return reviewRepository.addLikeOrDislikeToReview(reviewId, inMemoryUserService.get(userId).getId(), "лайк");
     }
 
     @Override
@@ -55,10 +49,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId) == null) {
-            throw new NotFoundException("Такого пользователя не существует");
-        }
-        return reviewRepository.addLikeOrDislikeToReview(reviewId, userId, "дизлайк");
+        return reviewRepository.addLikeOrDislikeToReview(reviewId, inMemoryUserService.get(userId).getId(), "дизлайк");
     }
 
     @Override
@@ -66,10 +57,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId) == null) {
-            throw new NotFoundException("Такого пользователя не существует");
-        }
-        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "лайк");
+        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, inMemoryUserService.get(userId).getId(), "лайк");
     }
 
     @Override
@@ -77,10 +65,7 @@ public class InMemoryReviewService implements ReviewService {
         if (!reviewRepository.isReviewExists(reviewId)) {
             throw new NotFoundException("Такого отзыва не существует");
         }
-        if (inMemoryUserService.get(userId) == null) {
-            throw new NotFoundException("Такого пользователя не существует");
-        }
-        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, userId, "дизлайк");
+        return reviewRepository.deleteLikeOrDislikeToReview(reviewId, inMemoryUserService.get(userId).getId(), "дизлайк");
     }
 
     @Override
@@ -95,14 +80,10 @@ public class InMemoryReviewService implements ReviewService {
             throw new BadInputException("Не указан ID фильма");
         }
         if (newReview.getIsPositive() == null) {
-            throw new BadInputException("Не указан ID фильма");
+            throw new BadInputException("Тип отзыва не может быть пустым");
         }
-        if (inMemoryUserService.get(newReview.getUserId()) == null) {
-            throw new NotFoundException("Указанного пользователя для отзыва не существует");
-        }
-        if (inMemoryFilmService.findFilmById(newReview.getFilmId()) == null) {
-            throw new NotFoundException("Указанного фильма для отзыва не существует");
-        }
+        inMemoryUserService.get(newReview.getUserId());
+        inMemoryFilmService.findFilmById(newReview.getFilmId());
         newReview.setUseful(0);
         Review review = reviewRepository.addReview(newReview);
         eventService.addEvent(new Event(newReview.getUserId(), EventType.REVIEW, OperationType.ADD, newReview.getReviewId(), Instant.now().toEpochMilli()));
@@ -111,9 +92,6 @@ public class InMemoryReviewService implements ReviewService {
 
     @Override
     public void deleteReview(Long reviewId) {
-        if (!reviewRepository.isReviewExists(reviewId)) {
-            throw new NotFoundException("Такого отзыва не существует");
-        }
         Long userId = (reviewRepository.getReviewById(reviewId)).get().getUserId();
         eventService.addEvent(new Event(userId, EventType.REVIEW, OperationType.REMOVE, reviewId, Instant.now().toEpochMilli()));
         reviewRepository.deleteReview(reviewId);
